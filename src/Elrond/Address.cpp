@@ -8,24 +8,8 @@
 
 using namespace TW::Elrond;
 
+const std::string Address::hrp = HRP_ELROND;
+
 bool Address::isValid(const std::string& string) {
-    // TODO: Finalize implementation
-    return false;
-}
-
-Address::Address(const std::string& string) {
-    // TODO: Finalize implementation
-
-    if (!isValid(string)) {
-        throw std::invalid_argument("Invalid address string");
-    }
-}
-
-Address::Address(const PublicKey& publicKey) {
-    // TODO: Finalize implementation
-}
-
-std::string Address::string() const {
-    // TODO: Finalize implementation
-    return "TODO";
+    Bech32Address::isValid(address, hrp);
 }

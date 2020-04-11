@@ -1340,6 +1340,7 @@
         "derivationPath": "m/44'/2003'/0'",
         "curve": "ed25519",
         "publicKeyType": "ed25519",
+        "hrp": "erd",
         "explorer": {
             "url": "https://explorer.elrond.com",
             "txPath": "/transactions/",

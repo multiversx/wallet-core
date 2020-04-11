@@ -8,32 +8,32 @@
 
 #include "../Data.h"
 #include "../PublicKey.h"
+#include "../Bech32Address.h"
 
 #include <string>
 
 namespace TW::Elrond {
 
-class Address {
+class Address : public Bech32Address {
   public:
-    // TODO: Complete class definition
+    // The human-readable part of the address, as defined in "coins.json"
+    static const std::string hrp; // HRP_ELROND
 
     /// Determines whether a string makes a valid address.
     static bool isValid(const std::string& string);
 
-    /// Initializes a Elrond address with a string representation.
-    explicit Address(const std::string& string);
+    Address() : Bech32Address(hrp) {}
 
-    /// Initializes a Elrond address with a public key.
-    explicit Address(const PublicKey& publicKey);
+    /// Initializes an address with a key hash.
+    Address(Data keyHash) : Bech32Address(hrp, keyHash) {}
 
-    /// Returns a string representation of the address.
-    std::string string() const;
+    /// Initializes an address with a public key.
+    Address(const PublicKey& publicKey) : Bech32Address(hrp, HASHER_SHA2_RIPEMD, publicKey) {}
+
+    static bool decode(const std::string& addr, Address& obj_out) {
+        return Bech32Address::decode(addr, obj_out, hrp);
+    }
 };
-
-inline bool operator==(const Address& lhs, const Address& rhs) {
-    // TODO: Complete equality operator
-    return true;
-}
 
 } // namespace TW::Elrond
 
