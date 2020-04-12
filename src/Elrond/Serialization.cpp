@@ -9,6 +9,7 @@
 #include "../Elrond/Address.h"
 #include "../proto/Elrond.pb.h"
 #include "Base64.h"
+#include "HexCoding.h"
 #include "PrivateKey.h"
 
 using namespace TW::Elrond;
@@ -20,8 +21,8 @@ std::map<std::string, int> fields_order {
     {"value", 2},
     {"receiver", 3},
     {"sender", 4},
-    {"gas_price", 5},
-    {"gas_limit", 6},
+    {"gasPrice", 5},
+    {"gasLimit", 6},
     {"data", 7}
 };
 
@@ -46,11 +47,12 @@ string TW::Elrond::serializeMessageToSignableString(const Proto::TransferMessage
     sorted_json payload {
         {"nonce", json(message.nonce())},
         {"value", json(message.value())},
-        {"receiver", json(message.receiver())},
-        {"sender", json(message.sender())},
-        {"gas_price", json(message.gas_price())},
-        {"gas_limit", json(message.gas_limit())}
+        {"gasPrice", json(message.gas_price())},
+        {"gasLimit", json(message.gas_limit())}
     };
+
+    payload["receiver"] = json(TW::Base64::encode(parse_hex(message.receiver())));
+    payload["sender"] = json(TW::Base64::encode(parse_hex(message.sender())));
 
     if (!message.data().empty()) {
         payload["data"] = json(encodeTransactionData(message.data()));

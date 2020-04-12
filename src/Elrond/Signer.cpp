@@ -8,20 +8,20 @@
 #include "Address.h"
 #include "Serialization.h"
 #include "../PublicKey.h"
+#include "HexCoding.h"
 
 using namespace TW;
 using namespace TW::Elrond;
 
 
 Proto::SigningOutput Signer::sign(const Proto::SigningInput &input) noexcept {
-    // TODO: Check and finalize implementation
+    auto privateKey = PrivateKey(input.private_key());
+    string payload = Elrond::serializeMessageToSignableString(input.transfer());
+    Data payloadAsData = TW::data(payload);
+    auto signature = privateKey.sign(payloadAsData, TWCurveED25519);
+    string encodedSignature = hex(signature);
 
     auto protoOutput = Proto::SigningOutput();
-    Data encoded;
-    // auto privateKey = PrivateKey(Data(input.private_key().begin(), input.private_key().end()));
-    // auto signature = privateKey.sign(payload, TWCurveED25519);
-    // encoded = encodeSignature(signature);
-
-    protoOutput.set_encoded(encoded.data(), encoded.size());
+    protoOutput.set_encoded(encodedSignature);
     return protoOutput;
 }
