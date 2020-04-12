@@ -6,6 +6,7 @@
 
 #include "Signer.h"
 #include "Address.h"
+#include "Serialization.h"
 #include "../PublicKey.h"
 
 using namespace TW;

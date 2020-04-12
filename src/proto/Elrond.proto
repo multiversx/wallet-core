@@ -9,14 +9,18 @@ syntax = "proto3";
 package TW.Elrond.Proto;
 option java_package = "wallet.core.jni.proto";
 
-// TODO: typical balance transfer, add more fields needed to sign
+// Typical balance transfer
 message TransferMessage {
-    int64 amount = 1;
-    int64 fee = 2;
-    string to = 3;
+    uint64      nonce = 1;
+    string      value = 2;
+    string      receiver = 3;
+    string      sender = 4;
+    uint64      gas_price = 5;
+    uint64      gas_limit = 6;
+    string      data = 7;
 }
 
-// TODO: Input data necessary to create a signed transaction.
+// Input data necessary to create a signed transaction.
 message SigningInput {
     bytes private_key = 1;
 
