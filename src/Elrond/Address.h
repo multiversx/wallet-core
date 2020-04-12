@@ -28,7 +28,7 @@ class Address : public Bech32Address {
     Address(Data keyHash) : Bech32Address(hrp, keyHash) {}
 
     /// Initializes an address with a public key.
-    Address(const PublicKey& publicKey) : Bech32Address(hrp, HASHER_SHA2_RIPEMD, publicKey) {}
+    Address(const PublicKey& publicKey) : Bech32Address(hrp, publicKey.bytes) {}
 
     static bool decode(const std::string& addr, Address& obj_out) {
         return Bech32Address::decode(addr, obj_out, hrp);

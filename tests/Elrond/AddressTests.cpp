@@ -25,19 +25,25 @@ TEST(ElrondAddress, Invalid) {
     ASSERT_FALSE(Address::isValid("10z9xdugayn528ksaesdwlhf006fw5sg2qmmm0h52fvxczwgesyvq5pwemr"));
 }
 
+TEST(ElrondAddress, FromString) {
+    Address alice;
+    ASSERT_TRUE(Address::decode("erd10z9xdugayn528ksaesdwlhf006fw5sg2qmmm0h52fvxczwgesyvq5pwemr", alice));
+    ASSERT_EQ("788a66f11d24e8a3da1dcc1aefdd2f7e92ea410a06f7b7de8a4b0d8139198118", hex(alice.getKeyHash()));
+}
+
+TEST(ElrondAddress, FromData) {
+    const auto alice = Address(parse_hex("0x788a66f11d24e8a3da1dcc1aefdd2f7e92ea410a06f7b7de8a4b0d8139198118"));
+    ASSERT_EQ(alice.string(), "erd10z9xdugayn528ksaesdwlhf006fw5sg2qmmm0h52fvxczwgesyvq5pwemr");
+}
+
 TEST(ElrondAddress, FromPrivateKey) {
-    auto privateKey = PrivateKey(parse_hex("6d893bc800f790261f814be252ee9bf51d6efc70e8c46dedc3f9357d06487b04"));
+    auto privateKey = PrivateKey(parse_hex("0x6d893bc800f790261f814be252ee9bf51d6efc70e8c46dedc3f9357d06487b04"));
     auto address = Address(privateKey.getPublicKey(TWPublicKeyTypeED25519));
     ASSERT_EQ(address.string(), "erd10z9xdugayn528ksaesdwlhf006fw5sg2qmmm0h52fvxczwgesyvq5pwemr");
 }
 
 TEST(ElrondAddress, FromPublicKey) {
-    auto publicKey = PublicKey(parse_hex("788a66f11d24e8a3da1dcc1aefdd2f7e92ea410a06f7b7de8a4b0d8139198118"), TWPublicKeyTypeED25519);
+    auto publicKey = PublicKey(parse_hex("0x788a66f11d24e8a3da1dcc1aefdd2f7e92ea410a06f7b7de8a4b0d8139198118"), TWPublicKeyTypeED25519);
     auto address = Address(publicKey);
-    ASSERT_EQ(address.string(), "erd10z9xdugayn528ksaesdwlhf006fw5sg2qmmm0h52fvxczwgesyvq5pwemr");
-}
-
-TEST(ElrondAddress, FromString) {
-    auto address = Address("erd10z9xdugayn528ksaesdwlhf006fw5sg2qmmm0h52fvxczwgesyvq5pwemr");
     ASSERT_EQ(address.string(), "erd10z9xdugayn528ksaesdwlhf006fw5sg2qmmm0h52fvxczwgesyvq5pwemr");
 }

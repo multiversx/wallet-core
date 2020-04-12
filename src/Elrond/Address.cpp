@@ -4,6 +4,8 @@
 // terms governing use, modification, and redistribution, is contained in the
 // file LICENSE at the root of the source code distribution tree.
 
+#include <TrustWalletCore/TWHRP.h>
+
 #include "Address.h"
 
 using namespace TW::Elrond;
@@ -11,5 +13,5 @@ using namespace TW::Elrond;
 const std::string Address::hrp = HRP_ELROND;
 
 bool Address::isValid(const std::string& string) {
-    Bech32Address::isValid(address, hrp);
+    return Bech32Address::isValid(string, hrp);
 }
