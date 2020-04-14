@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.name         = 'TrustWalletCore'
   s.version      = version
   s.summary      = 'Trust Wallet core data structures and algorithms.'
-  s.homepage     = 'https://github.com/TrustWallet/wallet-core'
+  s.homepage     = 'https://github.com/ElrondNetwork/wallet-core.git'
   s.license      = 'MIT'
   s.authors      = { 'Alejandro Isaza' => 'al@isaza.ca' }
 
@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.swift_version = '5.1'
 
   s.source = {
-    git: 'git@github.com:TrustWallet/wallet-core.git',
+    git: 'git@github.com:ElrondNetwork/wallet-core.git',
     tag: version,
     submodules: true
   }
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.default_subspec = 'Core'
 
   s.subspec 'Types' do |ss|
-    ss.source_files = 
+    ss.source_files =
       'swift/Sources/Generated/Enums/*.swift',
       'swift/Sources/Generated/Protobuf/*.swift'
     ss.dependency 'SwiftProtobuf'
