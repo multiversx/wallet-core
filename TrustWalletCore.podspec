@@ -1,7 +1,7 @@
 version = '2.0.7'
 
 Pod::Spec.new do |s|
-  s.name         = 'TrustWalletCoreElrond'
+  s.name         = 'TrustWalletCore'
   s.version      = version
   s.summary      = 'Trust Wallet core data structures and algorithms.'
   s.homepage     = 'https://github.com/ElrondNetwork/wallet-core.git'
