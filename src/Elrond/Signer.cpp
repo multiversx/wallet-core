@@ -16,12 +16,14 @@ using namespace TW::Elrond;
 
 Proto::SigningOutput Signer::sign(const Proto::SigningInput &input) noexcept {
     auto privateKey = PrivateKey(input.private_key());
-    string payload = Elrond::serializeMessageToSignableString(input.transfer());
-    Data payloadAsData = TW::data(payload);
-    auto signature = privateKey.sign(payloadAsData, TWCurveED25519);
-    string encodedSignature = hex(signature);
+    auto signableAsString = Elrond::serializeTransactionToSignableString(input.transaction());
+    auto signableAsData = TW::data(signableAsString);
+    auto signature = privateKey.sign(signableAsData, TWCurveED25519);
+    auto encodedSignature = hex(signature);
+    auto serializedTransaction = Elrond::serializeSignedTransaction(input.transaction(), encodedSignature);
 
     auto protoOutput = Proto::SigningOutput();
-    protoOutput.set_encoded(encodedSignature);
+    protoOutput.set_signature(encodedSignature);
+    protoOutput.set_signed_transaction(serializedTransaction);
     return protoOutput;
 }

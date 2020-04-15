@@ -15,6 +15,7 @@ using json = nlohmann::json;
 
 namespace TW::Elrond {
 
-string serializeMessageToSignableString(const Proto::TransferMessage& message);
+string serializeTransactionToSignableString(const Proto::TransactionMessage& message);
+string serializeSignedTransaction(const Proto::TransactionMessage& message, string encodedSignature);
 
 } // namespace

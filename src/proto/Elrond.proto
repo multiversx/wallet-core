@@ -9,8 +9,8 @@ syntax = "proto3";
 package TW.Elrond.Proto;
 option java_package = "wallet.core.jni.proto";
 
-// Typical balance transfer
-message TransferMessage {
+// A transaction, typical balance transfer
+message TransactionMessage {
     uint64      nonce = 1;
     string      value = 2;
     string      receiver = 3;
@@ -25,12 +25,12 @@ message SigningInput {
     bytes private_key = 1;
 
     oneof message_oneof {
-        TransferMessage transfer = 2;
+        TransactionMessage transaction = 2;
     }
 }
 
 // Transaction signing output.
 message SigningOutput {
-    // Signed and encoded transaction bytes.
-    string encoded = 1;
+    string signed_transaction = 1;
+    string signature = 2;
 }

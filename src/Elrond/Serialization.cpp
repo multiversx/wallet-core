@@ -9,14 +9,11 @@
 #include "../Elrond/Address.h"
 #include "../proto/Elrond.pb.h"
 #include "Base64.h"
-#include "HexCoding.h"
 #include "PrivateKey.h"
 
 using namespace TW::Elrond;
 
-using string = std::string;
-
-std::map<std::string, int> fields_order {
+std::map<string, int> fields_order {
     {"nonce", 1},
     {"value", 2},
     {"receiver", 3},
@@ -35,29 +32,35 @@ struct FieldsSorter {
 template<class Key, class T, class Compare, class Allocator>
 using sorted_map = std::map<Key, T, FieldsSorter, Allocator>;
 using sorted_json = nlohmann::basic_json<sorted_map>;
-using json = nlohmann::json;
 
-static string encodeTransactionData(string data) {
-    TW::Data buffer = TW::data(data); 
-    string encoded = TW::Base64::encode(buffer);
-    return encoded;
-}
-
-string TW::Elrond::serializeMessageToSignableString(const Proto::TransferMessage& message) {
+string TW::Elrond::serializeTransactionToSignableString(const Proto::TransactionMessage& message) {
     sorted_json payload {
         {"nonce", json(message.nonce())},
         {"value", json(message.value())},
+        {"receiver", json(message.receiver())},
+        {"sender", json(message.sender())},
         {"gasPrice", json(message.gas_price())},
-        {"gasLimit", json(message.gas_limit())}
+        {"gasLimit", json(message.gas_limit())},
     };
 
-    payload["receiver"] = json(TW::Base64::encode(parse_hex(message.receiver())));
-    payload["sender"] = json(TW::Base64::encode(parse_hex(message.sender())));
-
     if (!message.data().empty()) {
-        payload["data"] = json(encodeTransactionData(message.data()));
+        payload["data"] = json(TW::Base64::encode(TW::data(message.data())));
     }
 
-    string jsonString = payload.dump();
-    return jsonString;
+    return payload.dump();
+}
+
+string TW::Elrond::serializeSignedTransaction(const Proto::TransactionMessage& message, string signature) {
+    sorted_json payload {
+        {"nonce", json(message.nonce())},
+        {"value", json(message.value())},
+        {"receiver", json(message.receiver())},
+        {"sender", json(message.sender())},
+        {"gasPrice", json(message.gas_price())},
+        {"gasLimit", json(message.gas_limit())},
+        {"data", json(message.data())},
+        {"signature", json(signature)},
+    };
+
+    return payload.dump();
 }
