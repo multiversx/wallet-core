@@ -20,7 +20,8 @@ std::map<string, int> fields_order {
     {"sender", 4},
     {"gasPrice", 5},
     {"gasLimit", 6},
-    {"data", 7}
+    {"data", 7},
+    {"signature", 8}
 };
 
 struct FieldsSorter {

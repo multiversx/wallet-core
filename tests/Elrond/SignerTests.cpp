@@ -16,37 +16,44 @@ using namespace TW;
 using namespace TW::Elrond;
 
 
-TEST(ElrondSigner, SignWithoutData) {
+TEST(ElrondSigner, Sign) {
     auto input = Proto::SigningInput();
-    auto privateKey = PrivateKey(parse_hex("aa137cb6a0022f18ea2d31f00025190fb09961deb624e18cf11f6e867ccb45d3"));
+    auto privateKey = PrivateKey(parse_hex("1a927e2af5306a9bb2ea777f73e06ecc0ac9aaa72fb4ea3fecf659451394cccf"));
     input.set_private_key(privateKey.bytes.data(), 32);
 
     input.mutable_transaction()->set_nonce(0);
     input.mutable_transaction()->set_value("0");
-    input.mutable_transaction()->set_sender("93ee6143cdc10ce79f15b2a6c2ad38e9b6021c72a1779051f47154fd54cfbd5e");
-    input.mutable_transaction()->set_receiver("a967adb3d1574581a6f7ffe0cd6600fb488686704fcff944c88efc7c90b3b13b");
-    input.mutable_transaction()->set_gas_price(200000000000000);
-    input.mutable_transaction()->set_gas_limit(500000000);
-    auto output = Signer::sign(input);
-    auto signature = output.signature();
-
-    ASSERT_EQ("04e98acb3c844bcf49fcd07417fdfe5edc9df4419f7deed49262145d3759f687c1cda202cda51808ad0834b472ccf1f5334b952e3cb1fd0b98721c6bfca10d04", signature);
-}
-
-TEST(ElrondSigner, SignWithData) {
-    auto input = Proto::SigningInput();
-    auto privateKey = PrivateKey(parse_hex("aa137cb6a0022f18ea2d31f00025190fb09961deb624e18cf11f6e867ccb45d3"));
-    input.set_private_key(privateKey.bytes.data(), 32);
-
-    input.mutable_transaction()->set_nonce(0);
-    input.mutable_transaction()->set_value("0");
-    input.mutable_transaction()->set_sender("93ee6143cdc10ce79f15b2a6c2ad38e9b6021c72a1779051f47154fd54cfbd5e");
-    input.mutable_transaction()->set_receiver("a967adb3d1574581a6f7ffe0cd6600fb488686704fcff944c88efc7c90b3b13b");
+    input.mutable_transaction()->set_sender("erd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz");
+    input.mutable_transaction()->set_receiver("erd188nydpkagtpwvfklkl2tn0w6g40zdxkwfgwpjqc2a2m2n7ne9g8q2t22sr");
     input.mutable_transaction()->set_gas_price(200000000000000);
     input.mutable_transaction()->set_gas_limit(500000000);
     input.mutable_transaction()->set_data("foo");
+
     auto output = Signer::sign(input);
     auto signature = output.signature();
+    auto signedTransaction = output.signed_transaction();
 
-    ASSERT_EQ("d0cc3a4d97aa80f37195e91f041163a2f6e9963e5db508b18f1103739892e6660fac5b015050b3ba1ba1bfb43c17f2a432c10386274e665c3d668a3c21723f04", signature);
+    ASSERT_EQ("8912cd7310df084cffe67557ef93c8fd30048d00bb71ea5fe9f5ebb6d90194500122eab982d49c5c5c164e7012cb8d29279820f3e7e885a5fe31c5b2cce0e90a", signature);
+    ASSERT_EQ(R"({"nonce":0,"value":"0","receiver":"erd188nydpkagtpwvfklkl2tn0w6g40zdxkwfgwpjqc2a2m2n7ne9g8q2t22sr","sender":"erd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz","gasPrice":200000000000000,"gasLimit":500000000,"data":"foo","signature":"8912cd7310df084cffe67557ef93c8fd30048d00bb71ea5fe9f5ebb6d90194500122eab982d49c5c5c164e7012cb8d29279820f3e7e885a5fe31c5b2cce0e90a"})", signedTransaction);
+}
+
+TEST(ElrondSigner, SignWithoutData) {
+    auto input = Proto::SigningInput();
+    auto privateKey = PrivateKey(parse_hex("1a927e2af5306a9bb2ea777f73e06ecc0ac9aaa72fb4ea3fecf659451394cccf"));
+    input.set_private_key(privateKey.bytes.data(), 32);
+
+    input.mutable_transaction()->set_nonce(0);
+    input.mutable_transaction()->set_value("0");
+    input.mutable_transaction()->set_sender("erd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz");
+    input.mutable_transaction()->set_receiver("erd188nydpkagtpwvfklkl2tn0w6g40zdxkwfgwpjqc2a2m2n7ne9g8q2t22sr");
+    input.mutable_transaction()->set_gas_price(200000000000000);
+    input.mutable_transaction()->set_gas_limit(500000000);
+    input.mutable_transaction()->set_data("");
+    
+    auto output = Signer::sign(input);
+    auto signature = output.signature();
+    auto signedTransaction = output.signed_transaction();
+
+    ASSERT_EQ("4e160bcafb6cb8ab8fc3260d3faf24bf7ce1205b5685adb457803db6d67c648a614308d8354e40b40fbb90c227046d6997493f798b92acb1b4bc49173939e703", signature);
+    ASSERT_EQ(R"({"nonce":0,"value":"0","receiver":"erd188nydpkagtpwvfklkl2tn0w6g40zdxkwfgwpjqc2a2m2n7ne9g8q2t22sr","sender":"erd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz","gasPrice":200000000000000,"gasLimit":500000000,"data":"","signature":"4e160bcafb6cb8ab8fc3260d3faf24bf7ce1205b5685adb457803db6d67c648a614308d8354e40b40fbb90c227046d6997493f798b92acb1b4bc49173939e703"})", signedTransaction);
 }
