@@ -10,6 +10,8 @@
 #include "../PublicKey.h"
 #include "HexCoding.h"
 
+#include <google/protobuf/util/json_util.h>
+
 using namespace TW;
 using namespace TW::Elrond;
 
