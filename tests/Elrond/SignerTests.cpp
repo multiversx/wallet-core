@@ -19,7 +19,7 @@ using namespace TW::Elrond;
 TEST(ElrondSigner, Sign) {
     auto input = Proto::SigningInput();
     auto privateKey = PrivateKey(parse_hex("1a927e2af5306a9bb2ea777f73e06ecc0ac9aaa72fb4ea3fecf659451394cccf"));
-    input.set_private_key(privateKey.bytes.data(), 32);
+    input.set_private_key(privateKey.bytes.data(), privateKey.size());
 
     input.mutable_transaction()->set_nonce(0);
     input.mutable_transaction()->set_value("0");
@@ -49,7 +49,7 @@ TEST(ElrondSigner, SignJSON) {
 TEST(ElrondSigner, SignWithoutData) {
     auto input = Proto::SigningInput();
     auto privateKey = PrivateKey(parse_hex("1a927e2af5306a9bb2ea777f73e06ecc0ac9aaa72fb4ea3fecf659451394cccf"));
-    input.set_private_key(privateKey.bytes.data(), 32);
+    input.set_private_key(privateKey.bytes.data(), privateKey.size());
 
     input.mutable_transaction()->set_nonce(0);
     input.mutable_transaction()->set_value("0");
