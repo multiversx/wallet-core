@@ -10,18 +10,30 @@
 #include "../PublicKey.h"
 #include "HexCoding.h"
 
+#include <google/protobuf/util/json_util.h>
+
 using namespace TW;
 using namespace TW::Elrond;
 
 
 Proto::SigningOutput Signer::sign(const Proto::SigningInput &input) noexcept {
     auto privateKey = PrivateKey(input.private_key());
-    string payload = Elrond::serializeMessageToSignableString(input.transfer());
-    Data payloadAsData = TW::data(payload);
-    auto signature = privateKey.sign(payloadAsData, TWCurveED25519);
-    string encodedSignature = hex(signature);
+    auto signableAsString = Elrond::serializeTransactionToSignableString(input.transaction());
+    auto signableAsData = TW::data(signableAsString);
+    auto signature = privateKey.sign(signableAsData, TWCurveED25519);
+    auto encodedSignature = hex(signature);
+    auto serializedTransaction = Elrond::serializeSignedTransaction(input.transaction(), encodedSignature);
 
     auto protoOutput = Proto::SigningOutput();
-    protoOutput.set_encoded(encodedSignature);
+    protoOutput.set_signature(encodedSignature);
+    protoOutput.set_signed_transaction(serializedTransaction);
     return protoOutput;
+}
+
+std::string Signer::signJSON(const std::string& json, const Data& key) {
+    auto input = Proto::SigningInput();
+    google::protobuf::util::JsonStringToMessage(json, &input);
+    input.set_private_key(key.data(), key.size());
+    auto output = Signer::sign(input);
+    return output.signed_transaction();
 }

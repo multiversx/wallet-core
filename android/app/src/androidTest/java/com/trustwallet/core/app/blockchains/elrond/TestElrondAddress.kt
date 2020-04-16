@@ -18,16 +18,33 @@ class TestElrondAddress {
         System.loadLibrary("TrustWalletCore")
     }
 
+    private val aliceBech32 = "erd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz"
+    private var aliceSeedHex = "1a927e2af5306a9bb2ea777f73e06ecc0ac9aaa72fb4ea3fecf659451394cccf"
+    private var alicePubKeyHex = "0xfd691bb5e85d102687d81079dffce842d4dc328276d2d4c60d8fd1c3433c3293"
+
     @Test
-    fun testAddress() {
-        // TODO: Check and finalize implementation
+    fun testAddressFromPrivateKey() {
+        val key = PrivateKey(aliceSeedHex.toHexByteArray())
+        val pubKey = key.publicKeyEd25519
+        val address = AnyAddress(pubKey, CoinType.ELROND)
+        val expected = AnyAddress(aliceBech32, CoinType.ELROND)
 
-        val key = PrivateKey("__PRIVATE_KEY_DATA__".toHexByteArray())
-        val pubkey = key.publicKeyEd25519
-        val address = AnyAddress(pubkey, CoinType.ELROND)
-        val expected = AnyAddress("__EXPECTED_RESULT_ADDRESS__", CoinType.ELROND)
+        assertEquals(alicePubKeyHex, pubKey.data().toHex())
+        assertEquals(expected.description(), address.description())
+    }
 
-        assertEquals(pubkey.data().toHex(), "0x__EXPECTED_PUBKEY_DATA__")
-        assertEquals(address.description(), expected.description())
+    @Test
+    fun testAddressFromPublicKey() {
+        val pubKey = PublicKey(alicePubKeyHex.toHexByteArray(), PublicKeyType.ED25519)
+        val address = AnyAddress(pubKey, CoinType.ELROND)
+
+        assertEquals(aliceBech32, address.description())
+    }
+
+    @Test
+    fun testAddressFromString() {
+        val address = AnyAddress(aliceBech32, CoinType.ELROND)
+        
+        assertEquals(aliceBech32, address.description())
     }
 }
