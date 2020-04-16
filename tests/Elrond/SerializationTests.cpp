@@ -4,10 +4,13 @@
 // terms governing use, modification, and redistribution, is contained in the
 // file LICENSE at the root of the source code distribution tree.
 
-#include "HexCoding.h"
-#include "Elrond/Serialization.h"
 #include <gtest/gtest.h>
 #include <vector>
+#include "boost/format.hpp"
+
+#include "HexCoding.h"
+#include "Elrond/Serialization.h"
+#include "TestAccounts.h"
 
 using namespace TW;
 using namespace TW::Elrond;
@@ -28,14 +31,15 @@ TEST(ElrondSerialization, SignableStringWithRealData) {
     Proto::TransactionMessage message;
     message.set_nonce(15);
     message.set_value("100");
-    message.set_sender("erd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz");
-    message.set_receiver("erd188nydpkagtpwvfklkl2tn0w6g40zdxkwfgwpjqc2a2m2n7ne9g8q2t22sr");
+    message.set_sender(ALICE_BECH32);
+    message.set_receiver(BOB_BECH32);
     message.set_gas_price(200000000000000);
     message.set_gas_limit(500000000);
     message.set_data("for dinner");
 
-    string jsonString = serializeTransactionToSignableString(message);
-    ASSERT_EQ(R"({"nonce":15,"value":"100","receiver":"erd188nydpkagtpwvfklkl2tn0w6g40zdxkwfgwpjqc2a2m2n7ne9g8q2t22sr","sender":"erd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz","gasPrice":200000000000000,"gasLimit":500000000,"data":"Zm9yIGRpbm5lcg=="})", jsonString);
+    string expected = (boost::format(R"({"nonce":15,"value":"100","receiver":"%1%","sender":"%2%","gasPrice":200000000000000,"gasLimit":500000000,"data":"Zm9yIGRpbm5lcg=="})") % BOB_BECH32 % ALICE_BECH32).str();
+    string actual = serializeTransactionToSignableString(message);
+    ASSERT_EQ(expected, actual);
 }
 
 TEST(ElrondSerialization, SignableStringWithoutData) {
