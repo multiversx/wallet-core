@@ -27,3 +27,11 @@ Proto::SigningOutput Signer::sign(const Proto::SigningInput &input) noexcept {
     protoOutput.set_signed_transaction(serializedTransaction);
     return protoOutput;
 }
+
+std::string Signer::signJSON(const std::string& json, const Data& key) {
+    auto input = Proto::SigningInput();
+    google::protobuf::util::JsonStringToMessage(json, &input);
+    input.set_private_key(key.data(), key.size());
+    auto output = Signer::sign(input);
+    return output.signed_transaction();
+}
