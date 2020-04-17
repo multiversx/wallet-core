@@ -231,6 +231,16 @@ TEST(HDWallet, DeriveAlgorand) {
     assertHexEqual(privateKeyData, "ce0b7ac644e2b7d9d14d3928b11643f43e48c33d3e328d059fef8add7f070e82");
 }
 
+TEST(HDWallet, DeriveElrond) {
+    auto wallet = WRAP(TWHDWallet, TWHDWalletCreateWithMnemonic(words.get(), passphrase.get()));
+    auto privateKey = WRAP(TWPrivateKey, TWHDWalletGetKeyForCoin(wallet.get(), TWCoinTypeElrond));
+    auto privateKeyData = WRAPD(TWPrivateKeyData(privateKey.get()));
+    auto address = WRAPS(TWCoinTypeDeriveAddress(TWCoinTypeElrond, privateKey.get()));
+
+    assertHexEqual(privateKeyData, "7a0b6d3ec4c1f0512be7304636bb7caad52e9c2eeb0d627022b659173f6ad502");
+    assertStringsEqual(address, "erd140x7c0mcpveh2ln0r2egzg72mxe3a8h4xcc6s4t9mtuxerzt3nxsq5xq0v");
+}
+
 TEST(HDWallet, ExtendedKeys) {
     auto words = STRING("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about");
     auto wallet = WRAP(TWHDWallet, TWHDWalletCreateWithMnemonic(words.get(), STRING("").get()));
