@@ -1337,7 +1337,7 @@
         "symbol": "ERD",
         "decimals": 18,
         "blockchain": "ElrondNetwork",
-        "derivationPath": "m/44'/2003'/0'",
+        "derivationPath": "m/44'/508'/0'",
         "curve": "ed25519",
         "publicKeyType": "ed25519",
         "hrp": "erd",
@@ -1349,7 +1349,7 @@
         "info": {
             "url": "https://elrond.com/",
             "client": "https://github.com/ElrondNetwork/elrond-go",
-            "clientPublic": "https://wallet-api.elrond.com",
+            "clientPublic": "https://api.elrond.com",
             "clientDocs": "https://docs.elrond.com"
         }
     }

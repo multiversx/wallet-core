@@ -237,8 +237,8 @@ TEST(HDWallet, DeriveElrond) {
     auto privateKeyData = WRAPD(TWPrivateKeyData(privateKey.get()));
     auto address = WRAPS(TWCoinTypeDeriveAddress(TWCoinTypeElrond, privateKey.get()));
 
-    assertHexEqual(privateKeyData, "7a0b6d3ec4c1f0512be7304636bb7caad52e9c2eeb0d627022b659173f6ad502");
-    assertStringsEqual(address, "erd140x7c0mcpveh2ln0r2egzg72mxe3a8h4xcc6s4t9mtuxerzt3nxsq5xq0v");
+    assertHexEqual(privateKeyData, "1e6a08a0dc7cfcafdeea72949c3f6c1f8828536727e4b3d64232609c41cb8b3e");
+    assertStringsEqual(address, "erd17vh5dwqrvnlxpmgwujewkuqk0rs9wkl2sgmnxgcp8ahjap5suwusqkuc5r");
 }
 
 TEST(HDWallet, ExtendedKeys) {

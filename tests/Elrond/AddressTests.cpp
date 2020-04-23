@@ -27,7 +27,7 @@ TEST(ElrondAddress, Invalid) {
     ASSERT_FALSE(Address::isValid(""));
     ASSERT_FALSE(Address::isValid("foo"));
     ASSERT_FALSE(Address::isValid("10z9xdugayn528ksaesdwlhf006fw5sg2qmmm0h52fvxczwgesyvq5pwemr"));
-    ASSERT_FALSE(Address::isValid("nerd10z9xdugayn528ksaesdwlhf006fw5sg2qmmm0h52fvxczwgesyvq5pwemr"));
+    ASSERT_FALSE(Address::isValid("xerd10z9xdugayn528ksaesdwlhf006fw5sg2qmmm0h52fvxczwgesyvq5pwemr"));
     ASSERT_FALSE(Address::isValid("foo10z9xdugayn528ksaesdwlhf006fw5sg2qmmm0h52fvxczwgesyvq5pwemr"));
     ASSERT_FALSE(Address::isValid(ALICE_PUBKEY_HEX));
 }

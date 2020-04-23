@@ -18,11 +18,11 @@ using namespace TW::Elrond;
 
 Proto::SigningOutput Signer::sign(const Proto::SigningInput &input) noexcept {
     auto privateKey = PrivateKey(input.private_key());
-    auto signableAsString = Elrond::serializeTransactionToSignableString(input.transaction());
+    auto signableAsString = serializeTransactionToSignableString(input.transaction());
     auto signableAsData = TW::data(signableAsString);
     auto signature = privateKey.sign(signableAsData, TWCurveED25519);
     auto encodedSignature = hex(signature);
-    auto serializedTransaction = Elrond::serializeSignedTransaction(input.transaction(), encodedSignature);
+    auto serializedTransaction = serializeSignedTransaction(input.transaction(), encodedSignature);
 
     auto protoOutput = Proto::SigningOutput();
     protoOutput.set_signature(encodedSignature);
@@ -34,6 +34,6 @@ std::string Signer::signJSON(const std::string& json, const Data& key) {
     auto input = Proto::SigningInput();
     google::protobuf::util::JsonStringToMessage(json, &input);
     input.set_private_key(key.data(), key.size());
-    auto output = Signer::sign(input);
+    auto output = sign(input);
     return output.signed_transaction();
 }

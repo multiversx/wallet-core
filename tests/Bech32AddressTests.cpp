@@ -55,7 +55,7 @@ TEST(Bech32Address, Invalid) {
 
     ASSERT_FALSE(Bech32Address::isValid("", "erd"));
     ASSERT_FALSE(Bech32Address::isValid("erd1cux02zersde0l7hhklzhywcxk4u9n4py5tdxyx7vrvhnza2r4gmq4vw35!", "erd"));
-    ASSERT_FALSE(Bech32Address::isValid("terd19nu5t7hszckwah5nlcadmk5rlchtugzplznskffpwecygcu0520s9tnyy0", "erd"));
+    ASSERT_FALSE(Bech32Address::isValid("xerd19nu5t7hszckwah5nlcadmk5rlchtugzplznskffpwecygcu0520s9tnyy0", "erd"));
 }
 
 TEST(Bech32Address, InvalidWrongPrefix) {

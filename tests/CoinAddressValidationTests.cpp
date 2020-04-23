@@ -375,7 +375,7 @@ TEST(Coin, ValidateAddressVeChain) {
 
 TEST(Coin, ValidateAddressElrond) {
     EXPECT_TRUE(validateAddress(TWCoinTypeElrond, "erd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz"));
-    EXPECT_FALSE(validateAddress(TWCoinTypeElrond, "terd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz"));
+    EXPECT_FALSE(validateAddress(TWCoinTypeElrond, "xerd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz"));
 }
 
 
