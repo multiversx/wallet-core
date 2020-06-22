@@ -11,7 +11,7 @@
 #include "Base64.h"
 #include "PrivateKey.h"
 
-using namespace TW::Elrond;
+using namespace TW;
 
 std::map<string, int> fields_order {
     {"nonce", 1},
@@ -34,7 +34,7 @@ template<class Key, class T, class Compare, class Allocator>
 using sorted_map = std::map<Key, T, FieldsSorter, Allocator>;
 using sorted_json = nlohmann::basic_json<sorted_map>;
 
-string TW::Elrond::serializeTransactionToSignableString(const Proto::TransactionMessage& message) {
+sorted_json preparePayload(const Elrond::Proto::TransactionMessage& message) {
     sorted_json payload {
         {"nonce", json(message.nonce())},
         {"value", json(message.value())},
@@ -45,23 +45,19 @@ string TW::Elrond::serializeTransactionToSignableString(const Proto::Transaction
     };
 
     if (!message.data().empty()) {
-        payload["data"] = json(TW::Base64::encode(TW::data(message.data())));
+        payload["data"] = json(message.data());
     }
 
+    return payload;
+}
+
+string Elrond::serializeTransaction(const Proto::TransactionMessage& message) {
+    sorted_json payload = preparePayload(message);
     return payload.dump();
 }
 
-string TW::Elrond::serializeSignedTransaction(const Proto::TransactionMessage& message, string signature) {
-    sorted_json payload {
-        {"nonce", json(message.nonce())},
-        {"value", json(message.value())},
-        {"receiver", json(message.receiver())},
-        {"sender", json(message.sender())},
-        {"gasPrice", json(message.gas_price())},
-        {"gasLimit", json(message.gas_limit())},
-        {"data", json(message.data())},
-        {"signature", json(signature)},
-    };
-
+string Elrond::serializeSignedTransaction(const Proto::TransactionMessage& message, string signature) {
+    sorted_json payload = preparePayload(message);
+    payload["signature"] = json(signature);
     return payload.dump();
 }

@@ -27,10 +27,9 @@ class TestElrondAddress {
         val key = PrivateKey(aliceSeedHex.toHexByteArray())
         val pubKey = key.publicKeyEd25519
         val address = AnyAddress(pubKey, CoinType.ELROND)
-        val expected = AnyAddress(aliceBech32, CoinType.ELROND)
 
         assertEquals(alicePubKeyHex, pubKey.data().toHex())
-        assertEquals(expected.description(), address.description())
+        assertEquals(aliceBech32, address.description())
     }
 
     @Test
