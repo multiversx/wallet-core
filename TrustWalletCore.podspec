@@ -1,4 +1,4 @@
-version = '2.0.8'
+version = '2.0.9'
 
 Pod::Spec.new do |s|
   s.name         = 'TrustWalletCore'
