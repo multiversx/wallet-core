@@ -39,6 +39,8 @@ class TestElrondSigner {
             .setGasPrice(200000000000000)
             .setGasLimit(500000000)
             .setData("foo")
+            .setChainId("m1.0")
+            .setVersion(1)
             .build()
         
         val privateKey = ByteString.copyFrom(PrivateKey(aliceSeedHex.toHexByteArray()).data())
@@ -49,9 +51,9 @@ class TestElrondSigner {
             .build()
 
         val output = AnySigner.sign(signingInput, CoinType.ELROND, Elrond.SigningOutput.parser())
-        val expectedSignature = "b88ad2fe98a7316ea432a0a76c18cd87200fe75f27a8f053ea6532b40317dbec5136c5463aef132ae951b7e60d45d921caaa5903e70821dcda98f237d4ec4308"
+        val expectedSignature = "fd77f627294c2cad3c4b0c761cad70e886fa1cfd119803caa2bcbc2d5ed3518df3e7531de9daa8ab47b278ac97a0cca5797868bdaba759845ce8c2c91162c30f"
 
         assertEquals(expectedSignature, output.signature)
-        assertEquals("""{"nonce":0,"value":"0","receiver":"$bobBech32","sender":"$aliceBech32","gasPrice":200000000000000,"gasLimit":500000000,"data":"foo","signature":"$expectedSignature"}""", output.encoded)
+        assertEquals("""{"nonce":0,"value":"0","receiver":"$bobBech32","sender":"$aliceBech32","gasPrice":200000000000000,"gasLimit":500000000,"data":"foo","chainID":"m1.0","version":1,"signature":"$expectedSignature"}""", output.encoded)
     }
 }
