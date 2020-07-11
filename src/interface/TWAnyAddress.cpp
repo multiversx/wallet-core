@@ -73,9 +73,11 @@ TWData* _Nonnull TWAnyAddressData(struct TWAnyAddress* _Nonnull address) {
     Data data;
     switch (address->coin) {
     case TWCoinTypeBinance:
+    case TWCoinTypeBinanceTestnet:
     case TWCoinTypeCosmos:
     case TWCoinTypeKava:
     case TWCoinTypeTerra:
+    case TWCoinTypeBandChain:
     case TWCoinTypeIoTeX: {
         Cosmos::Address addr;
         if (!Cosmos::Address::decode(string, addr)) {

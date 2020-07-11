@@ -24,7 +24,7 @@ TW_EXPORT_ENUM(uint32_t)
 enum TWCoinType {
     TWCoinTypeAeternity = 457,
     TWCoinTypeAion = 425,
-    TWCoinTypeBinance = 714,
+    TWCoinTypeBinance = 12345,
     TWCoinTypeBitcoin = 0,
     TWCoinTypeBitcoinCash = 145,
     TWCoinTypeBitcoinGold = 156,
@@ -81,6 +81,8 @@ enum TWCoinType {
     TWCoinTypePolkadot = 354,
     TWCoinTypeFilecoin = 461,
     TWCoinTypeElrond = 508,
+    TWCoinTypeBandChain = 494,
+    TWCoinTypeBinanceTestnet = 714,
 };
 
 /// Returns the blockchain for a coin type.

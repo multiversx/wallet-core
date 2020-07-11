@@ -617,7 +617,7 @@
         "symbol": "BNB",
         "decimals": 8,
         "blockchain": "Binance",
-        "derivationPath": "m/44'/714'/0'/0/0",
+        "derivationPath": "m/44'/12345'/0'/0/0",
         "curve": "secp256k1",
         "publicKeyType": "secp256k1",
         "hrp": "bnb",
@@ -630,6 +630,31 @@
         },
         "info": {
             "url": "https://binance.org",
+            "client": "https://github.com/binance-chain/node-binary",
+            "clientPublic": "https://dex.binance.org",
+            "clientDocs": "https://docs.binance.org/api-reference/dex-api/paths.html"
+        }
+    },
+    {
+        "id": "binancetestnet",
+        "name": "BinanceTestnet",
+        "displayName": "TBNB",
+        "symbol": "TBNB",
+        "decimals": 8,
+        "blockchain": "BinanceTestnet",
+        "derivationPath": "m/44'/714'/0'/0/0",
+        "curve": "secp256k1",
+        "publicKeyType": "secp256k1",
+        "hrp": "tbnb",
+        "explorer": {
+            "url": "https://testnet-explorer.binance.org",
+            "txPath": "/tx/",
+            "accountPath": "/address/",
+            "sampleTx": "D56ADEF5B70597A4B9281B10C76D7B8D4EB5F59B8C520EE9266A2688203FB3A4",
+            "sampleAccount": "tbnb16a8qfhr5frpe2as3panjune840vwpj45mjudux"
+        },
+        "info": {
+            "url": "https://testnet.binance.org",
             "client": "https://github.com/binance-chain/node-binary",
             "clientPublic": "https://dex.binance.org",
             "clientDocs": "https://docs.binance.org/api-reference/dex-api/paths.html"
@@ -1379,6 +1404,30 @@
             "client": "https://github.com/ElrondNetwork/elrond-go",
             "clientPublic": "https://api.elrond.com",
             "clientDocs": "https://docs.elrond.com"
+        }
+    },
+    {
+        "id": "band",
+        "name": "BandChain",
+        "symbol": "BAND",
+        "decimals": 6,
+        "blockchain": "Cosmos",
+        "derivationPath": "m/44'/494'/0'/0/0",
+        "curve": "secp256k1",
+        "publicKeyType": "secp256k1",
+        "hrp": "band",
+        "explorer": {
+            "url": "https://scan-wenchang-testnet2.bandchain.org/",
+            "txPath": "/tx/",
+            "accountPath": "/account/",
+            "sampleTx": "473264551D3063A9EC64EC251C61BE92DDDFCF6CC46D026D1E574D83D5447173",
+            "sampleAccount": "band12nmsm9khdsv0tywge43q3zwj8kkj3hvup9rltp"
+        },
+        "info": {
+            "url": "https://bandprotocol.com/",
+            "client": "https://github.com/bandprotocol/bandchain",
+            "clientPublic": "https://api-wt2-lb.bandchain.org",
+            "clientDocs": "https://docs.bandchain.org/"
         }
     }
 ]
