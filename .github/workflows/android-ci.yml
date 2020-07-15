@@ -37,9 +37,9 @@ jobs:
       run: tools/android-build
     
     - name: Upload
-    - uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v2
       with:
-      name: for-test-trustwalletcore.aar
-      path: build/trustwalletcore.aar
+        name: for-test-trustwalletcore.aar
+        path: build/trustwalletcore.aar
 
         
