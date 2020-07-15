@@ -14,8 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install system dependencies
-      run: echo "ANDROID BUILD..."
-      run: brew install boost ninja
+      run: |
+        echo "ANDROID BUILD..."
+        brew install boost ninja
     - name: Install Android Dependencies
       run: |
         $ANDROID_HOME/tools/bin/sdkmanager --verbose "cmake;3.10.2.4988404" "ndk;21.2.6472646"
@@ -33,8 +34,9 @@ jobs:
         tools/install-dependencies
       if: steps.internal_cache.outputs.cache-hit != 'true'
     - name: Run test
-      run: tools/generate-files
-      run: tools/android-build
+      run: |
+        tools/generate-files
+        tools/android-build
     
     - name: Upload
       uses: actions/upload-artifact@v2
