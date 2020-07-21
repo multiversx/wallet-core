@@ -14,9 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install system dependencies
-      run: |
-        echo "ANDROID BUILD..."
-        brew install boost ninja
+      run: brew install boost ninja
     - name: Install Android Dependencies
       run: |
         $ANDROID_HOME/tools/bin/sdkmanager --verbose "cmake;3.10.2.4988404" "ndk;21.2.6472646"
@@ -36,12 +34,13 @@ jobs:
     - name: Run test
       run: |
         tools/generate-files
-        tools/android-build
-    
-    - name: Upload
+        tools/android-test
+    - name: Build sample app
+      run: |
+        tools/samples-build android
+
+    - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: for-test-trustwalletcore.aar
+        name: for-test-only-android.aar
         path: build/trustwalletcore.aar
-
-        
