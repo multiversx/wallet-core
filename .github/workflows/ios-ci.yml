@@ -2,9 +2,9 @@ name: iOS CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, do-not-merge-CI ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, do-not-merge-CI ]
 
 jobs:
   build:
@@ -33,3 +33,9 @@ jobs:
     - name: Build sample app
       run: |
         tools/samples-build ios
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: for-test-only-ios
+        path: build/ios
