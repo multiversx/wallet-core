@@ -27,10 +27,7 @@ jobs:
     - name: Run iOS tests
       run: |
         tools/generate-files
-        tools/ios-test
-    - name: Build sample app
-      run: |
-        tools/samples-build ios
+        tools/ios-build
     - name: List build
       run: |
         ls -1 -R build
@@ -38,4 +35,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: for-test-only-ios
-        path: build
+        path: build/ios
