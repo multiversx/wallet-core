@@ -36,7 +36,9 @@ jobs:
     - name: Build sample app
       run: |
         tools/samples-build android
-
+    - name: List build
+      run: |
+        ls -1 -R build
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
