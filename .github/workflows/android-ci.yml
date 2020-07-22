@@ -2,9 +2,7 @@ name: Android CI
 
 on:
   push:
-    branches: [ master, do-not-merge-CI ]
-  pull_request:
-    branches: [ master, do-not-merge-CI ]
+    branches: [ do-not-merge-CI, tbnb ]
 
 jobs:
   build:
@@ -42,5 +40,5 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: for-test-only-android.aar
-        path: build/trustwalletcore.aar
+        name: for-test-only-android
+        path: build

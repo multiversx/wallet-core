@@ -2,9 +2,7 @@ name: iOS CI
 
 on:
   push:
-    branches: [ master, do-not-merge-CI ]
-  pull_request:
-    branches: [ master, do-not-merge-CI ]
+    branches: [ do-not-merge-CI, tbnb ]
 
 jobs:
   build:
@@ -38,4 +36,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: for-test-only-ios
-        path: build/ios
+        path: build
