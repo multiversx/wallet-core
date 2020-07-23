@@ -2,9 +2,7 @@ name: Android CI
 
 on:
   push:
-    branches: [ tbnb ]
-  pull_request:
-    branches: [ tbnb ]
+    branches: [ do-not-merge-CI, tbnb ]
 
 jobs:
   build:
@@ -34,11 +32,10 @@ jobs:
     - name: Run test
       run: |
         tools/generate-files
-        tools/android-test
-    - name: Build sample app
+        tools/android-build
+    - name: List build
       run: |
-        tools/samples-build android
-
+        ls -1 -R build
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:

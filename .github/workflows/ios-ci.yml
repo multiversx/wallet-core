@@ -2,9 +2,7 @@ name: iOS CI
 
 on:
   push:
-    branches: [ tbnb ]
-  pull_request:
-    branches: [ tbnb ]
+    branches: [ do-not-merge-CI, tbnb ]
 
 jobs:
   build:
@@ -29,11 +27,10 @@ jobs:
     - name: Run iOS tests
       run: |
         tools/generate-files
-        tools/ios-test
-    - name: Build sample app
+        tools/ios-build
+    - name: List build
       run: |
-        tools/samples-build ios
-
+        ls -1 -R build
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
