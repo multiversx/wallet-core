@@ -620,16 +620,16 @@
         "derivationPath": "m/44'/714'/0'/0/0",
         "curve": "secp256k1",
         "publicKeyType": "secp256k1",
-        "hrp": "bnb",
+        "hrp": "tbnb",
         "explorer": {
-            "url": "https://explorer.binance.org",
+            "url": "https://testnet-explorer.binance.org",
             "txPath": "/tx/",
             "accountPath": "/address/",
-            "sampleTx": "A93625C9F9ABEA1A8E31585B30BBB16C34FAE0D172EB5B6B2F834AF077BF06BB",
-            "sampleAccount": "bnb1u7jm0cll5h3224y0tapwn6gf6pr49ytewx4gsz"
+            "sampleTx": "D56ADEF5B70597A4B9281B10C76D7B8D4EB5F59B8C520EE9266A2688203FB3A4",
+            "sampleAccount": "tbnb16a8qfhr5frpe2as3panjune840vwpj45mjudux"
         },
         "info": {
-            "url": "https://binance.org",
+            "url": "https://testnet.binance.org",
             "client": "https://github.com/binance-chain/node-binary",
             "clientPublic": "https://dex.binance.org",
             "clientDocs": "https://docs.binance.org/api-reference/dex-api/paths.html"

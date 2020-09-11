@@ -34,10 +34,10 @@ TEST(AnyAddress, Data) {
     }
     // bnb address key hash
     {
-        auto string = STRING("bnb1hlly02l6ahjsgxw9wlcswnlwdhg4xhx38yxpd5");
+        auto string = STRING("tbnb1uzqphymsp539lc8s2pucqwdphzydmr2a76jm8w");
         auto addr = WRAP(TWAnyAddress, TWAnyAddressCreateWithString(string.get(), TWCoinTypeBinance));
         auto keyHash = WRAPD(TWAnyAddressData(addr.get()));
-        assertHexEqual(keyHash, "bffe47abfaede50419c577f1074fee6dd1535cd1");
+        assertHexEqual(keyHash, "e0801b93700d225fe0f050798039a1b888dd8d5d");
     }
     // segwit witness program
     {
