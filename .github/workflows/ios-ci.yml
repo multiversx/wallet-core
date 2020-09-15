@@ -2,7 +2,7 @@ name: iOS CI
 
 on:
   push:
-    branches: [ do-not-merge-CI, tbnb ]
+    branches: [ do-not-merge-CI, tbnb2 ]
 
 jobs:
   build:
