@@ -8,9 +8,9 @@ TW_EXPORT_CLASS
 struct TWScope;
 
 TW_EXPORT_STATIC_METHOD
-void TWScopeSetTestnet();
+void TWScopeSetTestnet(struct TWScope *_Nonnull lhs);
 
 TW_EXPORT_STATIC_METHOD
-void TWScopeSetMainnet();
+void TWScopeSetMainnet(struct TWScope *_Nonnull lhs);
 
 TW_EXTERN_C_END
