@@ -14,7 +14,7 @@
 #include <TrustWalletCore/TWPrivateKey.h>
 #include <TrustWalletCore/TWPublicKey.h>
 
-#include <TrustWalletCore/Scope.h>
+#include <TrustWalletCore/TWScope.h>
 
 #include <TrustWalletCore/TWBitcoinScript.h>
 #include <TrustWalletCore/TWSegwitAddress.h>
