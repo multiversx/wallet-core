@@ -18,6 +18,17 @@ class BinanceChainTests: XCTestCase {
         XCTAssertEqual("bnb1grpf0955h0ykzq3ar5nmum7y6gdfl6lxfn46h2", address.description)
     }
 
+    func testAddressTestnet() {
+        Scope.setTestnet()
+
+        let publicKey = PublicKey(data: Data(hexString: "0x026a35920088d98c3888ca68c53dfc93f4564602606cbb87f0fe5ee533db38e502")!, type: .secp256k1)!
+        let address = AnyAddress(publicKey: publicKey, coin: .binance)
+
+        XCTAssertTrue(address.description.contains("tbnb"))
+
+        Scope.setMainnet()
+    }
+
     func testBinanceMainnet() {
         let wallet = HDWallet(mnemonic: "rabbit tilt arm protect banner ill produce vendor april bike much identify pond upset front easily glass gallery address hair priority focus forest angle", passphrase: "")
         let key = wallet.getKeyForCoin(coin: .binance)
