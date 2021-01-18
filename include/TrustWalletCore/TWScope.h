@@ -1,5 +1,7 @@
 #pragma once
 
+#include "TWBase.h"
+
 TW_EXTERN_C_BEGIN
 
 TW_EXPORT_CLASS
