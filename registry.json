@@ -42,7 +42,7 @@
     "publicKeyType": "secp256k1",
     "p2pkhPrefix": 0,
     "p2shPrefix": 5,
-    "hrp": "bc",
+    "hrp": "tb",
     "publicKeyHasher": "sha256ripemd",
     "base58Hasher": "sha256d",
     "xpub": "vpub",
