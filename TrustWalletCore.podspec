@@ -139,6 +139,7 @@ Pod::Spec.new do |s|
         '${PODS_ROOT}/TrustWalletCore/trezor-crypto/src',
       'SYSTEM_HEADER_SEARCH_PATHS' => '$(inherited) ' \
         '/usr/local/include ' \
+        '/opt/homebrew/include ' \
         '${PODS_ROOT}/TrustWalletCore/include ' \
         '${PODS_ROOT}/TrustWalletCore/trezor-crypto/include ' \
         "${PODS_ROOT}/TrustWalletCore/#{protobuf_source_dir}/src " \
@@ -150,7 +151,7 @@ Pod::Spec.new do |s|
       'OTHER_LDFLAGS' => '$(inherited) -fprofile-instr-generate'
     }
     ss.pod_target_xcconfig = {
-      'SYSTEM_HEADER_SEARCH_PATHS' => '$(inherited) /usr/local/include'
+      'SYSTEM_HEADER_SEARCH_PATHS' => '$(inherited) /usr/local/include /opt/homebrew/include'
     }
     ss.dependency 'TrustWalletCore/Types'
   end
