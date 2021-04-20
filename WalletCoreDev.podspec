@@ -140,6 +140,7 @@ Pod::Spec.new do |s|
         '${SRCROOT}/../../trezor-crypto/src ',
       'SYSTEM_HEADER_SEARCH_PATHS' => '$(inherited) ' \
         '/usr/local/include ' \
+        '/opt/homebrew/include ' \
         '${SRCROOT}/../../include ' \
         '${SRCROOT}/../../../build/local/include ' \
         "${SRCROOT}/../../trezor-crypto/include " \
