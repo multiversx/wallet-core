@@ -1,4 +1,4 @@
-// Copyright © 2017-2020 Trust Wallet.
+// Copyright © 2017-2021 Trust Wallet.
 //
 // This file is part of Trust. The full Trust copyright notice, including
 // terms governing use, modification, and redistribution, is contained in the
@@ -8,24 +8,42 @@ import WalletCore
 import XCTest
 
 extension HDWallet {
-    static let test = HDWallet(mnemonic: "ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal", passphrase: "TREZOR")
+    static let test = HDWallet(mnemonic: "ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal", passphrase: "TREZOR")!
 }
 
 class HDWalletTests: XCTestCase {
-    func testSeed() {
+    func testCreateFromMnemonic() {
         let wallet = HDWallet.test
 
+        XCTAssertEqual(wallet.mnemonic, "ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal")
+        XCTAssertEqual(wallet.entropy.hexString, "ba5821e8c356c05ba5f025d9532fe0f21f65d594")
         XCTAssertEqual(wallet.seed.hexString, "7ae6f661157bda6492f6162701e570097fc726b6235011ea5ad09bf04986731ed4d92bc43cbdee047b60ea0dd1b1fa4274377c9bf5bd14ab1982c272d8076f29")
     }
 
-    func testSeedNoPassword() {
-        let wallet = HDWallet(mnemonic: HDWallet.test.mnemonic, passphrase: "")
+    func testCreateFromMnemonicNoPassword() {
+        let wallet = HDWallet(mnemonic: HDWallet.test.mnemonic, passphrase: "")!
 
         XCTAssertEqual(wallet.seed.hexString, "354c22aedb9a37407adc61f657a6f00d10ed125efa360215f36c6919abd94d6dbc193a5f9c495e21ee74118661e327e84a5f5f11fa373ec33b80897d4697557d")
     }
 
+    func testCreateFromMnemonicInvalid() {
+        let wallet = HDWallet(mnemonic: "THIS IS AN INVALID MNEMONIC", passphrase: "")
+        XCTAssertNil(wallet)
+    }
+
+    func testGenerate() {
+        let wallet = HDWallet(strength: 128, passphrase: "")!
+        XCTAssertTrue(Mnemonic.isValid(mnemonic: wallet.mnemonic))
+    }
+
+    func testCreateFromEntropy() {
+        let wallet = HDWallet(entropy: Data(hexString: "ba5821e8c356c05ba5f025d9532fe0f21f65d594")!, passphrase: "TREZOR")!
+        XCTAssertEqual(wallet.mnemonic, "ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal")
+        XCTAssertEqual(wallet.entropy.hexString, "ba5821e8c356c05ba5f025d9532fe0f21f65d594")
+    }
+
     func testMasterKey() {
-        let wallet = HDWallet(mnemonic: "tiny escape drive pupil flavor endless love walk gadget match filter luxury", passphrase: "")
+        let wallet = HDWallet(mnemonic: "tiny escape drive pupil flavor endless love walk gadget match filter luxury", passphrase: "")!
         XCTAssertEqual(wallet.seed.hexString, "d430216f5b506dfd281d6ff6e92150d205868923df00774bc301e5ffdc2f4d1ad38a602017ddea6fc7d6315345d8b9cadbd8213ed2ffce5dfc550fa918665eb8")
         let masterKey = wallet.getMasterKey(curve: Curve.secp256k1)
         XCTAssertEqual(masterKey.data.hexString, "e120fc1ef9d193a851926ebd937c3985dc2c4e642fb3d0832317884d5f18f3b3")
@@ -34,8 +52,8 @@ class HDWalletTests: XCTestCase {
     func testDerive() {
         let wallet = HDWallet.test
 
-        let key0 = wallet.getKeyBIP44(coin: .ethereum, account: 0, change: 0, address: 0)
-        let key1 = wallet.getKeyBIP44(coin: .ethereum, account: 0, change: 0, address: 1)
+        let key0 = wallet.getDerivedKey(coin: .ethereum, account: 0, change: 0, address: 0)
+        let key1 = wallet.getDerivedKey(coin: .ethereum, account: 0, change: 0, address: 1)
 
         XCTAssertEqual(AnyAddress(publicKey: key0.getPublicKeySecp256k1(compressed: false), coin: .ethereum).description, "0x27Ef5cDBe01777D62438AfFeb695e33fC2335979")
         XCTAssertEqual(AnyAddress(publicKey: key1.getPublicKeySecp256k1(compressed: false), coin: .ethereum).description, "0x98f5438cDE3F0Ff6E11aE47236e93481899d1C47")
@@ -47,7 +65,7 @@ class HDWalletTests: XCTestCase {
         let key = wallet.getKeyForCoin(coin: wanChain)
         let address = wanChain.deriveAddress(privateKey: key)
 
-        XCTAssertEqual(address, "0x4ddA26870b4B3FA3fBa32222159359038F588318")
+        XCTAssertEqual(address, "0x4DDa26870B4b3fa3FbA32222159359038f588318")
     }
 
     func testDeriveBitcoin() {
@@ -98,7 +116,7 @@ class HDWalletTests: XCTestCase {
         let icon = CoinType.icon
         let wallet = HDWallet.test
         let key0 = wallet.getKeyForCoin(coin: icon)
-        let key1 = wallet.getKeyBIP44(coin: icon, account: 0, change: 0, address: 1)
+        let key1 = wallet.getDerivedKey(coin: icon, account: 0, change: 0, address: 1)
         let address0 = icon.deriveAddress(privateKey: key0)
         let address1 = icon.deriveAddress(privateKey: key1)
 
@@ -196,7 +214,7 @@ class HDWalletTests: XCTestCase {
     }
 
     func testDeriveTezos2() {
-        let wallet = HDWallet(mnemonic: "kidney setup media hat relief plastic ghost census mouse science expect movie", passphrase: "")
+        let wallet = HDWallet(mnemonic: "kidney setup media hat relief plastic ghost census mouse science expect movie", passphrase: "")!
 
         let key = wallet.getKeyForCoin(coin: .tezos)
         let address = CoinType.tezos.deriveAddress(privateKey: key)
@@ -207,7 +225,7 @@ class HDWalletTests: XCTestCase {
     func testDeriveNimiq() {
         // mnemonic is from https://github.com/Eligioo/nimiq-hd-wallet, compatible with ledger
         // but it's not compatible with safe.nimiq.com (can't import)
-        let wallet = HDWallet(mnemonic: "insane mixed health squeeze physical trust pipe possible garage hero flock stand profit power tooth review note camera express vicious clock machine entire heavy", passphrase: "")
+        let wallet = HDWallet(mnemonic: "insane mixed health squeeze physical trust pipe possible garage hero flock stand profit power tooth review note camera express vicious clock machine entire heavy", passphrase: "")!
         let coin = CoinType.nimiq
         let key = wallet.getKeyForCoin(coin: coin)
         let address = coin.deriveAddress(privateKey: key)
@@ -265,7 +283,7 @@ class HDWalletTests: XCTestCase {
     }
 
     func testExtendedKeys() {
-        let wallet = HDWallet(mnemonic: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about", passphrase: "")
+        let wallet = HDWallet(mnemonic: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about", passphrase: "")!
 
         let xprv = wallet.getExtendedPrivateKey(purpose: .bip44, coin: .bitcoin, version: .xprv)
         let xpub = wallet.getExtendedPublicKey(purpose: .bip44, coin: .bitcoin, version: .xpub)
@@ -419,5 +437,31 @@ class HDWalletTests: XCTestCase {
         let address = coin.deriveAddress(privateKey: key)
 
         XCTAssertEqual(address, "band1pe8xm2r46rmctsukuqu7gl900vzprfsp4sguc3")
+    }
+
+    func testGenerateMultiThreaded() throws {
+        let group = DispatchGroup()
+        for _ in 0..<5 {
+            group.enter()
+
+            Thread.init {
+                // multiple steps in one thread
+                for _ in 0..<10 {
+                    // random wallet generation
+                    let wallet = HDWallet(strength: 128, passphrase: "")
+                    XCTAssertNotNil(wallet)
+                    XCTAssertTrue(Mnemonic.isValid(mnemonic: wallet?.mnemonic  ?? ""))
+
+                    // also try mnemonic-based generation
+                    let mnemonic = wallet?.mnemonic ?? ""
+                    let wallet2 = HDWallet(mnemonic: mnemonic, passphrase: "")
+                    XCTAssertEqual(wallet2?.mnemonic, mnemonic)
+                }
+
+                group.leave()
+            }.start()
+        }
+
+        XCTAssertEqual(group.wait(timeout: .now() + .seconds(10)), .success)
     }
 }

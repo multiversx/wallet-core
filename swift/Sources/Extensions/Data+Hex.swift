@@ -21,6 +21,11 @@ extension Data {
             return nil
         }
 
+        // Check odd characters
+        if string.contains(where: { !$0.isHexDigit }) {
+            return nil
+        }
+
         // Convert the string to bytes for better performance
         guard let stringData = string.data(using: .ascii, allowLossyConversion: true) else {
             return nil
@@ -44,6 +49,12 @@ extension Data {
     private static func value(of nibble: UInt8) -> UInt8? {
         guard let letter = String(bytes: [nibble], encoding: .ascii) else { return nil }
         return UInt8(letter, radix: 16)
+    }
+
+    /// Reverses and parses hex string as `Data`
+    public static func reverse(hexString: String) -> Data {
+        guard let data = Data(hexString: hexString) else { return Data() }
+        return Data(data.reversed())
     }
 
     /// Returns the hex string representation of the data.

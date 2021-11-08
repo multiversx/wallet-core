@@ -76,11 +76,17 @@ TEST(DecredSigner, SignP2PKH) {
     auto txOut = TransactionOutput();
     redeemTx.outputs.push_back(txOut);
 
+    auto plan = input.mutable_plan();
+    plan->set_amount(100'000'000);
+    plan->set_available_amount(100'000'000);
+    plan->set_fee(0);
+    plan->set_change(0);
+    auto utxop0 = plan->add_utxos();
+    *utxop0 = *utxo0;
 
     // Sign
     auto signer = Signer(std::move(input));
     signer.transaction = redeemTx;
-    signer.txPlan.utxos.push_back(*utxo0);
     signer.txPlan.amount = 100'000'000;
     const auto result = signer.sign();
 
@@ -165,6 +171,13 @@ TEST(DecredSigner, SignP2SH) {
     utxo0->mutable_out_point()->set_hash(originTx.hash().data(), originTx.hash().size());
     utxo0->mutable_out_point()->set_index(0);
 
+    auto plan = input.mutable_plan();
+    plan->set_amount(100'000'000);
+    plan->set_available_amount(100'000'000);
+    plan->set_fee(0);
+    plan->set_change(0);
+    auto utxop0 = plan->add_utxos();
+    *utxop0 = *utxo0;
 
 	// Create the transaction to redeem the fake transaction.
     auto redeemTx = Transaction();
@@ -181,7 +194,6 @@ TEST(DecredSigner, SignP2SH) {
     // Sign
     auto signer = Signer(std::move(input));
     signer.transaction = redeemTx;
-    signer.txPlan.utxos.push_back(*utxo0);
     signer.txPlan.amount = 100'000'000;
     const auto result = signer.sign();
 
@@ -269,7 +281,7 @@ TEST(DecredSigner, SignNegativeNoUtxo) {
     ASSERT_FALSE(result);
 }
 
-TEST(DecredSigner, SignP2PKH_Noplan) {
+TEST(DecredSigner, SignP2PKH_NoPlan) {
     const auto privateKey = PrivateKey(parse_hex("22a47fa09a223f2aa079edf85a7c2d4f8720ee63e502ee2869afab7de234b80c"));
     const auto publicKey = privateKey.getPublicKey(TWPublicKeyTypeSECP256k1);
     const auto keyhash = Hash::ripemd(Hash::blake256(publicKey.bytes));
@@ -413,5 +425,5 @@ TEST(DecredSigning, SignP2WPKH_NegativeAddressWrongType) {
     // Sign
     auto result = Signer(std::move(input)).sign();
 
-    ASSERT_FALSE(result) << result.error();
+    ASSERT_FALSE(result) << std::to_string(result.error());
 }

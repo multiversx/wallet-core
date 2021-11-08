@@ -40,7 +40,8 @@ Data Transaction::computeSignatureHash(const Bitcoin::Script& prevOutScript, siz
     auto inputsToSign = inputs;
     auto signIndex = index;
     if ((hashType & TWBitcoinSigHashTypeAnyoneCanPay) != 0) {
-        inputsToSign = {inputs[index]};
+        inputsToSign.clear();
+        inputsToSign.push_back(inputs[index]);
         signIndex = 0;
     }
 
@@ -197,7 +198,7 @@ Proto::Transaction Transaction::proto() const {
     protoTx.set_locktime(lockTime);
 
     for (const auto& input : inputs) {
-        auto protoInput = protoTx.add_inputs();
+        auto* protoInput = protoTx.add_inputs();
         protoInput->mutable_previousoutput()->set_hash(input.previousOutput.hash.data(),
                                                        input.previousOutput.hash.size());
         protoInput->mutable_previousoutput()->set_index(input.previousOutput.index);
@@ -206,7 +207,7 @@ Proto::Transaction Transaction::proto() const {
     }
 
     for (const auto& output : outputs) {
-        auto protoOutput = protoTx.add_outputs();
+        auto* protoOutput = protoTx.add_outputs();
         protoOutput->set_value(output.value);
         protoOutput->set_script(output.script.bytes.data(), output.script.bytes.size());
     }

@@ -1,4 +1,4 @@
-// Copyright © 2017-2020 Trust Wallet.
+// Copyright © 2017-2021 Trust Wallet.
 //
 // This file is part of Trust. The full Trust copyright notice, including
 // terms governing use, modification, and redistribution, is contained in the
@@ -11,6 +11,7 @@
 #include "PrivateKey.h"
 #include "HexCoding.h"
 #include "HDWallet.h"
+#include "Mnemonic.h"
 #include "Coin.h"
 
 #include <iostream>
@@ -24,7 +25,7 @@ using namespace std;
 Keys::Keys(ostream& out, const Coins& coins) : _out(out), _coins(coins) {
     // init a random mnemonic
     HDWallet newwall(128, "");
-    _currentMnemonic = newwall.mnemonic;
+    _currentMnemonic = newwall.getMnemonic();
 }
 
 void privateKeyToResult(const PrivateKey& priKey, string& res_out) {
@@ -86,7 +87,7 @@ void Keys::setMnemonic(const vector<string>& param) {
     }
 
     // verify mnemonic
-    if (!HDWallet::isValid(mnem)) {
+    if (!Mnemonic::isValid(mnem)) {
         _out << "Not a valid mnemonic: " << mnem << endl;
         return;
     }
@@ -103,12 +104,12 @@ bool Keys::newMnemonic(const string& param1, string& res) {
         return false;
     }
     HDWallet newwall(strength, "");
-    if (newwall.mnemonic.length() == 0) {
+    if (newwall.getMnemonic().length() == 0) {
         _out << "Error: no mnemonic generated." << endl;
         return false;
     }
     // store
-    _currentMnemonic = newwall.mnemonic;
+    _currentMnemonic = newwall.getMnemonic();
     res = _currentMnemonic;
     _out << "New mnemonic set." << endl;
     return false;
@@ -117,7 +118,7 @@ bool Keys::newMnemonic(const string& param1, string& res) {
 bool Keys::dumpSeed(string& res) {
     assert(_currentMnemonic.length() > 0); // a mnemonic is always set
     HDWallet wallet(_currentMnemonic, "");
-    string seedHex = hex(wallet.seed);
+    string seedHex = hex(wallet.getSeed());
     res = seedHex;
     return true;
 }

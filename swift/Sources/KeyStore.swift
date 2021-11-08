@@ -128,7 +128,7 @@ public final class KeyStore {
     /// - Returns: new account
     public func `import`(json: Data, name: String, password: String, newPassword: String, coins: [CoinType]) throws -> Wallet {
         guard let key = StoredKey.importJSON(json: json) else {
-            throw Error.invalidKey
+            throw Error.invalidJSON
         }
         guard let data = key.decryptPrivateKey(password: Data(password.utf8)) else {
             throw Error.invalidPassword
@@ -145,7 +145,7 @@ public final class KeyStore {
     }
 
     private func checkMnemonic(_ data: Data) -> String? {
-        guard let mnemonic = String(data: data, encoding: .ascii), HDWallet.isValid(mnemonic: mnemonic) else {
+        guard let mnemonic = String(data: data, encoding: .ascii), Mnemonic.isValid(mnemonic: mnemonic) else {
             return nil
         }
         return mnemonic
@@ -231,7 +231,7 @@ public final class KeyStore {
     /// - Parameters:
     ///   - wallet: wallet to export
     ///   - password: account password
-    /// - Returns: private key data for encrypted keys or menmonic phrase for HD wallets
+    /// - Returns: private key data for encrypted keys or mnemonic phrase for HD wallets
     public func exportPrivateKey(wallet: Wallet, password: String) throws -> Data {
         guard let key = wallet.key.decryptPrivateKey(password: Data(password.utf8)) else {
             throw Error.invalidPassword

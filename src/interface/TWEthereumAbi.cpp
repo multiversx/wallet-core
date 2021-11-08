@@ -17,14 +17,10 @@
 #include <string>
 #include <vector>
 
-using namespace TW;
-using namespace TW::Ethereum;
 using namespace TW::Ethereum::ABI;
+using namespace TW::Ethereum;
+using namespace TW;
 
-/// Wrapper for C interface, empty as all methods are static
-struct TWEthereumAbi {
-    // TW::Ethereum::ABI::Encoder impl;
-};
 
 TWData* _Nonnull TWEthereumAbiEncode(struct TWEthereumAbiFunction* _Nonnull func_in) {
     assert(func_in != nullptr);
@@ -60,4 +56,14 @@ TWString* _Nullable TWEthereumAbiDecodeCall(TWData* _Nonnull callData, TWString*
     catch(...) {
         return nullptr;
     }
+}
+
+TWData* _Nonnull TWEthereumAbiEncodeTyped(TWString* _Nonnull messageJson) {
+    Data data;
+    try {
+        data = ParamStruct::hashStructJson(TWStringUTF8Bytes(messageJson));
+    } catch (...) {
+        // return empty
+    }
+    return TWDataCreateWithBytes(data.data(), data.size());
 }

@@ -23,13 +23,13 @@ using namespace std;
 bool AddressV3::parseAndCheckV3(const std::string& addr, Discrimination& discrimination, Kind& kind, Data& key1, Data& key2) {
     try {
         auto bech = Bech32::decode(addr);
-        if (bech.second.size() == 0) {
+        if (std::get<1>(bech).size() == 0) {
             // empty Bech data
             return false;
         }
         // Bech bits conversion
         Data conv;
-        auto success = Bech32::convertBits<5, 8, false>(conv, bech.second);
+        auto success = Bech32::convertBits<5, 8, false>(conv, std::get<1>(bech));
         if (!success) {
             return false;
         }
@@ -165,13 +165,7 @@ AddressV3::AddressV3(const Data& data) {
     std::copy(data.begin() + index, data.begin() + index + len2, groupKey.begin());
 }
 
-AddressV3::AddressV3(const AddressV3& other) :
-    discrimination(other.discrimination),
-    kind(other.kind),
-    key1(other.key1),
-    groupKey(other.groupKey),
-    legacyAddressV2(other.legacyAddressV2)
-{}
+AddressV3::AddressV3(const AddressV3& other) = default;
 
 void AddressV3::operator=(const AddressV3& other)
 {
@@ -213,7 +207,7 @@ string AddressV3::string(const std::string& hrp) const {
     if (!Bech32::convertBits<8, 5, true>(bech, keys)) {
         return "";
     }
-    return Bech32::encode(hrp, bech);
+    return Bech32::encode(hrp, bech, Bech32::ChecksumVariant::Bech32);
 }
 
 string AddressV3::stringBase32() const {

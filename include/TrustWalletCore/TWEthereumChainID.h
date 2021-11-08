@@ -22,6 +22,16 @@ enum TWEthereumChainID {
     TWEthereumChainIDThunderToken = 108,
     TWEthereumChainIDTomoChain = 88,
     TWEthereumChainIDBinanceSmartChain = 56,
+    TWEthereumChainIDPolygon = 137,
+    TWEthereumChainIDWanchain = 888,
+    TWEthereumChainIDOptimism = 10,
+    TWEthereumChainIDArbitrum = 42161,
+    TWEthereumChainIDHeco = 128,
+    TWEthereumChainIDAvalanche = 43114,
+    TWEthereumChainIDXDai = 100,
+    TWEthereumChainIDFantom = 250,
+    TWEthereumChainIDCelo = 42220,
+    TWEthereumChainIDRonin = 2020,
 };
 
 TW_EXTERN_C_END

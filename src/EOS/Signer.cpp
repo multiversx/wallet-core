@@ -7,6 +7,7 @@
 #include "Signer.h"
 #include "Asset.h"
 #include "PackedTransaction.h"
+#include "../proto/Common.pb.h"
 #include "../HexCoding.h"
 
 #include <TrezorCrypto/ecdsa.h>
@@ -62,7 +63,7 @@ Proto::SigningOutput Signer::sign(const Proto::SigningInput& input) noexcept {
         output.set_json_encoded(ptx.serialize().dump());
         return output;
     } catch (const std::exception& e) {
-        output.set_error(e.what());
+        output.set_error(Common::Proto::Error_internal);
     }
     return output;
 }
@@ -84,7 +85,7 @@ void Signer::sign(const PrivateKey& privateKey, Type type, Transaction& transact
 
     const Data result = privateKey.sign(hash(transaction), curve, canonicalChecker);
 
-    transaction.signatures.push_back(Signature(result, type));
+    transaction.signatures.emplace_back(Signature(result, type));
 }
 
 TW::Data Signer::hash(const Transaction& transaction) const noexcept {

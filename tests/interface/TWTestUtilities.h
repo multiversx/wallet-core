@@ -8,8 +8,10 @@
 
 #include <TrustWalletCore/TWData.h>
 #include <TrustWalletCore/TWString.h>
+
 #include <gtest/gtest.h>
 #include <google/protobuf/util/json_util.h>
+#include <nlohmann/json.hpp>
 
 #include <vector>
 
@@ -28,6 +30,12 @@ inline void assertHexEqual(const std::shared_ptr<TWData>& data, const char* expe
     assertStringsEqual(hex, expected);
 }
 
+inline void assertJSONEqual(const std::string& lhs, const char* expected) {
+    auto lhsJson = nlohmann::json::parse(lhs);
+    auto rhsJson = nlohmann::json::parse(std::string(expected));
+    ASSERT_EQ(lhsJson.dump(), rhsJson.dump());
+}
+
 inline std::vector<uint8_t>* dataFromTWData(TWData* data) {
     return const_cast<std::vector<uint8_t>*>(reinterpret_cast<const std::vector<uint8_t>*>(data));
 }
@@ -42,13 +50,6 @@ std::string getTestTempDir(void);
             auto outputTWData = WRAPD(TWAnySignerSign(inputTWData.get(), coin));\
             output.ParseFromArray(TWDataBytes(outputTWData.get()), static_cast<int>(TWDataSize(outputTWData.get())));\
         }
-#define ANY_ENCODE(input, coin) \
-        {\
-            auto inputData = input.SerializeAsString();\
-            auto inputTWData = WRAPD(TWDataCreateWithBytes((const uint8_t *)inputData.data(), inputData.size()));\
-            auto encodedData = WRAPD(TWAnySignerEncode(inputTWData.get(), coin));\
-            encoded = TW::data(TWDataBytes(encodedData.get()), static_cast<int>(TWDataSize(encodedData.get())));\
-        }
 #define ANY_PLAN(input, output, coin) \
         {\
             auto inputData = input.SerializeAsString();\
@@ -62,3 +63,21 @@ std::string getTestTempDir(void);
             google::protobuf::util::MessageToJsonString(input, &json); \
             std::cout<<"dump proto: "<<json<<std::endl; \
         }
+
+/// For tests which should throw.  Wrap code under test in this macro.  
+/// ExceptionMsg is the expected exception message (startsWith match)
+#define EXPECT_EXCEPTION(statement, expExceptionMsg) \
+    try { \
+        statement; \
+        FAIL() << "An exception was expected, but none was thrown"; \
+    } catch (const std::exception& ex) { \
+        const std::string expEx = expExceptionMsg; \
+        const std::string actEx = ex.what(); \
+        const auto actExPrefix = actEx.substr(0, expEx.length()); \
+        EXPECT_EQ(actExPrefix, expEx); \
+    } catch (...) { \
+        FAIL() << "Not the expected exception"; \
+    }
+
+/// Open a json file
+nlohmann::json loadJson(std::string path);

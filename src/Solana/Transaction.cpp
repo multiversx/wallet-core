@@ -47,6 +47,12 @@ void Message::addAccount(const AccountMeta& account) {
     }
 }
 
+void Message::addAccountKeys(const Address& account) {
+    if (std::find(accountKeys.begin(), accountKeys.end(), account) == accountKeys.end()) {
+        accountKeys.push_back(account);
+    }
+}
+
 void Message::compileAccounts() {
     for (auto& instr: instructions) {
         for (auto& address: instr.accounts) {
@@ -67,13 +73,13 @@ void Message::compileAccounts() {
     // merge the three buckets
     accountKeys.clear();
     for(auto& a: signedAccounts) {
-        accountKeys.push_back(a);
+        addAccountKeys(a);
     }
     for(auto& a: unsignedAccounts) {
-        accountKeys.push_back(a);
+        addAccountKeys(a);
     }
     for(auto& a: readOnlyAccounts) {
-        accountKeys.push_back(a);
+        addAccountKeys(a);
     }
 
     compileInstructions();
@@ -82,7 +88,7 @@ void Message::compileAccounts() {
 void Message::compileInstructions() {
     compiledInstructions.clear();
     for (auto instruction: instructions) {
-        compiledInstructions.push_back(CompiledInstruction(instruction, accountKeys));
+        compiledInstructions.emplace_back(CompiledInstruction(instruction, accountKeys));
     }
 }
 
@@ -128,7 +134,7 @@ Data Transaction::messageData() const {
 }
 
 uint8_t Transaction::getAccountIndex(Address publicKey) {
-    std::vector<Address>::iterator item =
+    auto item =
         std::find(this->message.accountKeys.begin(), this->message.accountKeys.end(), publicKey);
     if (item == this->message.accountKeys.end()) {
         throw std::invalid_argument("publicKey not found in message.accountKeys");

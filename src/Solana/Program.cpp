@@ -10,7 +10,7 @@
 #include "../Base58.h"
 #include "../Hash.h"
 
-#include "TrezorCrypto/ed25519-donna.h"
+#include <TrezorCrypto/ed25519-donna/ed25519-donna.h>
 
 #include <cassert>
 
@@ -30,13 +30,25 @@ Address StakeProgram::addressFromValidatorSeed(const Address& fromAddress, const
     return Address(hash);
 }
 
+Address StakeProgram::addressFromRecentBlockhash(const Address& fromAddress, const Hash& recentBlockhash, const Address& programId) {
+    Data extended = fromAddress.vector();
+    std::string seed = recentBlockhash.encoded();
+    Data vecSeed(seed.begin(), seed.end());
+    vecSeed.resize(32);
+    Data additional = programId.vector();
+    extended.insert(extended.end(), vecSeed.begin(), vecSeed.end());
+    extended.insert(extended.end(), additional.begin(), additional.end());
+    Data hash = TW::Hash::sha256(extended);
+    return Address(hash);
+}
+
 /*
  * Based on solana-program-library code, get_associated_token_address()
  * https://github.com/solana-labs/solana-program-library/blob/master/associated-token-account/program/src/lib.rs#L35
  * https://github.com/solana-labs/solana-program-library/blob/master/associated-token-account/program/src/lib.rs#L19
  */
 Address TokenProgram::defaultTokenAddress(const Address& mainAddress, const Address& tokenMintAddress) {
-    Address programId = Address(TOKEN_PROGRAM_ID_ADDRESS);
+    auto programId = Address(TOKEN_PROGRAM_ID_ADDRESS);
     std::vector<Data> seeds = {
         TW::data(mainAddress.bytes.data(), mainAddress.bytes.size()),
         TW::data(programId.bytes.data(), programId.bytes.size()),

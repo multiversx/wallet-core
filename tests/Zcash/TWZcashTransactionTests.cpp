@@ -111,12 +111,12 @@ TEST(TWZcashTransaction, SaplingSigning) {
     plan.change = 0;
     plan.branchId = Data(Zcash::SaplingBranchID.begin(), Zcash::SaplingBranchID.end());
 
-    auto &protoPlan = *input.mutable_plan();
+    auto& protoPlan = *input.mutable_plan();
     protoPlan = plan.proto();
 
     // Sign
-    auto result = Bitcoin::TransactionSigner<Zcash::Transaction, Zcash::TransactionBuilder>(std::move(input)).sign();
-    ASSERT_TRUE(result) << result.error();
+    auto result = Bitcoin::TransactionSigner<Zcash::Transaction, Zcash::TransactionBuilder>::sign(input);
+    ASSERT_TRUE(result) << std::to_string(result.error());
     auto signedTx = result.payload();
 
     // txid = "ec9033381c1cc53ada837ef9981c03ead1c7c41700ff3a954389cfaddc949256"
@@ -174,12 +174,12 @@ TEST(TWZcashTransaction, BlossomSigning) {
     plan.fee = fee;
     plan.change = 0;
 
-    auto &protoPlan = *input.mutable_plan();
+    auto& protoPlan = *input.mutable_plan();
     protoPlan = plan.proto();
 
     // Sign
-    auto result = Bitcoin::TransactionSigner<Zcash::Transaction, Zcash::TransactionBuilder>(std::move(input)).sign();
-    ASSERT_TRUE(result) << result.error();
+    auto result = Bitcoin::TransactionSigner<Zcash::Transaction, Zcash::TransactionBuilder>::sign(input);
+    ASSERT_TRUE(result) << std::to_string(result.error());
     auto signedTx = result.payload();
 
     Data serialized;

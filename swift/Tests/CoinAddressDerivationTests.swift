@@ -10,7 +10,7 @@ import WalletCore
 class CoinAddressDerivationTests: XCTestCase {
 
     func testDerive() {
-        let wallet = HDWallet(mnemonic: "shoot island position soft burden budget tooth cruel issue economy destroy above", passphrase: "")
+        let wallet = HDWallet(mnemonic: "shoot island position soft burden budget tooth cruel issue economy destroy above", passphrase: "")!
 
         for _ in 0..<4 {
             for coin in CoinType.allCases {
@@ -70,7 +70,16 @@ class CoinAddressDerivationTests: XCTestCase {
                 case .eos:
                     let expectedResult = "EOS6hs8sRvGSzuQtq223zwJipMzqTJpXUVjyvHPvPwBSZWWrJTJkg"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
-                case .ethereum, .smartChain:
+                case .ethereum,
+                     .smartChain,
+                     .polygon,
+                     .optimism,
+                     .arbitrum,
+                     .ecochain,
+                     .avalancheCChain,
+                     .xdai,
+                     .fantom,
+                     .ronin:
                     let expectedResult = "0x8f348F300873Fd5DA36950B2aC75a26584584feE"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .ethereumClassic:
@@ -166,9 +175,6 @@ class CoinAddressDerivationTests: XCTestCase {
                 case .tomoChain:
                     let expectedResult = "0xC74b6D8897cBa9A4b659d43fEF73C9cA852cE424"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
-                case .ton:
-                    let expectedResult = "EQAmXWk7P7avw96EViZULpA85Lz6Si3MeWG-vFXmbEjpL-fo"
-                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .tron:
                     let expectedResult = "TQ5NMqJjhpQGK7YJbESKtNCo86PJ89ujio"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
@@ -179,7 +185,7 @@ class CoinAddressDerivationTests: XCTestCase {
                     let expectedResult = "via1qnmsgjd6cvfprnszdgmyg9kewtjfgqflz67wwhc"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .wanchain:
-                    let expectedResult = "0xd5CA90B928279fe5d06144136A25dEd90127Ac15"
+                    let expectedResult = "0xD5ca90b928279FE5D06144136a25DeD90127aC15"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .waves:
                     let expectedResult = "3P63vkaHhyE9pPv9EfsjwGKqmZYcCRHys4n"
@@ -201,6 +207,21 @@ class CoinAddressDerivationTests: XCTestCase {
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .smartChainLegacy:
                     let expectedResult = "0x49784f90176D8D9d4A3feCDE7C1373dAAb5b13b8"
+                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
+                case .oasis:
+                    let expectedResult = "oasis1qzcpavvmuw280dk0kd4lxjhtpf0u3ll27yf7sqps"
+                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
+                case .thorchain:
+                    let expectedResult = "thor1c8jd7ad9pcw4k3wkuqlkz4auv95mldr2kyhc65"
+                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
+                case .bluzelle:
+                    let expectedResult = "bluzelle1xccvees6ev4wm2r49rc6ptulsdxa8x8jfpmund"
+                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
+                case .cryptoOrg:
+                    let expectedResult = "cro16fdf785ejm00jf9a24d23pzqzjh2h05klxjwu8"
+                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
+                case .celo:
+                    let expectedResult = "0xea1ac53e7Ccb5b47cdE341C118615Ef1862e3CF5"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 @unknown default:
                     fatalError()
