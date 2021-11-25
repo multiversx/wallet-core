@@ -9,7 +9,7 @@ import SwiftProtobuf
 
 public final class Marshalizer {
     public static func marshal(message: Message) -> Data {
-        let data = try! input.serializedData()
+        let data = try! message.serializedData()
         return data
     }
 
