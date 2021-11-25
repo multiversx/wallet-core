@@ -16,3 +16,4 @@ public final class Marshalizer {
     public static func unmarshal<T: Message>(data: Data) -> T {
         return try! T(serializedData: data)
     }
+}
