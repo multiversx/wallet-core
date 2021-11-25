@@ -26,3 +26,8 @@ public:
 };
 
 } // namespace
+
+/// Wrapper for C interface.
+struct TWElrondInteractionTransferESDT {
+    TW::Elrond::InteractionTransferESDT impl;
+};
