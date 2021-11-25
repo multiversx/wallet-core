@@ -10,7 +10,6 @@
 #include "TWString.h"
 #include "TWData.h"
 #include "TWAnyAddress.h"
-#include "TWElrondProto.h"
 
 TW_EXTERN_C_BEGIN
 
