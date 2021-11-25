@@ -35,13 +35,13 @@ void TWElrondInteractionTransferESDTSetTransfer(struct TWElrondInteractionTransf
     interaction.setTransfer(TWStringUTF8Bytes(tokenIdentifier), TWStringUTF8Bytes(amount));
 }
 
-// TW_Elrond_Proto_TransactionMessage *_Nonnull TWElrondInteractionTransferESDTBuildTransaction(struct TWElrondInteractionTransferESDT *_Nonnull self) {
-//     auto interaction = self->impl;
-//     auto transactionMessage = interaction.buildTransaction();
+TWData *_Nonnull TWElrondInteractionTransferESDTBuildTransaction(struct TWElrondInteractionTransferESDT *_Nonnull self) {
+    auto interaction = self->impl;
+    auto transactionMessage = interaction.buildTransaction();
     
-//     // Question for review: is this the correct way to return an Elrond::Proto::TransactionMessage to a Swift / kt caller?
-//     Data transactionMessageRaw(transactionMessage.ByteSizeLong());
-//     transactionMessage.SerializeToArray(transactionMessageRaw.data(),(int)transactionMessageRaw.size());
-//     auto result = (TW_Elrond_Proto_TransactionMessage*)TWDataCreateWithData(transactionMessageRaw.data());
-//     return result;
-// }
+    // Question for review: is this the correct way to return an Elrond::Proto::TransactionMessage to a Swift / kt caller?
+    Data transactionMessageRaw(transactionMessage.ByteSizeLong());
+    transactionMessage.SerializeToArray(transactionMessageRaw.data(),(int)transactionMessageRaw.size());
+    auto result = TWDataCreateWithData(transactionMessageRaw.data();
+    return result;
+}
