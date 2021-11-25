@@ -29,7 +29,7 @@ void TWElrondInteractionTransferESDTSetReceiver(struct TWElrondInteractionTransf
 TW_EXPORT_METHOD
 void TWElrondInteractionTransferESDTSetTransfer(struct TWElrondInteractionTransferESDT *_Nonnull self, TWString *_Nonnull tokenIdentifier, TWString *_Nonnull amount);
 
-TW_EXPORT_METHOD
-TW_Elrond_Proto_TransactionMessage *_Nonnull TWElrondInteractionTransferESDTBuildTransaction(struct TWElrondInteractionTransferESDT *_Nonnull self);
+// TW_EXPORT_METHOD
+// TW_Elrond_Proto_TransactionMessage *_Nonnull TWElrondInteractionTransferESDTBuildTransaction(struct TWElrondInteractionTransferESDT *_Nonnull self);
 
 TW_EXTERN_C_END

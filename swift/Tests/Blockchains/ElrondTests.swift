@@ -52,7 +52,7 @@ class ElrondTests: XCTestCase {
     }
 
     func testTransferESDT() {
-        let interaction = InteractionTransferESDT();
+        let interaction = ElrondInteractionTransferESDT();
         interaction.setSender(sender: Data(hexString: alicePubKeyHex)!)
         interaction.setReceiver(sender: Data(hexString: alicePubKeyHex)!)
         interaction.setTransfer("TEST-TOKEN", "12345")
