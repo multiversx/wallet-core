@@ -4,7 +4,7 @@
 // terms governing use, modification, and redistribution, is contained in the
 // file LICENSE at the root of the source code distribution tree.
 
-#include <TrustWalletCore/TWElrondInteractions.h>
+#include <TrustWalletCore/TWElrondInteractionTransferESDT.h>
 
 #include "Elrond/Interactions.h"
 #include "Elrond/Address.h"
