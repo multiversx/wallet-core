@@ -50,4 +50,11 @@ class ElrondTests: XCTestCase {
         XCTAssertEqual(output.signature, expectedSignature)
         XCTAssertEqual(output.encoded, expectedEncoded)
     }
+
+    func testTransferESDT() {
+        let interaction = InteractionTransferESDT();
+        interaction.setSender(sender: Data(hexString: alicePubKeyHex)!)
+        interaction.setReceiver(sender: Data(hexString: alicePubKeyHex)!)
+        interaction.setTransfer("TEST-TOKEN", "12345")
+    }
 }
