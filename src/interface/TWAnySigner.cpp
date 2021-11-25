@@ -17,6 +17,11 @@ TWData* _Nonnull TWAnySignerSign(TWData* _Nonnull data, enum TWCoinType coin) {
     return TWDataCreateWithBytes(dataOut.data(), dataOut.size());
 }
 
+TWData* _Nonnull TWAnySignerExampleExportA(TWData* _Nonnull dummy) {
+    Data result(100, 0);
+    return TWDataCreateWithBytes(result.data(), result.size());
+}
+
 TWString *_Nonnull TWAnySignerSignJSON(TWString *_Nonnull json, TWData *_Nonnull key, enum TWCoinType coin) {
     const Data& keyData = *(reinterpret_cast<const Data*>(key));
     const std::string& jsonString = *(reinterpret_cast<const std::string*>(json));

@@ -18,6 +18,8 @@ struct TWAnySigner;
 /// Signs a transaction.
 extern TWData *_Nonnull TWAnySignerSign(TWData *_Nonnull input, enum TWCoinType coin);
 
+extern TWData *_Nonnull TWAnySignerExampleExportA(TWData *_Nonnull dummy);
+
 /// Signs a json transaction with private key.
 extern TWString *_Nonnull TWAnySignerSignJSON(TWString *_Nonnull json, TWData *_Nonnull key, enum TWCoinType coin);
 
