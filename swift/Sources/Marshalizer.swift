@@ -8,11 +8,11 @@ import Foundation
 import SwiftProtobuf
 
 public final class Marshalizer {
-    public static func unmarshal<T: Message>(_ data: Data) -> T {
+    public static func unmarshalProto<T: Message>(_ data: Data) -> T {
         do {
             return try T(serializedData: data)
         } catch let error {
-            fatalError("Marshalizer.unmarshal() error: " + error.localizedDescription)
+            fatalError("Marshalizer.unmarshalProto() error: " + error.localizedDescription)
         }
     }
 }

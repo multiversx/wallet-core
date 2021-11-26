@@ -54,7 +54,7 @@ class ElrondTests: XCTestCase {
     func testESDTTransfer() {
         let factory = ElrondTransactionFactory();
 
-        let transaction: ElrondTransactionMessage = Marshalizer.unmarshal(factory.createESDTTransfer(
+        let transaction: ElrondTransactionMessage = Marshalizer.unmarshalProto(factory.createESDTTransfer(
             sender: aliceBech32,
             receiver: bobBech32,
             tokenIdentifier: "MYTOKEN-1234",

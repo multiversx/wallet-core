@@ -19,7 +19,7 @@ struct TWElrondTransactionFactory *_Nonnull TWElrondTransactionFactoryCreate() {
     return new TWElrondTransactionFactory{ factory };
 }
 
-void TWEthereumAbiFunctionDelete(struct TWElrondTransactionFactory *_Nonnull thisFactory) {
+void TWElrondTransactionFactoryDelete(struct TWElrondTransactionFactory *_Nonnull thisFactory) {
     assert(thisFactory != nullptr);
     delete thisFactory;
 }

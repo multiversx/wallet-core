@@ -11,6 +11,7 @@ import com.trustwallet.core.app.utils.toHexByteArray
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import wallet.core.java.AnySigner
+import wallet.core.java.Marshalizer
 import wallet.core.jni.CoinType
 import wallet.core.jni.PrivateKey
 import wallet.core.jni.proto.Elrond
@@ -23,13 +24,13 @@ class TestElrondTransactionsFactory {
 
     @Test
     fun createESDTTransfer() {
-        val factory = new Elrond.TransactionFactory()
-        val transaction = Marshalizer.unmarshal(factory.createESDTTransfer(
+        val factory = Elrond.TransactionFactory()
+        val transaction = Marshalizer.unmarshalProto(factory.createESDTTransfer(
             "erd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz",
             "erd1cux02zersde0l7hhklzhywcxk4u9n4py5tdxyx7vrvhnza2r4gmq4vw35r",
             "MYTOKEN-1234",
             "10000000000000"
-        ))
+        ), Elrond.TransactionMessage.parser())
 
         assertEquals("ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000", transaction.data)
     }
