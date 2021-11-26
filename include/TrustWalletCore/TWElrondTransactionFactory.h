@@ -23,7 +23,7 @@ TW_EXPORT_METHOD
 void TWElrondTransactionFactoryDelete(struct TWElrondTransactionFactory *_Nonnull thisFactory);
 
 TW_EXPORT_METHOD
-TWData *_Nonnull TWElrondTransactionFactoryCreateEGLDransfer(struct TWElrondTransactionFactory *_Nonnull thisFactory);
+TWData *_Nonnull TWElrondTransactionFactoryCreateEGLDTransfer(struct TWElrondTransactionFactory *_Nonnull thisFactory);
 
 TW_EXPORT_METHOD
 TWData *_Nonnull TWElrondTransactionFactoryCreateESDTTransfer(struct TWElrondTransactionFactory *_Nonnull thisFactory, TWString *_Nonnull sender, TWString *_Nonnull receiver, TWString *_Nonnull tokenIdentifier, TWString *_Nonnull amount);
