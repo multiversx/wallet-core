@@ -17,9 +17,8 @@ public final class Marshalizer {
     //     }
     // }
 
-    public static func unmarshal<T: Message>(_ rawData: Data) -> T {
+    public static func unmarshal<T: Message>(_ data: Data) -> T {
         do {
-            let data = TWDataNSData(rawData);
             return try T(serializedData: data)
         } catch let error {
             fatalError("cannot unmarshal raw data: " + error.localizedDescription)
