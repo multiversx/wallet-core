@@ -39,9 +39,10 @@ Proto::TransactionMessage InteractionTransferESDT::buildTransaction() {
     std::string data = std::string("ESDTTransfer") + std::string("@") + encodedTokenIdentifier +
                        std::string("@") + encodedAmount;
 
-    message.set_sender(this->sender.string());
+    message.set_sender("dummy test");
     message.set_receiver(this->receiver.string());
     message.set_data(data);
+    message.set_nonce(42);
 
     return message;
 }
