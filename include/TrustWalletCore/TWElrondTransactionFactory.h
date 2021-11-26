@@ -20,6 +20,9 @@ TW_EXPORT_STATIC_METHOD
 struct TWElrondTransactionFactory *_Nonnull TWElrondTransactionFactoryCreate();
 
 TW_EXPORT_METHOD
+void TWElrondTransactionFactoryDelete(struct TWElrondTransactionFactory *_Nonnull thisFactory);
+
+TW_EXPORT_METHOD
 TWData *_Nonnull TWElrondTransactionFactoryCreateEGLDransfer(struct TWElrondTransactionFactory *_Nonnull thisFactory);
 
 TW_EXPORT_METHOD

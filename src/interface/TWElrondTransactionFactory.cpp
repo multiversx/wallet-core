@@ -19,6 +19,11 @@ struct TWElrondTransactionFactory *_Nonnull TWElrondTransactionFactoryCreate() {
     return new TWElrondTransactionFactory{ factory };
 }
 
+void TWEthereumAbiFunctionDelete(struct TWElrondTransactionFactory *_Nonnull thisFactory) {
+    assert(thisFactory != nullptr);
+    delete thisFactory;
+}
+
 TWData *_Nonnull TWElrondTransactionFactoryCreateEGLDTransfer(
     struct TWElrondTransactionFactory *_Nonnull thisFactory
 ) {
