@@ -42,6 +42,6 @@ TWData *_Nonnull TWElrondInteractionTransferESDTBuildTransaction(struct TWElrond
     // Question for review: is this the correct way to return an Elrond::Proto::TransactionMessage to a Swift / kt caller?
     Data transactionMessageRaw(transactionMessage.ByteSizeLong());
     transactionMessage.SerializeToArray(transactionMessageRaw.data(),(int)transactionMessageRaw.size());
-    auto result = TWDataCreateWithData(transactionMessageRaw.data());
+    auto result = TWDataCreateWithBytes(transactionMessageRaw.data(), transactionMessageRaw.size());
     return result;
 }

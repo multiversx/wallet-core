@@ -17,7 +17,7 @@ public final class Marshalizer {
     //     }
     // }
 
-    public static func unmarshal<T: Message>(rawData: UnsafeRawPointer) -> T {
+    public static func unmarshal<T: Message>(_ rawData: Data) -> T {
         do {
             let data = TWDataNSData(rawData);
             return try T(serializedData: data)
