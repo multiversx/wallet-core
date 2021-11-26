@@ -24,6 +24,11 @@ void TWElrondInteractionTransferESDTSetSender(struct TWElrondInteractionTransfer
     interaction.setSender(Address(senderAsData));
 }
 
+TWString *_Nonnull TWElrondInteractionTransferESDTGetSender(struct TWElrondInteractionTransferESDT *_Nonnull self) {
+    auto interaction = self->impl;
+    return TWStringCreateWithRawBytes(interaction.sender.string())
+}
+
 void TWElrondInteractionTransferESDTSetReceiver(struct TWElrondInteractionTransferESDT *_Nonnull self, TWData *_Nonnull receiver) {
     auto interaction = self->impl;
     auto receiverAsData = *static_cast<const Data*>(receiver);
@@ -41,7 +46,7 @@ TWData *_Nonnull TWElrondInteractionTransferESDTBuildTransaction(struct TWElrond
     
     // Question for review: is this the correct way to return an Elrond::Proto::TransactionMessage to a Swift / kt caller?
     Data transactionMessageRaw(transactionMessage.ByteSizeLong());
-    transactionMessage.SerializeToArray(transactionMessageRaw.data(),(int)transactionMessageRaw.size());
+    transactionMessage.SerializeToArray(transactionMessageRaw.data(), (int)transactionMessageRaw.size());
     auto result = TWDataCreateWithBytes(transactionMessageRaw.data(), transactionMessageRaw.size());
     return result;
 }

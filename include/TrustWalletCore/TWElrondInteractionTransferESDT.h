@@ -23,6 +23,9 @@ TW_EXPORT_METHOD
 void TWElrondInteractionTransferESDTSetSender(struct TWElrondInteractionTransferESDT *_Nonnull self, TWData *_Nonnull sender);
 
 TW_EXPORT_METHOD
+TWString *_Nonnull TWElrondInteractionTransferESDTGetSender(struct TWElrondInteractionTransferESDT *_Nonnull self);
+
+TW_EXPORT_METHOD
 void TWElrondInteractionTransferESDTSetReceiver(struct TWElrondInteractionTransferESDT *_Nonnull self, TWData *_Nonnull receiver);
 
 TW_EXPORT_METHOD

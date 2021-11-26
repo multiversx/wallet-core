@@ -12,7 +12,7 @@
 namespace TW::Elrond {
 
 class InteractionTransferESDT {
-private:
+public:
     Address sender;
     Address receiver;
     std::string tokenIdentifier;

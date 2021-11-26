@@ -56,6 +56,7 @@ class ElrondTests: XCTestCase {
         interaction.setSender(sender: Data(hexString: alicePubKeyHex)!)
         interaction.setReceiver(receiver: Data(hexString: alicePubKeyHex)!)
         interaction.setTransfer(tokenIdentifier: "TEST-TOKEN", amount: "12345")
+        XCTAssertEqual(interaction.getSender(), aliceBech32 + "test")
 
         let transaction: ElrondTransactionMessage = Marshalizer.unmarshal(interaction.buildTransaction())
         XCTAssertEqual(transaction.sender, aliceBech32)
