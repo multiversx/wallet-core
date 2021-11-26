@@ -58,7 +58,7 @@ TWData *_Nonnull TWElrondTransactionFactoryCreateESDTTransfer(
 TWData *_Nonnull marshalTransaction(const Elrond::Proto::TransactionMessage& transaction) {
     long size = transaction.ByteSizeLong();
     Data raw(size);
-    transaction.SerializeToArray(raw.data(), size);
+    transaction.SerializeToArray(raw.data(), (int)size);
     auto result = TWDataCreateWithBytes(raw.data(), size);
     return result;
 }
