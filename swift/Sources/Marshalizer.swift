@@ -8,20 +8,15 @@ import Foundation
 import SwiftProtobuf
 
 public final class Marshalizer {
-    // public static func marshal(message: Message) -> Data {
-    //     do {
-    //         let data = try message.serializedData()
-    //         return data
-    //     } catch let error {
-    //         fatalError(error.localizedDescription)
-    //     }
-    // }
+    public static func unmarshalAndRelease<T: Message>(_ data: Data) -> T {
+        defer {
+            TWDataDelete(data)
+        }
 
-    public static func unmarshal<T: Message>(_ data: Data) -> T {
         do {
             return try T(serializedData: data)
         } catch let error {
-            fatalError("cannot unmarshal raw data: " + error.localizedDescription)
+            fatalError("Marshalizer.unmarshalAndRelease() error: " + error.localizedDescription)
         }
     }
 }
