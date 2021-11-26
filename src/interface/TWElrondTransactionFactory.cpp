@@ -12,35 +12,48 @@
 using namespace TW;
 using namespace TW::Elrond;
 
-TWData *_Nonnull marshalTransaction(const Elrond::Proto::TransactionMessage& transaction);
+TWData *_Nonnull marshalProto(const Elrond::Proto::TransactionMessage& transaction);
 
 struct TWElrondTransactionFactory *_Nonnull TWElrondTransactionFactoryCreate() {
     auto factory = TWElrondTransactionFactory();
     return new TWElrondTransactionFactory{ factory };
 }
 
-void TWElrondTransactionFactoryDelete(struct TWElrondTransactionFactory *_Nonnull thisFactory) {
-    assert(thisFactory != nullptr);
-    delete thisFactory;
+void TWElrondTransactionFactoryDelete(struct TWElrondTransactionFactory *_Nonnull self) {
+    assert(self != nullptr);
+    delete self;
 }
 
 TWData *_Nonnull TWElrondTransactionFactoryCreateEGLDTransfer(
-    struct TWElrondTransactionFactory *_Nonnull thisFactory
+    struct TWElrondTransactionFactory *_Nonnull self,
+    TWString *_Nonnull sender,
+    TWString *_Nonnull receiver,
+    TWString *_Nonnull amount
 ) {
-    auto factory = thisFactory->impl;
-    auto transaction = factory.createEGLDTransfer();
+    auto factory = self->impl;
 
-    return marshalTransaction(transaction);
+    Address senderAddress, receiverAddress;
+    Address::decode(TWStringUTF8Bytes(sender), senderAddress);
+    Address::decode(TWStringUTF8Bytes(receiver), receiverAddress);
+
+    auto transaction = factory.createEGLDTransfer(
+        senderAddress, 
+        receiverAddress, 
+        uint256_t(TWStringUTF8Bytes(amount))
+    );
+
+    return marshalProto(transaction);
 }
 
 TWData *_Nonnull TWElrondTransactionFactoryCreateESDTTransfer(
-    struct TWElrondTransactionFactory *_Nonnull thisFactory,
+    struct TWElrondTransactionFactory *_Nonnull self,
     TWString *_Nonnull sender,
     TWString *_Nonnull receiver,
     TWString *_Nonnull tokenIdentifier, 
     TWString *_Nonnull amount
 ) {
-    auto factory = thisFactory->impl;
+    auto factory = self->impl;
+
     Address senderAddress, receiverAddress;
     Address::decode(TWStringUTF8Bytes(sender), senderAddress);
     Address::decode(TWStringUTF8Bytes(receiver), receiverAddress);
@@ -52,13 +65,14 @@ TWData *_Nonnull TWElrondTransactionFactoryCreateESDTTransfer(
         uint256_t(TWStringUTF8Bytes(amount))
     );
     
-    return marshalTransaction(transaction);
+    return marshalProto(transaction);
 }
 
-TWData *_Nonnull marshalTransaction(const Elrond::Proto::TransactionMessage& transaction) {
-    long size = transaction.ByteSizeLong();
+template <typename ProtoMessage>
+TWData *_Nonnull marshalProto(const ProtoMessage& message) {
+    long size = message.ByteSizeLong();
     Data raw(size);
-    transaction.SerializeToArray(raw.data(), (int)size);
+    message.SerializeToArray(raw.data(), (int)size);
     auto result = TWDataCreateWithBytes(raw.data(), size);
     return result;
 }

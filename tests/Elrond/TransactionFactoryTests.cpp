@@ -9,17 +9,38 @@
 #include "boost/format.hpp"
 
 #include "HexCoding.h"
+#include "uint256.h"
 #include "Elrond/TransactionFactory.h"
+#include "TestAccounts.h"
 
 using namespace TW;
 using namespace TW::Elrond;
 
-TEST(ElrondTransactionFactory, createESDTTransfer) {
+TEST(ElrondTransactionFactory, createEGLDTransfer) {
+    Address sender, receiver;
+    Address::decode(ALICE_BECH32, sender);
+    Address::decode(BOB_BECH32, receiver);
+
     TransactionFactory factory;
 
+    Proto::TransactionMessage message = factory.createEGLDTransfer(
+        sender,
+        receiver,
+        uint256_t("1000000000000000000")
+    );
+
+    ASSERT_EQ(ALICE_BECH32, message.sender());
+    ASSERT_EQ(BOB_BECH32, message.receiver());
+    ASSERT_EQ("", message.data());
+    ASSERT_EQ("1000000000000000000", message.value());
+}
+
+TEST(ElrondTransactionFactory, createESDTTransfer) {
     Address sender, receiver;
-    Address::decode("erd1k2s324ww2g0yj38qn2ch2jwctdy8mnfxep94q9arncc6xecg3xaq6mjse8", sender);
-    Address::decode("erd1uv40ahysflse896x4ktnh6ecx43u7cmy9wnxnvcyp7deg299a4sq6vaywa", receiver);
+    Address::decode(ALICE_BECH32, sender);
+    Address::decode(BOB_BECH32, receiver);
+
+    TransactionFactory factory;
 
     Proto::TransactionMessage message = factory.createESDTTransfer(
         sender,
@@ -28,5 +49,8 @@ TEST(ElrondTransactionFactory, createESDTTransfer) {
         uint256_t("10000000000000")
     );
 
+    ASSERT_EQ(ALICE_BECH32, message.sender());
+    ASSERT_EQ(BOB_BECH32, message.receiver());
     ASSERT_EQ("ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000", message.data());
+    ASSERT_EQ("", message.value());
 }

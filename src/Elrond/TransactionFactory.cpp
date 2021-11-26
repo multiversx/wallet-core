@@ -15,8 +15,13 @@ using namespace TW::Elrond;
 
 TransactionFactory::TransactionFactory() {}
 
-Proto::TransactionMessage TransactionFactory::createEGLDTransfer() {
+Proto::TransactionMessage TransactionFactory::createEGLDTransfer(const Address& sender, const Address& receiver, uint256_t amount) {
     Proto::TransactionMessage message;
+
+    message.set_sender(sender.string());
+    message.set_receiver(receiver.string());
+    message.set_value(toString(amount));
+
     return message;
 }
 
@@ -26,8 +31,12 @@ Proto::TransactionMessage TransactionFactory::createESDTTransfer(const Address& 
     std::string encodedTokenIdentifier = Codec::encodeStringTopLevel(tokenIdentifier);
     std::string encodedAmount = Codec::encodeBigIntTopLevel(amount);
 
-    std::string data = std::string("ESDTTransfer") + std::string("@") + encodedTokenIdentifier +
-                       std::string("@") + encodedAmount;
+    std::string data = 
+        std::string("ESDTTransfer") + 
+        std::string("@") + 
+        encodedTokenIdentifier +
+        std::string("@") + 
+        encodedAmount;
 
     message.set_sender(sender.string());
     message.set_receiver(receiver.string());

@@ -20,12 +20,23 @@ TW_EXPORT_STATIC_METHOD
 struct TWElrondTransactionFactory *_Nonnull TWElrondTransactionFactoryCreate();
 
 TW_EXPORT_METHOD
-void TWElrondTransactionFactoryDelete(struct TWElrondTransactionFactory *_Nonnull thisFactory);
+void TWElrondTransactionFactoryDelete(struct TWElrondTransactionFactory *_Nonnull self);
 
 TW_EXPORT_METHOD
-TWData *_Nonnull TWElrondTransactionFactoryCreateEGLDTransfer(struct TWElrondTransactionFactory *_Nonnull thisFactory);
+TWData *_Nonnull TWElrondTransactionFactoryCreateEGLDTransfer(
+    struct TWElrondTransactionFactory *_Nonnull self, 
+    TWString *_Nonnull sender,
+    TWString *_Nonnull receiver,
+    TWString *_Nonnull amount
+);
 
 TW_EXPORT_METHOD
-TWData *_Nonnull TWElrondTransactionFactoryCreateESDTTransfer(struct TWElrondTransactionFactory *_Nonnull thisFactory, TWString *_Nonnull sender, TWString *_Nonnull receiver, TWString *_Nonnull tokenIdentifier, TWString *_Nonnull amount);
+TWData *_Nonnull TWElrondTransactionFactoryCreateESDTTransfer(
+    struct TWElrondTransactionFactory *_Nonnull self, 
+    TWString *_Nonnull sender, 
+    TWString *_Nonnull receiver, 
+    TWString *_Nonnull tokenIdentifier, 
+    TWString *_Nonnull amount
+);
 
 TW_EXTERN_C_END

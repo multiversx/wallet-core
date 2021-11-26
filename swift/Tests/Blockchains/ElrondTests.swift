@@ -51,6 +51,21 @@ class ElrondTests: XCTestCase {
         XCTAssertEqual(output.encoded, expectedEncoded)
     }
 
+    func testEGLDTransfer() {
+        let factory = ElrondTransactionFactory();
+
+        let transaction: ElrondTransactionMessage = Marshalizer.unmarshalProto(factory.createEGLDTransfer(
+            sender: aliceBech32,
+            receiver: bobBech32,
+            amount: "1000000000000000000"
+        ))
+
+        XCTAssertEqual(transaction.sender, aliceBech32)
+        XCTAssertEqual(transaction.receiver, bobBech32)
+        XCTAssertEqual(transaction.data, "")
+        XCTAssertEqual(transaction.value, "1000000000000000000")
+    }
+
     func testESDTTransfer() {
         let factory = ElrondTransactionFactory();
 
@@ -64,5 +79,6 @@ class ElrondTests: XCTestCase {
         XCTAssertEqual(transaction.sender, aliceBech32)
         XCTAssertEqual(transaction.receiver, bobBech32)
         XCTAssertEqual(transaction.data, "ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000")
+        XCTAssertEqual(transaction.value, "")
     }
 }

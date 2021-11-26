@@ -15,7 +15,7 @@ namespace TW::Elrond {
 class TransactionFactory {
 public:
     TransactionFactory();
-    Proto::TransactionMessage createEGLDTransfer();
+    Proto::TransactionMessage createEGLDTransfer(const Address& sender, const Address& receiver, uint256_t amount);
     Proto::TransactionMessage createESDTTransfer(const Address& sender, const Address& receiver, const std::string& tokenIdentifier, uint256_t amount);
 };
 
