@@ -51,10 +51,10 @@ class ElrondTests: XCTestCase {
         XCTAssertEqual(output.encoded, expectedEncoded)
     }
 
-    func testTransferESDT() {
+    func testESDTTransfer() {
         let factory = ElrondTransactionFactory();
 
-        let transaction: ElrondTransactionMessage = Marshalizer.unmarshalAndRelease(factory.createESDTTransfer(
+        let transaction: ElrondTransactionMessage = Marshalizer.unmarshal(factory.createESDTTransfer(
             sender: aliceBech32,
             receiver: bobBech32,
             tokenIdentifier: "TEST-TOKEN",

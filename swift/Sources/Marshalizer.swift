@@ -8,15 +8,11 @@ import Foundation
 import SwiftProtobuf
 
 public final class Marshalizer {
-    public static func unmarshalAndRelease<T: Message>(_ data: Data) -> T {
-        defer {
-            TWDataDelete(data)
-        }
-
+    public static func unmarshal<T: Message>(_ data: Data) -> T {
         do {
             return try T(serializedData: data)
         } catch let error {
-            fatalError("Marshalizer.unmarshalAndRelease() error: " + error.localizedDescription)
+            fatalError("Marshalizer.unmarshal() error: " + error.localizedDescription)
         }
     }
 }
