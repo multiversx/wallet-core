@@ -10,11 +10,6 @@ import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
 
 public class Marshalizer {
-    public static byte[] marshal(Message message) throws Exception {
-        byte[] data = message.toByteArray();
-        return data;
-    }
-
     public static <T extends Message> T unmarshal(byte[] data, Parser<T> parser) throws Exception {
         T message = parser.parseFrom(data);
         return message;

@@ -57,12 +57,12 @@ class ElrondTests: XCTestCase {
         let transaction: ElrondTransactionMessage = Marshalizer.unmarshal(factory.createESDTTransfer(
             sender: aliceBech32,
             receiver: bobBech32,
-            tokenIdentifier: "TEST-TOKEN",
-            amount: "12345"
+            tokenIdentifier: "MYTOKEN-1234",
+            amount: "10000000000000"
         ))
 
         XCTAssertEqual(transaction.sender, aliceBech32)
         XCTAssertEqual(transaction.receiver, bobBech32)
-        XCTAssertEqual(transaction.data, "-----------")
+        XCTAssertEqual(transaction.data, "ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000")
     }
 }
