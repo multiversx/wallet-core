@@ -26,7 +26,7 @@ void TWElrondInteractionTransferESDTSetSender(struct TWElrondInteractionTransfer
 
 TWString *_Nonnull TWElrondInteractionTransferESDTGetSender(struct TWElrondInteractionTransferESDT *_Nonnull self) {
     auto interaction = self->impl;
-    return TWStringCreateWithRawBytes(interaction.sender.string());
+    return TWStringCreateWithRawBytes(interaction.sender.string(), 62);
 }
 
 void TWElrondInteractionTransferESDTSetReceiver(struct TWElrondInteractionTransferESDT *_Nonnull self, TWData *_Nonnull receiver) {
