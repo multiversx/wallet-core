@@ -9,11 +9,19 @@ import SwiftProtobuf
 
 public final class Marshalizer {
     public static func marshal(message: Message) -> Data {
-        let data = try! message.serializedData()
-        return data
+        do {
+            let data = try message.serializedData()
+            return data
+        } catch let error {
+            fatalError(error.localizedDescription)
+        }
     }
 
     public static func unmarshal<T: Message>(data: Data) -> T {
-        return try! T(serializedData: data)
+        do {
+            return try T(serializedData: data)
+        } catch let error {
+            fatalError(error.localizedDescription)
+        }
     }
 }
