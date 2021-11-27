@@ -12,7 +12,8 @@
 using namespace TW;
 using namespace TW::Elrond;
 
-TWData *_Nonnull marshalProto(const Elrond::Proto::TransactionMessage& transaction);
+template <typename ProtoMessage>
+TWData *_Nonnull marshalProto(const ProtoMessage& message);
 
 struct TWElrondTransactionFactory *_Nonnull TWElrondTransactionFactoryCreate() {
     auto factory = TransactionFactory();
