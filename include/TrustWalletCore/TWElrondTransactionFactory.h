@@ -25,10 +25,9 @@ void TWElrondTransactionFactoryDelete(struct TWElrondTransactionFactory *_Nonnul
 TW_EXPORT_METHOD
 TWData *_Nonnull TWElrondTransactionFactoryCreateEGLDTransfer(
     struct TWElrondTransactionFactory *_Nonnull self, 
-    TWString *_Nonnull sender,
-    TWString *_Nonnull receiver,
-    TWString *_Nonnull amount
-);
+    TWString *_Nonnull sender, 
+    TWString *_Nonnull receiver, 
+    TWString *_Nonnull amount);
 
 TW_EXPORT_METHOD
 TWData *_Nonnull TWElrondTransactionFactoryCreateESDTTransfer(
@@ -36,7 +35,6 @@ TWData *_Nonnull TWElrondTransactionFactoryCreateESDTTransfer(
     TWString *_Nonnull sender, 
     TWString *_Nonnull receiver, 
     TWString *_Nonnull tokenIdentifier, 
-    TWString *_Nonnull amount
-);
+    TWString *_Nonnull amount);
 
 TW_EXTERN_C_END
