@@ -28,12 +28,12 @@ void TWElrondNetworkConfigSetChainId(struct TWElrondNetworkConfig *_Nonnull self
     networkConfig.setChainId(TWStringUTF8Bytes(value));
 }
 
-void TWElrondNetworkConfigSetGasPerDataByte(struct TWElrondNetworkConfig *_Nonnull self, uint value) {
+void TWElrondNetworkConfigSetGasPerDataByte(struct TWElrondNetworkConfig *_Nonnull self, uint32_t value) {
     auto networkConfig = self->impl;
     networkConfig.setGasPerDataByte(value);
 }
 
-void TWElrondNetworkConfigSetMinGasLimit(struct TWElrondNetworkConfig *_Nonnull self, uint value) {
+void TWElrondNetworkConfigSetMinGasLimit(struct TWElrondNetworkConfig *_Nonnull self, uint32_t value) {
     auto networkConfig = self->impl;
     networkConfig.setMinGasLimit(value);
 }
@@ -43,12 +43,12 @@ void TWElrondNetworkConfigSetMinGasPrice(struct TWElrondNetworkConfig *_Nonnull 
     networkConfig.setMinGasPrice(value);
 }
 
-void TWElrondNetworkConfigSetGasCostESDTTransfer(struct TWElrondNetworkConfig *_Nonnull self, uint value) {
+void TWElrondNetworkConfigSetGasCostESDTTransfer(struct TWElrondNetworkConfig *_Nonnull self, uint32_t value) {
     auto networkConfig = self->impl;
     networkConfig.setGasCostESDTTransfer(value);
 }
 
-void TWElrondNetworkConfigSetGasCostESDTNFTTransfer(struct TWElrondNetworkConfig *_Nonnull self, uint value) {
+void TWElrondNetworkConfigSetGasCostESDTNFTTransfer(struct TWElrondNetworkConfig *_Nonnull self, uint32_t value) {
     auto networkConfig = self->impl;
     networkConfig.setGasCostESDTNFTTransfer(value);
 }

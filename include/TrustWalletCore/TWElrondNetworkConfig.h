@@ -25,18 +25,18 @@ TW_EXPORT_METHOD
 void TWElrondNetworkConfigSetChainId(struct TWElrondNetworkConfig *_Nonnull self, TWString *_Nonnull value);
 
 TW_EXPORT_METHOD
-void TWElrondNetworkConfigSetGasPerDataByte(struct TWElrondNetworkConfig *_Nonnull self, uint value);
+void TWElrondNetworkConfigSetGasPerDataByte(struct TWElrondNetworkConfig *_Nonnull self, uint32_t value);
 
 TW_EXPORT_METHOD
-void TWElrondNetworkConfigSetMinGasLimit(struct TWElrondNetworkConfig *_Nonnull self, uint value);
+void TWElrondNetworkConfigSetMinGasLimit(struct TWElrondNetworkConfig *_Nonnull self, uint32_t value);
 
 TW_EXPORT_METHOD
 void TWElrondNetworkConfigSetMinGasPrice(struct TWElrondNetworkConfig *_Nonnull self, uint64_t value);
 
 TW_EXPORT_METHOD
-void TWElrondNetworkConfigSetGasCostESDTTransfer(struct TWElrondNetworkConfig *_Nonnull self, uint value);
+void TWElrondNetworkConfigSetGasCostESDTTransfer(struct TWElrondNetworkConfig *_Nonnull self, uint32_t value);
 
 TW_EXPORT_METHOD
-void TWElrondNetworkConfigSetGasCostESDTNFTTransfer(struct TWElrondNetworkConfig *_Nonnull self, uint value);
+void TWElrondNetworkConfigSetGasCostESDTNFTTransfer(struct TWElrondNetworkConfig *_Nonnull self, uint32_t value);
 
 TW_EXTERN_C_END
