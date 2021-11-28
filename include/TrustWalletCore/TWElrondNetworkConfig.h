@@ -21,4 +21,22 @@ struct TWElrondNetworkConfig *_Nonnull TWElrondNetworkConfigCreate();
 TW_EXPORT_METHOD
 void TWElrondNetworkConfigDelete(struct TWElrondNetworkConfig *_Nonnull self);
 
+TW_EXPORT_METHOD
+void TWElrondNetworkConfigSetChainId(struct TWElrondNetworkConfig *_Nonnull self, TWString *_Nonnull value);
+
+TW_EXPORT_METHOD
+void TWElrondNetworkConfigSetGasPerDataByte(struct TWElrondNetworkConfig *_Nonnull self, uint value);
+
+TW_EXPORT_METHOD
+void TWElrondNetworkConfigSetMinGasLimit(struct TWElrondNetworkConfig *_Nonnull self, uint value);
+
+TW_EXPORT_METHOD
+void TWElrondNetworkConfigSetMinGasPrice(struct TWElrondNetworkConfig *_Nonnull self, uint64_t value);
+
+TW_EXPORT_METHOD
+void TWElrondNetworkConfigSetGasCostESDTTransfer(struct TWElrondNetworkConfig *_Nonnull self, uint value);
+
+TW_EXPORT_METHOD
+void TWElrondNetworkConfigSetGasCostESDTNFTTransfer(struct TWElrondNetworkConfig *_Nonnull self, uint value);
+
 TW_EXTERN_C_END

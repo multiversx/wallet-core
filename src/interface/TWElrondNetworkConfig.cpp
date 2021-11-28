@@ -22,3 +22,33 @@ void TWElrondNetworkConfigDelete(struct TWElrondNetworkConfig *_Nonnull self) {
     assert(self != nullptr);
     delete self;
 }
+
+void TWElrondNetworkConfigSetChainId(struct TWElrondNetworkConfig *_Nonnull self, TWString *_Nonnull value) {
+    auto networkConfig = self->impl;
+    networkConfig.setChainId(TWStringUTF8Bytes(value));
+}
+
+void TWElrondNetworkConfigSetGasPerDataByte(struct TWElrondNetworkConfig *_Nonnull self, uint value) {
+    auto networkConfig = self->impl;
+    networkConfig.setGasPerDataByte(value);
+}
+
+void TWElrondNetworkConfigSetMinGasLimit(struct TWElrondNetworkConfig *_Nonnull self, uint value) {
+    auto networkConfig = self->impl;
+    networkConfig.setMinGasLimit(value);
+}
+
+void TWElrondNetworkConfigSetMinGasPrice(struct TWElrondNetworkConfig *_Nonnull self, uint64_t value) {
+    auto networkConfig = self->impl;
+    networkConfig.setMinGasPrice(value);
+}
+
+void TWElrondNetworkConfigSetGasCostESDTTransfer(struct TWElrondNetworkConfig *_Nonnull self, uint value) {
+    auto networkConfig = self->impl;
+    networkConfig.setGasCostESDTTransfer(value);
+}
+
+void TWElrondNetworkConfigSetGasCostESDTNFTTransfer(struct TWElrondNetworkConfig *_Nonnull self, uint value) {
+    auto networkConfig = self->impl;
+    networkConfig.setGasCostESDTNFTTransfer(value);
+}

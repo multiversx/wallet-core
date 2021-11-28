@@ -36,7 +36,7 @@ public:
     /// The Meta ESDTs (a special kind of SFTs) held by an account can be fetched from https://api.elrond.com/accounts/{address}/nfts?type=MetaESDT.
     ///
     /// The "collection" and "nonce" parameters are found as well in the HTTP response of the API call.
-    Proto::TransactionMessage createESDTNFTTransfer(const Address& sender, const Address& receiver, const std::string& collection, ulong nonce, uint256_t quantity);
+    Proto::TransactionMessage createESDTNFTTransfer(const Address& sender, const Address& receiver, const std::string& collection, uint64_t nonce, uint256_t quantity);
 };
 
 } // namespace

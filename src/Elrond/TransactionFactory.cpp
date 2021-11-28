@@ -60,7 +60,7 @@ Proto::TransactionMessage TransactionFactory::createESDTTransfer(const Address& 
     return message;
 }
 
-Proto::TransactionMessage TransactionFactory::createESDTNFTTransfer(const Address& sender, const Address& receiver, const std::string& collection, ulong nonce, uint256_t quantity) {
+Proto::TransactionMessage TransactionFactory::createESDTNFTTransfer(const Address& sender, const Address& receiver, const std::string& collection, uint64_t nonce, uint256_t quantity) {
     Proto::TransactionMessage message;
 
     std::string encodedCollection = Codec::encodeStringTopLevel(collection);
@@ -92,7 +92,6 @@ Proto::TransactionMessage TransactionFactory::createESDTNFTTransfer(const Addres
     return message;
 }
 
-/// E.g. prepareFunctionCall("callMe", { "aa", "bb", "cc" }) -> "callMe@aa@bb@cc".
 std::string prepareFunctionCall(const std::string& function, std::initializer_list<const std::string> arguments) {
     const auto ARGUMENTS_SEPARATOR = "@";
     std::string result;

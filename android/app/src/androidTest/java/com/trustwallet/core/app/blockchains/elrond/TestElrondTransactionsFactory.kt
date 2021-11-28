@@ -28,7 +28,7 @@ class TestElrondTransactionsFactory {
     val bobBech32 = "erd1cux02zersde0l7hhklzhywcxk4u9n4py5tdxyx7vrvhnza2r4gmq4vw35r"
 
     @Test
-    fun createEGLDransfer() {
+    fun createEGLDTransfer() {
         val networkConfig = ElrondNetworkConfig()
         val factory = ElrondTransactionFactory(networkConfig)
 
@@ -91,5 +91,51 @@ class TestElrondTransactionsFactory {
         assertEquals(937500, transaction.gasLimit)
         assertEquals("1", transaction.chainId)
         assertEquals(1, transaction.version)
+    }
+
+    @Test
+    fun createTransfersWithChangedNetworkConfig() {
+        val networkConfig = ElrondNetworkConfig()
+        networkConfig.setChainId(value: "T")
+        networkConfig.setMinGasPrice(value: 1500000000)
+        networkConfig.setMinGasLimit(value: 60000)
+        networkConfig.setGasPerDataByte(value: 2000)
+        networkConfig.setGasCostESDTTransfer(value: 300000)
+        networkConfig.setGasCostESDTNFTTransfer(value: 300000)
+
+        val factory = ElrondTransactionFactory(networkConfig)
+        
+        val tx1 = Marshalizer.unmarshalProto(factory.createEGLDTransfer(
+            aliceBech32,
+            bobBech32,
+            "1000000000000000000"
+        ), Elrond.TransactionMessage.parser())
+
+        val tx2 = Marshalizer.unmarshalProto(factory.createESDTTransfer(
+            aliceBech32,
+            bobBech32,
+            "MYTOKEN-1234",
+            "10000000000000"
+        ), Elrond.TransactionMessage.parser())
+
+        val tx3 = Marshalizer.unmarshalProto(factory.createESDTNFTTransfer(
+            aliceBech32,
+            bobBech32,
+            "LKMEX-aab910",
+            4,
+            "184300000000000000"
+        ), Elrond.TransactionMessage.parser())
+
+        assertEquals(1500000000, tx1.gasPrice)
+        assertEquals(60000, tx1.gasLimit)
+        assertEquals("T", tx1.chainId)
+
+        assertEquals(1500000000, tx2.gasPrice)
+        assertEquals(560000, tx2.gasLimit)
+        assertEquals("T", tx2.chainId)
+
+        assertEquals(1500000000, tx3.gasPrice)
+        assertEquals(1110000, tx3.gasLimit)
+        assertEquals("T", tx3.chainId)
     }
 }
