@@ -96,12 +96,12 @@ class TestElrondTransactionsFactory {
     @Test
     fun createTransfersWithChangedNetworkConfig() {
         val networkConfig = ElrondNetworkConfig()
-        networkConfig.setChainId(value: "T")
-        networkConfig.setMinGasPrice(value: 1500000000)
-        networkConfig.setMinGasLimit(value: 60000)
-        networkConfig.setGasPerDataByte(value: 2000)
-        networkConfig.setGasCostESDTTransfer(value: 300000)
-        networkConfig.setGasCostESDTNFTTransfer(value: 300000)
+        networkConfig.setChainId("T")
+        networkConfig.setMinGasPrice(1500000000)
+        networkConfig.setMinGasLimit(60000)
+        networkConfig.setGasPerDataByte(2000)
+        networkConfig.setGasCostESDTTransfer(300000)
+        networkConfig.setGasCostESDTNFTTransfer(300000)
 
         val factory = ElrondTransactionFactory(networkConfig)
         
