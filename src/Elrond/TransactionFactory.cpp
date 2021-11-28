@@ -23,6 +23,8 @@ Proto::TransactionMessage TransactionFactory::createEGLDTransfer(const Address& 
     message.set_sender(sender.string());
     message.set_receiver(receiver.string());
     message.set_value(toString(amount));
+    message.set_gas_limit(this->networkConfig.getMinGasLimit());
+    message.set_gas_price(this->networkConfig.getMinGasPrice());
     message.set_version(1);
 
     return message;
@@ -44,6 +46,7 @@ Proto::TransactionMessage TransactionFactory::createESDTTransfer(const Address& 
     message.set_sender(sender.string());
     message.set_receiver(receiver.string());
     message.set_data(data);
+    message.set_gas_price(this->networkConfig.getMinGasPrice());
     message.set_version(1);
 
     return message;

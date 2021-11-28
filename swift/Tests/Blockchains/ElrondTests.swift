@@ -53,7 +53,7 @@ class ElrondTests: XCTestCase {
 
     func testEGLDTransfer() {
         let networkConfig = ElrondNetworkConfig()
-        let factory = ElrondTransactionFactory(networkConfig)
+        let factory = ElrondTransactionFactory(networkConfig: networkConfig)
 
         let transaction: ElrondTransactionMessage = Marshalizer.unmarshalProto(factory.createEGLDTransfer(
             sender: aliceBech32,
@@ -65,11 +65,14 @@ class ElrondTests: XCTestCase {
         XCTAssertEqual(transaction.receiver, bobBech32)
         XCTAssertEqual(transaction.data, "")
         XCTAssertEqual(transaction.value, "1000000000000000000")
+        XCTAssertEqual(transaction.gasPrice, 1000000000)
+        XCTAssertEqual(transaction.gasLimit, 50000)
+        XCTAssertEqual(transaction.version, 1)
     }
 
     func testESDTTransfer() {
         let networkConfig = ElrondNetworkConfig()
-        let factory = ElrondTransactionFactory(networkConfig)
+        let factory = ElrondTransactionFactory(networkConfig: networkConfig)
 
         let transaction: ElrondTransactionMessage = Marshalizer.unmarshalProto(factory.createESDTTransfer(
             sender: aliceBech32,
@@ -82,5 +85,7 @@ class ElrondTests: XCTestCase {
         XCTAssertEqual(transaction.receiver, bobBech32)
         XCTAssertEqual(transaction.data, "ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000")
         XCTAssertEqual(transaction.value, "")
+        XCTAssertEqual(transaction.gasPrice, 1000000000)
+        XCTAssertEqual(transaction.version, 1)
     }
 }

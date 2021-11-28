@@ -34,6 +34,9 @@ TEST(ElrondTransactionFactory, createEGLDTransfer) {
     ASSERT_EQ(BOB_BECH32, message.receiver());
     ASSERT_EQ("", message.data());
     ASSERT_EQ("1000000000000000000", message.value());
+    ASSERT_EQ(50000, message.gas_limit());
+    ASSERT_EQ(1000000000, message.gas_price());
+    ASSERT_EQ(1, message.version());
 }
 
 TEST(ElrondTransactionFactory, createESDTTransfer) {
@@ -55,4 +58,6 @@ TEST(ElrondTransactionFactory, createESDTTransfer) {
     ASSERT_EQ(BOB_BECH32, message.receiver());
     ASSERT_EQ("ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000", message.data());
     ASSERT_EQ("", message.value());
+    ASSERT_EQ(1000000000, message.gas_price());
+    ASSERT_EQ(1, message.version());
 }
