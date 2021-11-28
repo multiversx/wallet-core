@@ -15,30 +15,30 @@ class NetworkConfig {
     /// The following fields can (should) be fetched from https://api.elrond.com/network/config.
     /// However, a "NetworkConfig" object is initialized with proper default values for Elrond Mainnet (as of December 2021).
     std::string chainId;
-    uint gasPerDataByte;
-    uint minGasLimit;
+    uint32_t gasPerDataByte;
+    uint32_t minGasLimit;
     uint64_t minGasPrice;
 
     /// GasSchedule entries of interest (only one at this moment), according to: https://github.com/ElrondNetwork/elrond-config-testnet/blob/master/gasSchedules.
     /// Here, for the sake of simplicity, we define the gas costs of interest directly in the class "NetworkConfig" 
     /// (that is, without defining extra nested structures such as "GasSchedule" and "BuiltInCosts").
-    uint gasCostESDTTransfer;
-    uint gasCostESDTNFTTransfer;
+    uint32_t gasCostESDTTransfer;
+    uint32_t gasCostESDTNFTTransfer;
 public:
     NetworkConfig();
     void setChainId(const std::string& value);
-    void setGasPerDataByte(uint value);
-    void setMinGasLimit(uint value);
+    void setGasPerDataByte(uint32_t value);
+    void setMinGasLimit(uint32_t value);
     void setMinGasPrice(uint64_t value);
-    void setGasCostESDTTransfer(uint value);
-    void setGasCostESDTNFTTransfer(uint value);
+    void setGasCostESDTTransfer(uint32_t value);
+    void setGasCostESDTNFTTransfer(uint32_t value);
 
     const std::string& getChainId();
-    uint getGasPerDataByte();
-    uint getMinGasLimit();
+    uint32_t getGasPerDataByte();
+    uint32_t getMinGasLimit();
     uint64_t getMinGasPrice();
-    uint getGasCostESDTTransfer();
-    uint getGasCostESDTNFTTransfer();
+    uint32_t getGasCostESDTTransfer();
+    uint32_t getGasCostESDTNFTTransfer();
 };
 
 } // namespace
