@@ -8,13 +8,15 @@
 
 #include "../proto/Elrond.pb.h"
 #include "Address.h"
+#include "NetworkConfig.h"
 #include "uint256.h"
 
 namespace TW::Elrond {
 
 class TransactionFactory {
+    NetworkConfig networkConfig;
 public:
-    TransactionFactory();
+    TransactionFactory(const NetworkConfig& networkConfig);
     Proto::TransactionMessage createEGLDTransfer(const Address& sender, const Address& receiver, uint256_t amount);
     Proto::TransactionMessage createESDTTransfer(const Address& sender, const Address& receiver, const std::string& tokenIdentifier, uint256_t amount);
 };

@@ -6,11 +6,26 @@
 
 #pragma once
 
+#include <string>
+
 namespace TW::Elrond {
 
 class NetworkConfig {
+    std::string chainId;
+    int gasPerByte;
+    int minGasLimit;
+    long minGasPrice;
 public:
     NetworkConfig();
+    void setChainId(const std::string& value);
+    void setGasPerByte(int value);
+    void setMinGasLimit(int value);
+    void setMinGasPrice(long value);
+
+    const std::string& getChainId();
+    int getGasPerByte();
+    int getMinGasLimit();
+    long getMinGasPrice();
 };
 
 } // namespace

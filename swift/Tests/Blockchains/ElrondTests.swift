@@ -52,7 +52,8 @@ class ElrondTests: XCTestCase {
     }
 
     func testEGLDTransfer() {
-        let factory = ElrondTransactionFactory();
+        let networkConfig = ElrondNetworkConfig()
+        let factory = ElrondTransactionFactory(networkConfig)
 
         let transaction: ElrondTransactionMessage = Marshalizer.unmarshalProto(factory.createEGLDTransfer(
             sender: aliceBech32,
@@ -67,7 +68,8 @@ class ElrondTests: XCTestCase {
     }
 
     func testESDTTransfer() {
-        let factory = ElrondTransactionFactory();
+        let networkConfig = ElrondNetworkConfig()
+        let factory = ElrondTransactionFactory(networkConfig)
 
         let transaction: ElrondTransactionMessage = Marshalizer.unmarshalProto(factory.createESDTTransfer(
             sender: aliceBech32,

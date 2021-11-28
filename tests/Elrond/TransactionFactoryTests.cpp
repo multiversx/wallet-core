@@ -21,7 +21,8 @@ TEST(ElrondTransactionFactory, createEGLDTransfer) {
     Address::decode(ALICE_BECH32, sender);
     Address::decode(BOB_BECH32, receiver);
 
-    TransactionFactory factory;
+    NetworkConfig networkConfig;
+    TransactionFactory factory(networkConfig);
 
     Proto::TransactionMessage message = factory.createEGLDTransfer(
         sender,
@@ -40,7 +41,8 @@ TEST(ElrondTransactionFactory, createESDTTransfer) {
     Address::decode(ALICE_BECH32, sender);
     Address::decode(BOB_BECH32, receiver);
 
-    TransactionFactory factory;
+    NetworkConfig networkConfig;
+    TransactionFactory factory(networkConfig);
 
     Proto::TransactionMessage message = factory.createESDTTransfer(
         sender,

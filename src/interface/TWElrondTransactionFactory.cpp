@@ -15,8 +15,8 @@ using namespace TW::Elrond;
 template <typename ProtoMessage>
 TWData *_Nonnull marshalProto(const ProtoMessage& message);
 
-struct TWElrondTransactionFactory *_Nonnull TWElrondTransactionFactoryCreate() {
-    auto factory = TransactionFactory();
+struct TWElrondTransactionFactory *_Nonnull TWElrondTransactionFactoryCreate(struct TWElrondNetworkConfig *_Nonnull networkConfig) {
+    auto factory = TransactionFactory(networkConfig->impl);
     return new TWElrondTransactionFactory{ factory };
 }
 

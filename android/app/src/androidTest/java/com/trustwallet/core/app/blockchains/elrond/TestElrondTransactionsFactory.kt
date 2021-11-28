@@ -15,6 +15,7 @@ import wallet.core.java.Marshalizer
 import wallet.core.jni.CoinType
 import wallet.core.jni.PrivateKey
 import wallet.core.jni.proto.Elrond
+import wallet.core.jni.ElrondNetworkConfig
 import wallet.core.jni.ElrondTransactionFactory
 
 class TestElrondTransactionsFactory {
@@ -28,7 +29,9 @@ class TestElrondTransactionsFactory {
 
     @Test
     fun createEGLDransfer() {
-        val factory = ElrondTransactionFactory()
+        val networkConfig = ElrondNetworkConfig()
+        val factory = ElrondTransactionFactory(networkConfig)
+
         val transaction = Marshalizer.unmarshalProto(factory.createESDTTransfer(
             aliceBech32,
             bobBech32,
@@ -43,7 +46,9 @@ class TestElrondTransactionsFactory {
 
     @Test
     fun createESDTTransfer() {
-        val factory = ElrondTransactionFactory()
+        val networkConfig = ElrondNetworkConfig()
+        val factory = ElrondTransactionFactory(networkConfig)
+        
         val transaction = Marshalizer.unmarshalProto(factory.createESDTTransfer(
             aliceBech32,
             bobBech32,

@@ -10,6 +10,7 @@
 #include "TWString.h"
 #include "TWData.h"
 #include "TWAnyAddress.h"
+#include "TWElrondNetworkConfig.h"
 
 TW_EXTERN_C_BEGIN
 
@@ -17,7 +18,7 @@ TW_EXPORT_CLASS
 struct TWElrondTransactionFactory;
 
 TW_EXPORT_STATIC_METHOD
-struct TWElrondTransactionFactory *_Nonnull TWElrondTransactionFactoryCreate();
+struct TWElrondTransactionFactory *_Nonnull TWElrondTransactionFactoryCreate(struct TWElrondNetworkConfig *_Nonnull networkConfig);
 
 TW_EXPORT_METHOD
 void TWElrondTransactionFactoryDelete(struct TWElrondTransactionFactory *_Nonnull self);

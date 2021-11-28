@@ -13,7 +13,9 @@
 using namespace TW;
 using namespace TW::Elrond;
 
-TransactionFactory::TransactionFactory() {}
+TransactionFactory::TransactionFactory(const NetworkConfig& networkConfig) {
+    this->networkConfig = networkConfig;
+}
 
 Proto::TransactionMessage TransactionFactory::createEGLDTransfer(const Address& sender, const Address& receiver, uint256_t amount) {
     Proto::TransactionMessage message;
@@ -21,6 +23,7 @@ Proto::TransactionMessage TransactionFactory::createEGLDTransfer(const Address& 
     message.set_sender(sender.string());
     message.set_receiver(receiver.string());
     message.set_value(toString(amount));
+    message.set_version(1);
 
     return message;
 }
@@ -41,6 +44,7 @@ Proto::TransactionMessage TransactionFactory::createESDTTransfer(const Address& 
     message.set_sender(sender.string());
     message.set_receiver(receiver.string());
     message.set_data(data);
+    message.set_version(1);
 
     return message;
 }

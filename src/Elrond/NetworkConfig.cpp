@@ -9,4 +9,43 @@
 using namespace TW;
 using namespace TW::Elrond;
 
-NetworkConfig::NetworkConfig() {}
+// A NetworkConfig object should be synchronized with the current network configuration, as fetched from https://api.elrond.com/network/config.
+// Howerver, we initialize the fields with their default Mainnet values (as of November 2021):
+NetworkConfig::NetworkConfig() :
+    chainId("1"), // Mainnet
+    gasPerByte(1500),
+    minGasLimit(50000),
+    minGasPrice(1000000000) {
+}
+
+void NetworkConfig::setChainId(const std::string& value) {
+    this->chainId = value;
+}
+
+void NetworkConfig::setGasPerByte(int value) {
+    this->gasPerByte = value;
+}
+    
+void NetworkConfig::setMinGasLimit(int value) {
+    this->minGasLimit = value;
+}
+
+void NetworkConfig::setMinGasPrice(long value) {
+    this->minGasPrice = value;
+}
+
+const std::string& NetworkConfig::getChainId() {
+    return this->chainId;
+}
+
+int NetworkConfig::getGasPerByte() {
+    return this->gasPerByte;
+}
+
+int NetworkConfig::getMinGasLimit() {
+    return this->minGasLimit;
+}
+
+long NetworkConfig::getMinGasPrice() {
+    return this->minGasPrice;
+}
