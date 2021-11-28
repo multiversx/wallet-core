@@ -15,8 +15,7 @@ NetworkConfig::NetworkConfig() :
     minGasLimit(50000),
     minGasPrice(1000000000),
     gasCostESDTTransfer(200000),
-    gasCostESDTNFTTransfer(200000),
-    gasCostDataCopyPerByte(100) {
+    gasCostESDTNFTTransfer(200000) {
 }
 
 void NetworkConfig::setChainId(const std::string& value) {
@@ -43,10 +42,6 @@ void NetworkConfig::setGasCostESDTNFTTransfer(long value) {
     this->gasCostESDTNFTTransfer = value;
 }
 
-void NetworkConfig::setGasCostDataCopyPerByte(long value) {
-    this->gasCostDataCopyPerByte = value;
-}
-
 const std::string& NetworkConfig::getChainId() {
     return this->chainId;
 }
@@ -69,8 +64,4 @@ long NetworkConfig::getGasCostESDTTransfer() {
 
 long NetworkConfig::getGasCostESDTNFTTransfer() {
     return this->gasCostESDTNFTTransfer;
-}
-
-long NetworkConfig::getGasCostDataCopyPerByte() {
-    return this->gasCostDataCopyPerByte;
 }

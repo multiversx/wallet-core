@@ -87,7 +87,29 @@ class ElrondTests: XCTestCase {
         XCTAssertEqual(transaction.data, "ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000")
         XCTAssertEqual(transaction.value, "")
         XCTAssertEqual(transaction.gasPrice, 1000000000)
-        XCTAssertEqual(transaction.gasLimit, 325000)
+        XCTAssertEqual(transaction.gasLimit, 425000)
+        XCTAssertEqual(transaction.chainID, "1")
+        XCTAssertEqual(transaction.version, 1)
+    }
+
+    func testESDTNFTTransfer() {
+        let networkConfig = ElrondNetworkConfig()
+        let factory = ElrondTransactionFactory(networkConfig: networkConfig)
+
+        let transaction: ElrondTransactionMessage = Marshalizer.unmarshalProto(factory.createESDTNFTTransfer(
+            sender: aliceBech32,
+            receiver: bobBech32,
+            tokenIdentifier: "LKMEX-aab910",
+            nonce: 4,
+            amount: "184300000000000000"
+        ))
+
+        XCTAssertEqual(transaction.sender, aliceBech32)
+        XCTAssertEqual(transaction.receiver, aliceBech32)
+        XCTAssertEqual(transaction.data, "ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@c70cf50b238372fffaf7b7c5723b06b57859d424a2da621bcc1b2f317543aa36")
+        XCTAssertEqual(transaction.value, "")
+        XCTAssertEqual(transaction.gasPrice, 1000000000)
+        XCTAssertEqual(transaction.gasLimit, 937500)
         XCTAssertEqual(transaction.chainID, "1")
         XCTAssertEqual(transaction.version, 1)
     }

@@ -14,6 +14,9 @@ using namespace TW::Elrond;
 
 template <typename ProtoMessage>
 TWData *_Nonnull marshalProto(const ProtoMessage& message);
+std::string unmarshalString(const TWString *_Nonnull value);
+Address unmarshalAddress(const TWString *_Nonnull address);
+uint256_t unmarshalBigUInt(const TWString *_Nonnull value);
 
 struct TWElrondTransactionFactory *_Nonnull TWElrondTransactionFactoryCreate(struct TWElrondNetworkConfig *_Nonnull networkConfig) {
     auto factory = TransactionFactory(networkConfig->impl);
@@ -33,14 +36,10 @@ TWData *_Nonnull TWElrondTransactionFactoryCreateEGLDTransfer(
 ) {
     auto factory = self->impl;
 
-    Address senderAddress, receiverAddress;
-    Address::decode(TWStringUTF8Bytes(sender), senderAddress);
-    Address::decode(TWStringUTF8Bytes(receiver), receiverAddress);
-
     auto transaction = factory.createEGLDTransfer(
-        senderAddress, 
-        receiverAddress, 
-        uint256_t(TWStringUTF8Bytes(amount))
+        unmarshalAddress(sender),
+        unmarshalAddress(receiver),
+        unmarshalBigUInt(amount)
     );
 
     return marshalProto(transaction);
@@ -55,15 +54,32 @@ TWData *_Nonnull TWElrondTransactionFactoryCreateESDTTransfer(
 ) {
     auto factory = self->impl;
 
-    Address senderAddress, receiverAddress;
-    Address::decode(TWStringUTF8Bytes(sender), senderAddress);
-    Address::decode(TWStringUTF8Bytes(receiver), receiverAddress);
-    
     auto transaction = factory.createESDTTransfer(
-        senderAddress,
-        receiverAddress,
-        TWStringUTF8Bytes(tokenIdentifier),
-        uint256_t(TWStringUTF8Bytes(amount))
+        unmarshalAddress(sender),
+        unmarshalAddress(receiver),
+        unmarshalString(tokenIdentifier),
+        unmarshalBigUInt(amount)
+    );
+    
+    return marshalProto(transaction);
+}
+
+TWData *_Nonnull TWElrondTransactionFactoryCreateESDTNFTTransfer(
+    struct TWElrondTransactionFactory *_Nonnull self, 
+    TWString *_Nonnull sender,
+    TWString *_Nonnull receiver,
+    TWString *_Nonnull collection,
+    uint64_t nonce,
+    TWString *_Nonnull quantity
+) {
+    auto factory = self->impl;
+
+    auto transaction = factory.createESDTNFTTransfer(
+        unmarshalAddress(sender),
+        unmarshalAddress(receiver),
+        unmarshalString(collection),
+        nonce,
+        unmarshalBigUInt(quantity)
     );
     
     return marshalProto(transaction);
@@ -76,4 +92,18 @@ TWData *_Nonnull marshalProto(const ProtoMessage& message) {
     message.SerializeToArray(raw.data(), (int)size);
     auto result = TWDataCreateWithBytes(raw.data(), size);
     return result;
+}
+
+std::string unmarshalString(const TWString *_Nonnull value) {
+    return TWStringUTF8Bytes(value);
+}
+
+Address unmarshalAddress(const TWString *_Nonnull address) {
+    Address result;
+    Address::decode(TWStringUTF8Bytes(address), result);
+    return result;
+}
+
+uint256_t unmarshalBigUInt(const TWString *_Nonnull value) {
+    return uint256_t(TWStringUTF8Bytes(value));
 }

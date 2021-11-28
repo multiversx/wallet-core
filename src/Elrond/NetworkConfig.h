@@ -24,7 +24,6 @@ class NetworkConfig {
     /// (that is, without defining extra nested structures such as "GasSchedule" and "BuiltInCosts").
     long gasCostESDTTransfer;
     long gasCostESDTNFTTransfer;
-    long gasCostDataCopyPerByte;
 public:
     NetworkConfig();
     void setChainId(const std::string& value);
@@ -33,7 +32,6 @@ public:
     void setMinGasPrice(long value);
     void setGasCostESDTTransfer(long value);
     void setGasCostESDTNFTTransfer(long value);
-    void setGasCostDataCopyPerByte(long value);
 
     const std::string& getChainId();
     int getGasPerDataByte();
@@ -41,7 +39,6 @@ public:
     long getMinGasPrice();
     long getGasCostESDTTransfer();
     long getGasCostESDTNFTTransfer();
-    long getGasCostDataCopyPerByte();
 };
 
 } // namespace

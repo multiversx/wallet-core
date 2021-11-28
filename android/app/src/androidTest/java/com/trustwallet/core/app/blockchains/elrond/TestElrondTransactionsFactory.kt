@@ -44,7 +44,7 @@ class TestElrondTransactionsFactory {
         assertEquals("1000000000000000000", transaction.value)
         assertEquals(1000000000, transaction.gasPrice)
         assertEquals(50000, transaction.gasLimit)
-        assertEquals("1", transaction.chainID)
+        assertEquals("1", transaction.chainId)
         assertEquals(1, transaction.version)
     }
 
@@ -65,8 +65,31 @@ class TestElrondTransactionsFactory {
         assertEquals("ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000", transaction.data)
         assertEquals("", transaction.value)
         assertEquals(1000000000, transaction.gasPrice)
-        assertEquals(325000, transaction.gasLimit)
-        assertEquals("1", transaction.chainID)
+        assertEquals(425000, transaction.gasLimit)
+        assertEquals("1", transaction.chainId)
+        assertEquals(1, transaction.version)
+    }
+
+    @Test
+    fun createESDTNFTTransfer() {
+        val networkConfig = ElrondNetworkConfig()
+        val factory = ElrondTransactionFactory(networkConfig)
+        
+        val transaction = Marshalizer.unmarshalProto(factory.createESDTNFTTransfer(
+            aliceBech32,
+            bobBech32,
+            "LKMEX-aab910",
+            4,
+            "184300000000000000"
+        ), Elrond.TransactionMessage.parser())
+
+        assertEquals(aliceBech32, transaction.sender)
+        assertEquals(aliceBech32, transaction.receiver)
+        assertEquals("ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@c70cf50b238372fffaf7b7c5723b06b57859d424a2da621bcc1b2f317543aa36", transaction.data)
+        assertEquals("", transaction.value)
+        assertEquals(1000000000, transaction.gasPrice)
+        assertEquals(937500, transaction.gasLimit)
+        assertEquals("1", transaction.chainId)
         assertEquals(1, transaction.version)
     }
 }

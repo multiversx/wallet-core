@@ -20,7 +20,9 @@ namespace TW::Elrond {
 class Codec {
 public:
     static std::string encodeStringTopLevel(std::string value);
+    static std::string encodeUint64TopLevel(uint64_t value);
     static std::string encodeBigIntTopLevel(TW::uint256_t value);
+    static std::string encodeAddressTopLevel(const Address& address);
 };
 
 } // namespace
