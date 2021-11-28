@@ -32,7 +32,7 @@ class TestElrondTransactionsFactory {
         val networkConfig = ElrondNetworkConfig()
         val factory = ElrondTransactionFactory(networkConfig)
 
-        val transaction = Marshalizer.unmarshalProto(factory.createESDTTransfer(
+        val transaction = Marshalizer.unmarshalProto(factory.createEGLDTransfer(
             aliceBech32,
             bobBech32,
             "1000000000000000000"
@@ -42,6 +42,9 @@ class TestElrondTransactionsFactory {
         assertEquals(bobBech32, transaction.receiver)
         assertEquals("", transaction.data)
         assertEquals("1000000000000000000", transaction.value)
+        assertEquals(1000000000, transaction.gasPrice)
+        assertEquals(50000, transaction.gasLimit)
+        assertEquals(1, transaction.version)
     }
 
     @Test
@@ -60,5 +63,7 @@ class TestElrondTransactionsFactory {
         assertEquals(bobBech32, transaction.receiver)
         assertEquals("ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000", transaction.data)
         assertEquals("", transaction.value)
+        assertEquals(1000000000, transaction.gasPrice)
+        assertEquals(1, transaction.version)
     }
 }
