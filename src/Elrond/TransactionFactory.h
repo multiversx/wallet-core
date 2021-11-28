@@ -13,6 +13,7 @@
 
 namespace TW::Elrond {
 
+/// Creates specific transaction objects, wrt. the provided "NetworkConfig".
 class TransactionFactory {
     NetworkConfig networkConfig;
 public:

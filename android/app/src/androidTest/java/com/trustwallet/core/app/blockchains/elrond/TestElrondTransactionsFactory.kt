@@ -44,6 +44,7 @@ class TestElrondTransactionsFactory {
         assertEquals("1000000000000000000", transaction.value)
         assertEquals(1000000000, transaction.gasPrice)
         assertEquals(50000, transaction.gasLimit)
+        assertEquals("1", transaction.chainID)
         assertEquals(1, transaction.version)
     }
 
@@ -64,6 +65,8 @@ class TestElrondTransactionsFactory {
         assertEquals("ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000", transaction.data)
         assertEquals("", transaction.value)
         assertEquals(1000000000, transaction.gasPrice)
+        assertEquals(325000, transaction.gasLimit)
+        assertEquals("1", transaction.chainID)
         assertEquals(1, transaction.version)
     }
 }

@@ -67,6 +67,7 @@ class ElrondTests: XCTestCase {
         XCTAssertEqual(transaction.value, "1000000000000000000")
         XCTAssertEqual(transaction.gasPrice, 1000000000)
         XCTAssertEqual(transaction.gasLimit, 50000)
+        XCTAssertEqual(transaction.chainID, "1")
         XCTAssertEqual(transaction.version, 1)
     }
 
@@ -86,6 +87,8 @@ class ElrondTests: XCTestCase {
         XCTAssertEqual(transaction.data, "ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000")
         XCTAssertEqual(transaction.value, "")
         XCTAssertEqual(transaction.gasPrice, 1000000000)
+        XCTAssertEqual(transaction.gasLimit, 325000)
+        XCTAssertEqual(transaction.chainID, "1")
         XCTAssertEqual(transaction.version, 1)
     }
 }

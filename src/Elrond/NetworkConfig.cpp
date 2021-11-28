@@ -9,21 +9,22 @@
 using namespace TW;
 using namespace TW::Elrond;
 
-// A NetworkConfig object should be synchronized with the current network configuration, as fetched from https://api.elrond.com/network/config.
-// Howerver, we initialize the fields with their default Mainnet values (as of November 2021):
 NetworkConfig::NetworkConfig() :
     chainId("1"), // Mainnet
-    gasPerByte(1500),
+    gasPerDataByte(1500),
     minGasLimit(50000),
-    minGasPrice(1000000000) {
+    minGasPrice(1000000000),
+    gasCostESDTTransfer(200000),
+    gasCostESDTNFTTransfer(200000),
+    gasCostDataCopyPerByte(100) {
 }
 
 void NetworkConfig::setChainId(const std::string& value) {
     this->chainId = value;
 }
 
-void NetworkConfig::setGasPerByte(int value) {
-    this->gasPerByte = value;
+void NetworkConfig::setGasPerDataByte(int value) {
+    this->gasPerDataByte = value;
 }
     
 void NetworkConfig::setMinGasLimit(int value) {
@@ -34,12 +35,24 @@ void NetworkConfig::setMinGasPrice(long value) {
     this->minGasPrice = value;
 }
 
+void NetworkConfig::setGasCostESDTTransfer(long value) {
+    this->gasCostESDTTransfer = value;
+}
+
+void NetworkConfig::setGasCostESDTNFTTransfer(long value) {
+    this->gasCostESDTNFTTransfer = value;
+}
+
+void NetworkConfig::setGasCostDataCopyPerByte(long value) {
+    this->gasCostDataCopyPerByte = value;
+}
+
 const std::string& NetworkConfig::getChainId() {
     return this->chainId;
 }
 
-int NetworkConfig::getGasPerByte() {
-    return this->gasPerByte;
+int NetworkConfig::getGasPerDataByte() {
+    return this->gasPerDataByte;
 }
 
 int NetworkConfig::getMinGasLimit() {
@@ -48,4 +61,16 @@ int NetworkConfig::getMinGasLimit() {
 
 long NetworkConfig::getMinGasPrice() {
     return this->minGasPrice;
+}
+
+long NetworkConfig::getGasCostESDTTransfer() {
+    return this->gasCostESDTTransfer;
+}
+
+long NetworkConfig::getGasCostESDTNFTTransfer() {
+    return this->gasCostESDTNFTTransfer;
+}
+
+long NetworkConfig::getGasCostDataCopyPerByte() {
+    return this->gasCostDataCopyPerByte;
 }

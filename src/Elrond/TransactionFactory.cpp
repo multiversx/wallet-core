@@ -25,6 +25,7 @@ Proto::TransactionMessage TransactionFactory::createEGLDTransfer(const Address& 
     message.set_value(toString(amount));
     message.set_gas_limit(this->networkConfig.getMinGasLimit());
     message.set_gas_price(this->networkConfig.getMinGasPrice());
+    message.set_chain_id(this->networkConfig.getChainId());
     message.set_version(1);
 
     return message;
@@ -43,10 +44,17 @@ Proto::TransactionMessage TransactionFactory::createESDTTransfer(const Address& 
         std::string("@") + 
         encodedAmount;
 
+    long gasLimit = 
+        this->networkConfig.getMinGasLimit() + 
+        this->networkConfig.getGasCostESDTTransfer() + 
+        this->networkConfig.getGasPerDataByte() * data.size();
+
     message.set_sender(sender.string());
     message.set_receiver(receiver.string());
     message.set_data(data);
+    message.set_gas_limit(gasLimit);
     message.set_gas_price(this->networkConfig.getMinGasPrice());
+    message.set_chain_id(this->networkConfig.getChainId());
     message.set_version(1);
 
     return message;
