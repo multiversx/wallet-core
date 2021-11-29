@@ -125,11 +125,10 @@ class ElrondTests: XCTestCase {
 
         let factory = ElrondTransactionFactory(networkConfig: networkConfig)
 
-        let tx1: ElrondTransactionMessage = Marshalizer.unmarshalProto(factory.createESDTTransfer(
+        let tx1: ElrondTransactionMessage = Marshalizer.unmarshalProto(factory.createEGLDTransfer(
             sender: aliceBech32,
             receiver: bobBech32,
-            tokenIdentifier: "MYTOKEN-1234",
-            amount: "10000000000000"
+            amount: "1000000000000000000"
         ))
 
         let tx2: ElrondTransactionMessage = Marshalizer.unmarshalProto(factory.createESDTTransfer(
