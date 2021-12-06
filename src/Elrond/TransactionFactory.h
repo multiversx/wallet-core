@@ -9,6 +9,7 @@
 #include "../proto/Elrond.pb.h"
 #include "Address.h"
 #include "NetworkConfig.h"
+#include "GasEstimator.h"
 #include "uint256.h"
 
 namespace TW::Elrond {
@@ -16,6 +17,7 @@ namespace TW::Elrond {
 /// Creates specific transaction objects, wrt. the provided "NetworkConfig".
 class TransactionFactory {
     NetworkConfig networkConfig;
+    GasEstimator gasEstimator;
 public:
     TransactionFactory(const NetworkConfig& networkConfig);
 
