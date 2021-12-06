@@ -15,20 +15,25 @@ using namespace TW::Elrond;
 
 std::string prepareFunctionCall(const std::string& function, std::initializer_list<const std::string> arguments);
 
-TransactionFactory::TransactionFactory(const NetworkConfig& networkConfig) {
-    this->networkConfig = networkConfig;
+const int TX_VERSION = 1;
+
+TransactionFactory::TransactionFactory(const NetworkConfig& networkConfig) : 
+    networkConfig(networkConfig),
+    gasEstimator(networkConfig) {
 }
 
 Proto::TransactionMessage TransactionFactory::createEGLDTransfer(const Address& sender, const Address& receiver, uint256_t amount) {
     Proto::TransactionMessage message;
 
+    long gasLimit = this->gasEstimator.forEGLDTransfer(0);
+
     message.set_sender(sender.string());
     message.set_receiver(receiver.string());
     message.set_value(toString(amount));
-    message.set_gas_limit(this->networkConfig.getMinGasLimit());
+    message.set_gas_limit(gasLimit);
     message.set_gas_price(this->networkConfig.getMinGasPrice());
     message.set_chain_id(this->networkConfig.getChainId());
-    message.set_version(1);
+    message.set_version(TX_VERSION);
 
     return message;
 }
@@ -39,15 +44,7 @@ Proto::TransactionMessage TransactionFactory::createESDTTransfer(const Address& 
     std::string encodedTokenIdentifier = Codec::encodeStringTopLevel(tokenIdentifier);
     std::string encodedAmount = Codec::encodeBigIntTopLevel(amount);
     std::string data = prepareFunctionCall("ESDTTransfer", { encodedTokenIdentifier, encodedAmount });
-
-    // Additional gas to account for eventual increases in gas requirements (thus avoid breaking changes in clients of TW-core).
-    const long ADDITIONAL_GAS = 100000;
-
-    long gasLimit = 
-        this->networkConfig.getMinGasLimit() + 
-        this->networkConfig.getGasCostESDTTransfer() + 
-        this->networkConfig.getGasPerDataByte() * data.size() +
-        ADDITIONAL_GAS;
+    long gasLimit = this->gasEstimator.forESDTTransfer(data.size());
 
     message.set_sender(sender.string());
     message.set_receiver(receiver.string());
@@ -55,7 +52,7 @@ Proto::TransactionMessage TransactionFactory::createESDTTransfer(const Address& 
     message.set_gas_limit(gasLimit);
     message.set_gas_price(this->networkConfig.getMinGasPrice());
     message.set_chain_id(this->networkConfig.getChainId());
-    message.set_version(1);
+    message.set_version(TX_VERSION);
 
     return message;
 }
@@ -68,17 +65,8 @@ Proto::TransactionMessage TransactionFactory::createESDTNFTTransfer(const Addres
     std::string encodedQuantity = Codec::encodeBigIntTopLevel(quantity);
     std::string encodedReceiver = Codec::encodeAddressTopLevel(receiver);
     std::string data = prepareFunctionCall("ESDTNFTTransfer", { encodedCollection, encodedNonce, encodedQuantity, encodedReceiver });
-
-    // Additional gas to account for extra blockchain operations (e.g. data movement (between accounts) for NFTs), 
-    // and for eventual increases in gas requirements (thus avoid breaking changes in clients of TW-core).
-    const long ADDITIONAL_GAS = 500000;
-
-    long gasLimit = 
-        this->networkConfig.getMinGasLimit() + 
-        this->networkConfig.getGasCostESDTNFTTransfer() + 
-        this->networkConfig.getGasPerDataByte() * data.size() +
-        ADDITIONAL_GAS;
-
+    long gasLimit = this->gasEstimator.forESDTNFTTransfer(data.size());
+    
     // For NFT, SFT and MetaESDT, transaction.sender == transaction.receiver.
     message.set_sender(sender.string());
     message.set_receiver(sender.string());
@@ -87,7 +75,7 @@ Proto::TransactionMessage TransactionFactory::createESDTNFTTransfer(const Addres
     message.set_gas_limit(gasLimit);
     message.set_gas_price(this->networkConfig.getMinGasPrice());
     message.set_chain_id(this->networkConfig.getChainId());
-    message.set_version(1);
+    message.set_version(TX_VERSION);
 
     return message;
 }
