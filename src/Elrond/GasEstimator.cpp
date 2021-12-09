@@ -11,6 +11,13 @@
 using namespace TW;
 using namespace TW::Elrond;
 
+// Additional gas to account for eventual increases in gas requirements (thus avoid breaking changes in clients of TW-core).
+const long ADDITIONAL_GAS_FOR_ESDT_TRANSFER = 100000;
+
+// Additional gas to account for extra blockchain operations (e.g. data movement (between accounts) for NFTs), 
+// and for eventual increases in gas requirements (thus avoid breaking changes in clients of TW-core).
+const long ADDITIONAL_GAS_FOR_ESDT_NFT_TRANSFER = 500000;
+
 GasEstimator::GasEstimator(const NetworkConfig& networkConfig) {
     this->networkConfig = networkConfig;
 }
@@ -24,30 +31,21 @@ long GasEstimator::forEGLDTransfer(long dataLength) {
 }
 
 long GasEstimator::forESDTTransfer(long dataLength) {
-    // Additional gas to account for eventual increases in gas requirements (thus avoid breaking changes in clients of TW-core).
-    const long ADDITIONAL_GAS = 100000;
-
     long gasLimit = 
         this->networkConfig.getMinGasLimit() + 
         this->networkConfig.getGasCostESDTTransfer() + 
         this->networkConfig.getGasPerDataByte() * dataLength +
-        ADDITIONAL_GAS;
+        ADDITIONAL_GAS_FOR_ESDT_TRANSFER;
 
     return gasLimit;
 }
 
 long GasEstimator::forESDTNFTTransfer(long dataLength) {
-    // Additional gas to account for extra blockchain operations (e.g. data movement (between accounts) for NFTs), 
-    // and for eventual increases in gas requirements (thus avoid breaking changes in clients of TW-core).
-    const long ADDITIONAL_GAS = 500000;
-
     long gasLimit = 
         this->networkConfig.getMinGasLimit() + 
         this->networkConfig.getGasCostESDTNFTTransfer() + 
         this->networkConfig.getGasPerDataByte() * dataLength +
-        ADDITIONAL_GAS;
+        ADDITIONAL_GAS_FOR_ESDT_NFT_TRANSFER;
 
     return gasLimit;
 }
-
-

@@ -48,6 +48,7 @@ Proto::TransactionMessage TransactionFactory::createESDTTransfer(const Address& 
 
     message.set_sender(sender.string());
     message.set_receiver(receiver.string());
+    message.set_value(toString(0));
     message.set_data(data);
     message.set_gas_limit(gasLimit);
     message.set_gas_price(this->networkConfig.getMinGasPrice());
@@ -70,6 +71,7 @@ Proto::TransactionMessage TransactionFactory::createESDTNFTTransfer(const Addres
     // For NFT, SFT and MetaESDT, transaction.sender == transaction.receiver.
     message.set_sender(sender.string());
     message.set_receiver(sender.string());
+    message.set_value(toString(0));
 
     message.set_data(data);
     message.set_gas_limit(gasLimit);

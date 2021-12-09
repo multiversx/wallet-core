@@ -53,7 +53,7 @@ TEST(ElrondTransactionFactory, createESDTTransfer) {
     ASSERT_EQ(ALICE_BECH32, message.sender());
     ASSERT_EQ(BOB_BECH32, message.receiver());
     ASSERT_EQ("ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000", message.data());
-    ASSERT_EQ("", message.value());
+    ASSERT_EQ("0", message.value());
     ASSERT_EQ(425000, message.gas_limit());
     ASSERT_EQ(1000000000, message.gas_price());
     ASSERT_EQ("1", message.chain_id());
@@ -73,7 +73,7 @@ TEST(ElrondTransactionFactory, createESDTNFTTransfer) {
     ASSERT_EQ(ALICE_BECH32, message.sender());
     ASSERT_EQ(ALICE_BECH32, message.receiver());
     ASSERT_EQ("ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@c70cf50b238372fffaf7b7c5723b06b57859d424a2da621bcc1b2f317543aa36", message.data());
-    ASSERT_EQ("", message.value());
+    ASSERT_EQ("0", message.value());
     ASSERT_EQ(937500, message.gas_limit());
     ASSERT_EQ(1000000000, message.gas_price());
     ASSERT_EQ("1", message.chain_id());
