@@ -17,6 +17,10 @@ std::string prepareFunctionCall(const std::string& function, std::initializer_li
 
 const int TX_VERSION = 1;
 
+TransactionFactory::TransactionFactory() : 
+    TransactionFactory(NetworkConfig::GetDefault()) {
+}
+
 TransactionFactory::TransactionFactory(const NetworkConfig& networkConfig) : 
     networkConfig(networkConfig),
     gasEstimator(networkConfig) {

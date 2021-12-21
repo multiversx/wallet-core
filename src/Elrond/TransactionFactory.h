@@ -19,6 +19,7 @@ class TransactionFactory {
     NetworkConfig networkConfig;
     GasEstimator gasEstimator;
 public:
+    TransactionFactory();
     TransactionFactory(const NetworkConfig& networkConfig);
 
     /// This should be used to transfer EGLD.
@@ -42,8 +43,3 @@ public:
 };
 
 } // namespace
-
-/// Wrapper for C interface.
-struct TWElrondTransactionFactory {
-    TW::Elrond::TransactionFactory impl;
-};

@@ -44,11 +44,11 @@ public:
 
     uint32_t getGasCostESDTNFTTransfer();
     void setGasCostESDTNFTTransfer(uint32_t value);
+
+    // TODO: docs ...
+    static NetworkConfig GetDefault();
+    // TODO: docs ...
+    static NetworkConfig GetByTimestamp(uint64_t timestamp);
 };
 
 } // namespace
-
-/// Wrapper for C interface.
-struct TWElrondNetworkConfig {
-    TW::Elrond::NetworkConfig impl;
-};
