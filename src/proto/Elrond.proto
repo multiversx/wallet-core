@@ -34,36 +34,41 @@ message TransactionMessage {
 // EGLD transfer (move balance).
 message EGLDTransfer {
     uint64      nonce = 1;
-    string      sender_username = 2;
-    string      receiver = 3;
-    string      receiver_username = 4;
-    string      amount = 5;
-    uint64      gas_price = 6;
-    string      chain_id = 7;
+    string      sender = 2;
+    string      sender_username = 3;
+    string      receiver = 4;
+    string      receiver_username = 5;
+    string      amount = 6;
+    uint64      gas_price = 7;
+    string      chain_id = 8;
 }
 
 // ESDT transfer (transfer regular ESDTs - fungible tokens).
 message ESDTTransfer {
     uint64      nonce = 1;
-    string      sender_username = 2;
-    string      receiver = 3;
-    string      receiver_username = 4;
-    string      token_identifier = 5;
-    string      amount = 6;
-    uint64      gas_price = 7;
-    string      chain_id = 8;
+    string      sender = 2;
+    string      sender_username = 3;
+    string      receiver = 4;
+    string      receiver_username = 5;
+    string      token_identifier = 6;
+    string      amount = 7;
+    uint64      gas_price = 8;
+    string      chain_id = 9;
 }
 
 // ESDTNFT transfer (transfer NFTs, SFTs and Meta ESDTs).
 message ESDTNFTTransfer {
     uint64      nonce = 1;
-    string      sender_username = 2;
-    string      receiver = 3;
-    string      receiver_username = 4;
-    string      token_identifier = 5;
-    string      amount = 6;
-    uint64      gas_price = 7;
-    string      chain_id = 8;
+    string      sender = 2;
+    string      sender_username = 3;
+    string      receiver = 4;
+    string      receiver_username = 5;
+    string      token_identifier = 6;
+    string      token_collection = 7;
+    uint64      token_nonce = 8;
+    string      amount = 9;
+    uint64      gas_price = 10;
+    string      chain_id = 11;
 }
 
 // Input data necessary to create a signed transaction.
