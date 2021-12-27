@@ -17,74 +17,69 @@ using namespace TW;
 using namespace TW::Elrond;
 
 TEST(ElrondTransactionFactory, createEGLDTransfer) {
-    Address sender, receiver;
-    Address::decode(ALICE_BECH32, sender);
-    Address::decode(BOB_BECH32, receiver);
+    TransactionFactory factory;
 
-    NetworkConfig networkConfig;
-    TransactionFactory factory(networkConfig);
+    auto transfer = Proto::EGLDTransfer();
+    transfer.set_sender(ALICE_BECH32);
+    transfer.set_receiver(BOB_BECH32);
+    transfer.set_amount("1000000000000000000");
 
-    Proto::TransactionMessage message = factory.createEGLDTransfer(
-        sender,
-        receiver,
-        uint256_t("1000000000000000000")
-    );
+    Proto::TransactionMessage transaction = factory.createEGLDTransfer(transfer);
 
-    ASSERT_EQ(ALICE_BECH32, message.sender());
-    ASSERT_EQ(BOB_BECH32, message.receiver());
-    ASSERT_EQ("", message.data());
-    ASSERT_EQ("1000000000000000000", message.value());
-    ASSERT_EQ(50000, message.gas_limit());
-    ASSERT_EQ(1000000000, message.gas_price());
-    ASSERT_EQ("1", message.chain_id());
-    ASSERT_EQ(1, message.version());
+    ASSERT_EQ(ALICE_BECH32, transaction.sender());
+    ASSERT_EQ(BOB_BECH32, transaction.receiver());
+    ASSERT_EQ("", transaction.data());
+    ASSERT_EQ("1000000000000000000", transaction.value());
+    ASSERT_EQ(50000, transaction.gas_limit());
+    ASSERT_EQ(1000000000, transaction.gas_price());
+    ASSERT_EQ("1", transaction.chain_id());
+    ASSERT_EQ(1, transaction.version());
 }
 
 TEST(ElrondTransactionFactory, createESDTTransfer) {
-    Address sender, receiver;
-    Address::decode(ALICE_BECH32, sender);
-    Address::decode(BOB_BECH32, receiver);
+    TransactionFactory factory;
 
-    NetworkConfig networkConfig;
-    TransactionFactory factory(networkConfig);
+    auto transfer = Proto::ESDTTransfer();
+    transfer.set_sender(ALICE_BECH32);
+    transfer.set_receiver(BOB_BECH32);
+    transfer.set_token_identifier("MYTOKEN-1234");
+    transfer.set_amount("10000000000000");
 
-    Proto::TransactionMessage message = factory.createESDTTransfer(sender, receiver, "MYTOKEN-1234", uint256_t("10000000000000"));
+    Proto::TransactionMessage transaction = factory.createESDTTransfer(transfer);
 
-    ASSERT_EQ(ALICE_BECH32, message.sender());
-    ASSERT_EQ(BOB_BECH32, message.receiver());
-    ASSERT_EQ("ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000", message.data());
-    ASSERT_EQ("0", message.value());
-    ASSERT_EQ(425000, message.gas_limit());
-    ASSERT_EQ(1000000000, message.gas_price());
-    ASSERT_EQ("1", message.chain_id());
-    ASSERT_EQ(1, message.version());
+    ASSERT_EQ(ALICE_BECH32, transaction.sender());
+    ASSERT_EQ(BOB_BECH32, transaction.receiver());
+    ASSERT_EQ("ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000", transaction.data());
+    ASSERT_EQ("0", transaction.value());
+    ASSERT_EQ(425000, transaction.gas_limit());
+    ASSERT_EQ(1000000000, transaction.gas_price());
+    ASSERT_EQ("1", transaction.chain_id());
+    ASSERT_EQ(1, transaction.version());
 }
 
 TEST(ElrondTransactionFactory, createESDTNFTTransfer) {
-    Address sender, receiver;
-    Address::decode(ALICE_BECH32, sender);
-    Address::decode(BOB_BECH32, receiver);
+    TransactionFactory factory;
 
-    NetworkConfig networkConfig;
-    TransactionFactory factory(networkConfig);
+    auto transfer = Proto::ESDTNFTTransfer();
+    transfer.set_sender(ALICE_BECH32);
+    transfer.set_receiver(BOB_BECH32);
+    transfer.set_token_collection("LKMEX-aab910");
+    transfer.set_token_nonce(4);
+    transfer.set_amount("184300000000000000");
 
-    Proto::TransactionMessage message = factory.createESDTNFTTransfer(sender, receiver, "LKMEX-aab910", 4, uint256_t("184300000000000000"));
+    Proto::TransactionMessage transaction = factory.createESDTNFTTransfer(transfer);
 
-    ASSERT_EQ(ALICE_BECH32, message.sender());
-    ASSERT_EQ(ALICE_BECH32, message.receiver());
-    ASSERT_EQ("ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@c70cf50b238372fffaf7b7c5723b06b57859d424a2da621bcc1b2f317543aa36", message.data());
-    ASSERT_EQ("0", message.value());
-    ASSERT_EQ(937500, message.gas_limit());
-    ASSERT_EQ(1000000000, message.gas_price());
-    ASSERT_EQ("1", message.chain_id());
-    ASSERT_EQ(1, message.version());
+    ASSERT_EQ(ALICE_BECH32, transaction.sender());
+    ASSERT_EQ(ALICE_BECH32, transaction.receiver());
+    ASSERT_EQ("ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@c70cf50b238372fffaf7b7c5723b06b57859d424a2da621bcc1b2f317543aa36", transaction.data());
+    ASSERT_EQ("0", transaction.value());
+    ASSERT_EQ(937500, transaction.gas_limit());
+    ASSERT_EQ(1000000000, transaction.gas_price());
+    ASSERT_EQ("1", transaction.chain_id());
+    ASSERT_EQ(1, transaction.version());
 }
 
 TEST(ElrondTransactionFactory, createTransfersWithChangedNetworkConfig) {
-    Address sender, receiver;
-    Address::decode(ALICE_BECH32, sender);
-    Address::decode(BOB_BECH32, receiver);
-
     NetworkConfig networkConfig;
 
     // Set dummy values:
@@ -97,9 +92,28 @@ TEST(ElrondTransactionFactory, createTransfersWithChangedNetworkConfig) {
 
     TransactionFactory factory(networkConfig);
 
-    Proto::TransactionMessage tx1 = factory.createEGLDTransfer(sender, receiver, uint256_t("0"));
-    Proto::TransactionMessage tx2 = factory.createESDTTransfer(sender, receiver, "MYTOKEN-1234", uint256_t("10000000000000"));
-    Proto::TransactionMessage tx3 = factory.createESDTNFTTransfer(sender, receiver, "LKMEX-aab910", 4, uint256_t("184300000000000000"));
+    Proto::EGLDTransfer egldTransfer;
+    egldTransfer.set_sender(ALICE_BECH32);
+    egldTransfer.set_receiver(BOB_BECH32);
+    egldTransfer.set_amount("0");
+
+    Proto::ESDTTransfer esdtTransfer;
+    esdtTransfer.set_sender(ALICE_BECH32);
+    esdtTransfer.set_receiver(BOB_BECH32);
+    esdtTransfer.set_token_identifier("MYTOKEN-1234");
+    esdtTransfer.set_amount("10000000000000");
+
+    Proto::ESDTNFTTransfer esdtnftTransfer;
+    esdtnftTransfer.set_sender(ALICE_BECH32);
+    esdtnftTransfer.set_receiver(BOB_BECH32);
+    esdtnftTransfer.set_token_collection("LKMEX-aab910");
+    esdtnftTransfer.set_token_nonce(4);
+    esdtnftTransfer.set_amount("184300000000000000");
+
+
+    Proto::TransactionMessage tx1 = factory.createEGLDTransfer(egldTransfer);
+    Proto::TransactionMessage tx2 = factory.createESDTTransfer(esdtTransfer);
+    Proto::TransactionMessage tx3 = factory.createESDTNFTTransfer(esdtnftTransfer);
     
     ASSERT_EQ(60000, tx1.gas_limit());
     ASSERT_EQ(1500000000, tx1.gas_price());

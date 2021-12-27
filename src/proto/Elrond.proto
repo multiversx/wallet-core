@@ -65,13 +65,12 @@ message ESDTNFTTransfer {
     string      sender_username = 3;
     string      receiver = 4;
     string      receiver_username = 5;
-    string      token_identifier = 6;
-    string      token_collection = 7;
-    uint64      token_nonce = 8;
-    string      amount = 9;
-    uint64      gas_limit = 10;
-    uint64      gas_price = 11;
-    string      chain_id = 12;
+    string      token_collection = 6;
+    uint64      token_nonce = 7;
+    string      amount = 8;
+    uint64      gas_limit = 9;
+    uint64      gas_price = 10;
+    string      chain_id = 11;
 }
 
 // Input data necessary to create a signed transaction.
