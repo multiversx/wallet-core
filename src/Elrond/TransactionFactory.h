@@ -23,6 +23,8 @@ public:
     TransactionFactory();
     TransactionFactory(const NetworkConfig& networkConfig);
 
+    Proto::TransactionMessage createTransaction(const Proto::SigningInput &input);
+
     /// This should be used to transfer EGLD.
     /// For reference, see: https://docs.elrond.com/developers/signing-transactions/signing-transactions/#general-structure.
     Proto::TransactionMessage createEGLDTransfer(const Proto::EGLDTransfer& transfer);
@@ -42,9 +44,10 @@ public:
     /// The fields "transfer.token_collection" and "transfer.token_nonce" are found as well in the HTTP response of the API call (as "collection" and "nonce", respectively).
     Proto::TransactionMessage createESDTNFTTransfer(const Proto::ESDTNFTTransfer& transfer);
 private:
+    uint64_t coalesceGasLimit(uint64_t providedGasLimit, uint64_t estimatedGasLimit);
     uint64_t coalesceGasPrice(uint64_t gasPrice);
     std::string coalesceChainId(std::string chainID);
-    static std::string prepareFunctionCall(const std::string& function, std::initializer_list<const std::string> arguments);
+    std::string prepareFunctionCall(const std::string& function, std::initializer_list<const std::string> arguments);
 };
 
 } // namespace
