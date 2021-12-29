@@ -94,6 +94,7 @@ Proto::TransactionMessage TransactionFactory::createESDTNFTTransfer(const Proto:
     std::string data = prepareFunctionCall("ESDTNFTTransfer", { encodedCollection, encodedNonce, encodedQuantity, encodedReceiver });
     uint64_t estimatedGasLimit = this->gasEstimator.forESDTNFTTransfer(data.size());
     
+    transaction.set_nonce(transfer.nonce());
     // For NFT, SFT and MetaESDT, transaction.sender == transaction.receiver.
     transaction.set_sender(transfer.sender());
     transaction.set_receiver(transfer.sender());

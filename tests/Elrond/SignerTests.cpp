@@ -43,6 +43,8 @@ TEST(ElrondSigner, SignGenericTransaction) {
     ASSERT_EQ(expectedEncoded, encoded);
 }
 
+// Sign transfers?
+
 TEST(ElrondSigner, SignJSON) {
     // Shuffle some fields, assume arbitrary order in the input
     auto input = (boost::format(R"({"transaction" : {"data":"foo","value":"0","nonce":0,"receiver":"%1%","sender":"%2%","gasPrice":1000000000,"gasLimit":50000,"chainId":"1","version":1}})") % BOB_BECH32 % ALICE_BECH32).str();
@@ -161,6 +163,91 @@ TEST(ElrondSigner, SignWithOptions) {
         boost::format(R"({"nonce":89,"value":"0","receiver":"%1%","sender":"%2%","gasPrice":1000000000,"gasLimit":50000,"chainID":"local-testnet","version":1,"options":42,"signature":"%3%"})")
         % "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" 
         % "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" 
+        % expectedSignature
+    ).str();
+
+    ASSERT_EQ(expectedSignature, signature);
+    ASSERT_EQ(expectedEncoded, encoded);
+}
+
+TEST(ElrondSigner, SignEGLDTransfer) {
+    auto input = Proto::SigningInput();
+    auto privateKey = PrivateKey(parse_hex("413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9"));
+    input.set_private_key(privateKey.bytes.data(), privateKey.bytes.size());
+
+    input.mutable_egld_transfer()->set_nonce(7);
+    input.mutable_egld_transfer()->set_sender("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+    input.mutable_egld_transfer()->set_receiver("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
+    input.mutable_egld_transfer()->set_amount("1000000000000000000");
+    
+    auto output = Signer::sign(input);
+    auto signature = output.signature();
+    auto encoded = output.encoded();
+    auto expectedSignature = "7e1c4c63b88ea72dcf7855a54463b1a424eb357ac3feb4345221e512ce07c7a50afb6d7aec6f480b554e32cf2037082f3bc17263d1394af1f3ef240be53c930b";
+    auto expectedEncoded = 
+    (
+        boost::format(R"({"nonce":7,"value":"1000000000000000000","receiver":"%1%","sender":"%2%","gasPrice":1000000000,"gasLimit":50000,"chainID":"1","version":1,"signature":"%3%"})")
+        % "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" 
+        % "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" 
+        % expectedSignature
+    ).str();
+
+    ASSERT_EQ(expectedSignature, signature);
+    ASSERT_EQ(expectedEncoded, encoded);
+}
+
+TEST(ElrondSigner, SignESDTTransfer) {
+    auto input = Proto::SigningInput();
+    auto privateKey = PrivateKey(parse_hex("413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9"));
+    input.set_private_key(privateKey.bytes.data(), privateKey.bytes.size());
+
+    input.mutable_esdt_transfer()->set_nonce(7);
+    input.mutable_esdt_transfer()->set_sender("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+    input.mutable_esdt_transfer()->set_receiver("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
+    input.mutable_esdt_transfer()->set_token_identifier("MYTOKEN-1234");
+    input.mutable_esdt_transfer()->set_amount("10000000000000");
+    
+    auto output = Signer::sign(input);
+    auto signature = output.signature();
+    auto encoded = output.encoded();
+    auto expectedSignature = "9add6d9ac3f1a1fddb07b934e8a73cad3b8c232bdf29d723c1b38ad619905f03e864299d06eb3fe3bbb48a9f1d9b7f14e21dc5eaffe0c87f5718ad0c4198bb0c";
+    auto expectedEncoded = 
+    (
+        boost::format(R"({"nonce":7,"value":"0","receiver":"%1%","sender":"%2%","gasPrice":1000000000,"gasLimit":425000,"data":"%3%","chainID":"1","version":1,"signature":"%4%"})")
+        % "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx" 
+        % "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th"
+        // "ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000"
+        % "RVNEVFRyYW5zZmVyQDRkNTk1NDRmNGI0NTRlMmQzMTMyMzMzNEAwOTE4NGU3MmEwMDA="
+        % expectedSignature
+    ).str();
+
+    ASSERT_EQ(expectedSignature, signature);
+    ASSERT_EQ(expectedEncoded, encoded);
+}
+
+TEST(ElrondSigner, SignESDTNFTTransfer) {
+    auto input = Proto::SigningInput();
+    auto privateKey = PrivateKey(parse_hex("413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9"));
+    input.set_private_key(privateKey.bytes.data(), privateKey.bytes.size());
+
+    input.mutable_esdtnft_transfer()->set_nonce(7);
+    input.mutable_esdtnft_transfer()->set_sender("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th");
+    input.mutable_esdtnft_transfer()->set_receiver("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx");
+    input.mutable_esdtnft_transfer()->set_token_collection("LKMEX-aab910");
+    input.mutable_esdtnft_transfer()->set_token_nonce(4);
+    input.mutable_esdtnft_transfer()->set_amount("184300000000000000");
+    
+    auto output = Signer::sign(input);
+    auto signature = output.signature();
+    auto encoded = output.encoded();
+    auto expectedSignature = "cc935685d5b31525e059a16a832cba98dee751983a5a93de4198f6553a2c55f5f1e0b4300fe9077376fa754546da0b0f6697e66462101a209aafd0fc775ab60a";
+    auto expectedEncoded = 
+    (
+        boost::format(R"({"nonce":7,"value":"0","receiver":"%1%","sender":"%2%","gasPrice":1000000000,"gasLimit":937500,"data":"%3%","chainID":"1","version":1,"signature":"%4%"})")
+        % "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th" 
+        % "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th"
+        // "ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@8049d639e5a6980d1cd2392abcce41029cda74a1563523a202f09641cc2618f8"
+        % "RVNEVE5GVFRyYW5zZmVyQDRjNGI0ZDQ1NTgyZDYxNjE2MjM5MzEzMEAwNEAwMjhlYzNkZmEwMWFjMDAwQDgwNDlkNjM5ZTVhNjk4MGQxY2QyMzkyYWJjY2U0MTAyOWNkYTc0YTE1NjM1MjNhMjAyZjA5NjQxY2MyNjE4Zjg="
         % expectedSignature
     ).str();
 
