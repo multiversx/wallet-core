@@ -32,54 +32,60 @@ Proto::TransactionMessage TransactionFactory::createTransaction(const Proto::Sig
     } else if (input.has_esdtnft_transfer()) {
         return createESDTNFTTransfer(input.esdtnft_transfer());
     } else {
-        return input.transaction();
+        return createGenericTransaction(input.transaction());
     }
 }
 
+Proto::TransactionMessage TransactionFactory::createGenericTransaction(const Proto::TransactionMessage& genericTransaction) {
+    // Creates merely a clone of the input (by invoking the = operator), without any other logic.
+    Proto::TransactionMessage transaction = genericTransaction;
+    return transaction;
+}
+
 Proto::TransactionMessage TransactionFactory::createEGLDTransfer(const Proto::EGLDTransfer& transfer) {
-    Proto::TransactionMessage message;
+    Proto::TransactionMessage transaction;
 
     uint64_t estimatedGasLimit = this->gasEstimator.forEGLDTransfer(0);
 
-    message.set_nonce(transfer.nonce());
-    message.set_sender(transfer.sender());
-    message.set_sender_username(transfer.sender_username());
-    message.set_receiver(transfer.receiver());
-    message.set_receiver_username(transfer.receiver_username());
-    message.set_value(transfer.amount());
-    message.set_gas_limit(coalesceGasLimit(transfer.gas_limit(), estimatedGasLimit));
-    message.set_gas_price(coalesceGasPrice(transfer.gas_price()));
-    message.set_chain_id(coalesceChainId(transfer.chain_id()));
-    message.set_version(TX_VERSION);
+    transaction.set_nonce(transfer.nonce());
+    transaction.set_sender(transfer.sender());
+    transaction.set_sender_username(transfer.sender_username());
+    transaction.set_receiver(transfer.receiver());
+    transaction.set_receiver_username(transfer.receiver_username());
+    transaction.set_value(transfer.amount());
+    transaction.set_gas_limit(coalesceGasLimit(transfer.gas_limit(), estimatedGasLimit));
+    transaction.set_gas_price(coalesceGasPrice(transfer.gas_price()));
+    transaction.set_chain_id(coalesceChainId(transfer.chain_id()));
+    transaction.set_version(TX_VERSION);
 
-    return message;
+    return transaction;
 }
 
 Proto::TransactionMessage TransactionFactory::createESDTTransfer(const Proto::ESDTTransfer& transfer) {
-    Proto::TransactionMessage message;
+    Proto::TransactionMessage transaction;
 
     std::string encodedTokenIdentifier = Codec::encodeStringTopLevel(transfer.token_identifier());
     std::string encodedAmount = Codec::encodeBigIntTopLevel(transfer.amount());
     std::string data = prepareFunctionCall("ESDTTransfer", { encodedTokenIdentifier, encodedAmount });
     uint64_t estimatedGasLimit = this->gasEstimator.forESDTTransfer(data.size());
 
-    message.set_nonce(transfer.nonce());
-    message.set_sender(transfer.sender());
-    message.set_sender_username(transfer.sender_username());
-    message.set_receiver(transfer.receiver());
-    message.set_receiver_username(transfer.receiver_username());
-    message.set_value("0");
-    message.set_data(data);
-    message.set_gas_limit(coalesceGasLimit(transfer.gas_limit(), estimatedGasLimit));
-    message.set_gas_price(coalesceGasPrice(transfer.gas_price()));
-    message.set_chain_id(coalesceChainId(transfer.chain_id()));
-    message.set_version(TX_VERSION);
+    transaction.set_nonce(transfer.nonce());
+    transaction.set_sender(transfer.sender());
+    transaction.set_sender_username(transfer.sender_username());
+    transaction.set_receiver(transfer.receiver());
+    transaction.set_receiver_username(transfer.receiver_username());
+    transaction.set_value("0");
+    transaction.set_data(data);
+    transaction.set_gas_limit(coalesceGasLimit(transfer.gas_limit(), estimatedGasLimit));
+    transaction.set_gas_price(coalesceGasPrice(transfer.gas_price()));
+    transaction.set_chain_id(coalesceChainId(transfer.chain_id()));
+    transaction.set_version(TX_VERSION);
 
-    return message;
+    return transaction;
 }
 
 Proto::TransactionMessage TransactionFactory::createESDTNFTTransfer(const Proto::ESDTNFTTransfer& transfer) {
-    Proto::TransactionMessage message;
+    Proto::TransactionMessage transaction;
 
     std::string encodedCollection = Codec::encodeStringTopLevel(transfer.token_collection());
     std::string encodedNonce = Codec::encodeUint64TopLevel(transfer.token_nonce());
@@ -89,17 +95,17 @@ Proto::TransactionMessage TransactionFactory::createESDTNFTTransfer(const Proto:
     uint64_t estimatedGasLimit = this->gasEstimator.forESDTNFTTransfer(data.size());
     
     // For NFT, SFT and MetaESDT, transaction.sender == transaction.receiver.
-    message.set_sender(transfer.sender());
-    message.set_receiver(transfer.sender());
-    message.set_value("0");
+    transaction.set_sender(transfer.sender());
+    transaction.set_receiver(transfer.sender());
+    transaction.set_value("0");
 
-    message.set_data(data);
-    message.set_gas_limit(coalesceGasLimit(transfer.gas_limit(), estimatedGasLimit));
-    message.set_gas_price(coalesceGasPrice(transfer.gas_price()));
-    message.set_chain_id(coalesceChainId(transfer.chain_id()));
-    message.set_version(TX_VERSION);
+    transaction.set_data(data);
+    transaction.set_gas_limit(coalesceGasLimit(transfer.gas_limit(), estimatedGasLimit));
+    transaction.set_gas_price(coalesceGasPrice(transfer.gas_price()));
+    transaction.set_chain_id(coalesceChainId(transfer.chain_id()));
+    transaction.set_version(TX_VERSION);
 
-    return message;
+    return transaction;
 }
 
 uint64_t TransactionFactory::coalesceGasLimit(uint64_t providedGasLimit, uint64_t estimatedGasLimit) {

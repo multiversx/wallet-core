@@ -23,7 +23,10 @@ public:
     TransactionFactory();
     TransactionFactory(const NetworkConfig& networkConfig);
 
+    /// Creates the appropriate transaction object, with respect to the "oneof" field (substructure) of Proto::SigningInput.
     Proto::TransactionMessage createTransaction(const Proto::SigningInput &input);
+
+    Proto::TransactionMessage createGenericTransaction(const Proto::TransactionMessage& genericTransaction);
 
     /// This should be used to transfer EGLD.
     /// For reference, see: https://docs.elrond.com/developers/signing-transactions/signing-transactions/#general-structure.
