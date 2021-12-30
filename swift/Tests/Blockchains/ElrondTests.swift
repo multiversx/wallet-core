@@ -44,7 +44,7 @@ class ElrondTests: XCTestCase {
         }
 
         let output: ElrondSigningOutput = AnySigner.sign(input: input, coin: .elrond)
-        let expectedSignature = "b5fddb8c16fa7f6123cb32edc854f1e760a3eb62c6dc420b5a4c0473c58befd45b621b31a448c5b59e21428f2bc128c80d0ee1caa4f2bf05a12be857ad451b00"
+        let expectedSignature = "b4f60c20ad6393bb3315853fe151e6c1ea5fadbeef059e9a4391a1fe8dd07aa955ec2330bb9461a1bb44a66688eaac8618c82f8a305afec5e5bb0aa5244c420c"
         let expectedEncoded = #"{"nonce":0,"value":"0","receiver":"\#(accountBBech32)","sender":"\#(accountABech32)","gasPrice":1000000000,"gasLimit":50000,"data":"Zm9v","chainID":"1","version":1,"signature":"\#(expectedSignature)"}"#
 
         XCTAssertEqual(output.signature, expectedSignature)
@@ -106,7 +106,7 @@ class ElrondTests: XCTestCase {
 
     //     XCTAssertEqual(transaction.sender, aliceBech32)
     //     XCTAssertEqual(transaction.receiver, aliceBech32)
-    //     XCTAssertEqual(transaction.data, "ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@c70cf50b238372fffaf7b7c5723b06b57859d424a2da621bcc1b2f317543aa36")
+    //     XCTAssertEqual(transaction.data, "ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@8049d639e5a6980d1cd2392abcce41029cda74a1563523a202f09641cc2618f8")
     //     XCTAssertEqual(transaction.value, "0")
     //     XCTAssertEqual(transaction.gasPrice, 1000000000)
     //     XCTAssertEqual(transaction.gasLimit, 937500)

@@ -20,14 +20,14 @@ TEST(ElrondTransactionFactory, createEGLDTransfer) {
     TransactionFactory factory;
 
     auto transfer = Proto::EGLDTransfer();
-    transfer.set_sender(ACCOUNT_A_BECH32);
-    transfer.set_receiver(ACCOUNT_B_BECH32);
+    transfer.set_sender(ALICE_BECH32);
+    transfer.set_receiver(BOB_BECH32);
     transfer.set_amount("1000000000000000000");
 
     Proto::TransactionMessage transaction = factory.createEGLDTransfer(transfer);
 
-    ASSERT_EQ(ACCOUNT_A_BECH32, transaction.sender());
-    ASSERT_EQ(ACCOUNT_B_BECH32, transaction.receiver());
+    ASSERT_EQ(ALICE_BECH32, transaction.sender());
+    ASSERT_EQ(BOB_BECH32, transaction.receiver());
     ASSERT_EQ("", transaction.data());
     ASSERT_EQ("1000000000000000000", transaction.value());
     ASSERT_EQ(50000, transaction.gas_limit());
@@ -40,15 +40,15 @@ TEST(ElrondTransactionFactory, createESDTTransfer) {
     TransactionFactory factory;
 
     auto transfer = Proto::ESDTTransfer();
-    transfer.set_sender(ACCOUNT_A_BECH32);
-    transfer.set_receiver(ACCOUNT_B_BECH32);
+    transfer.set_sender(ALICE_BECH32);
+    transfer.set_receiver(BOB_BECH32);
     transfer.set_token_identifier("MYTOKEN-1234");
     transfer.set_amount("10000000000000");
 
     Proto::TransactionMessage transaction = factory.createESDTTransfer(transfer);
 
-    ASSERT_EQ(ACCOUNT_A_BECH32, transaction.sender());
-    ASSERT_EQ(ACCOUNT_B_BECH32, transaction.receiver());
+    ASSERT_EQ(ALICE_BECH32, transaction.sender());
+    ASSERT_EQ(BOB_BECH32, transaction.receiver());
     ASSERT_EQ("ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000", transaction.data());
     ASSERT_EQ("0", transaction.value());
     ASSERT_EQ(425000, transaction.gas_limit());
@@ -61,17 +61,17 @@ TEST(ElrondTransactionFactory, createESDTNFTTransfer) {
     TransactionFactory factory;
 
     auto transfer = Proto::ESDTNFTTransfer();
-    transfer.set_sender(ACCOUNT_A_BECH32);
-    transfer.set_receiver(ACCOUNT_B_BECH32);
+    transfer.set_sender(ALICE_BECH32);
+    transfer.set_receiver(BOB_BECH32);
     transfer.set_token_collection("LKMEX-aab910");
     transfer.set_token_nonce(4);
     transfer.set_amount("184300000000000000");
 
     Proto::TransactionMessage transaction = factory.createESDTNFTTransfer(transfer);
 
-    ASSERT_EQ(ACCOUNT_A_BECH32, transaction.sender());
-    ASSERT_EQ(ACCOUNT_A_BECH32, transaction.receiver());
-    ASSERT_EQ("ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@c70cf50b238372fffaf7b7c5723b06b57859d424a2da621bcc1b2f317543aa36", transaction.data());
+    ASSERT_EQ(ALICE_BECH32, transaction.sender());
+    ASSERT_EQ(ALICE_BECH32, transaction.receiver());
+    ASSERT_EQ("ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@8049d639e5a6980d1cd2392abcce41029cda74a1563523a202f09641cc2618f8", transaction.data());
     ASSERT_EQ("0", transaction.value());
     ASSERT_EQ(937500, transaction.gas_limit());
     ASSERT_EQ(1000000000, transaction.gas_price());
@@ -93,19 +93,19 @@ TEST(ElrondTransactionFactory, createTransfersWithProvidedNetworkConfig) {
     TransactionFactory factory(networkConfig);
 
     Proto::EGLDTransfer egldTransfer;
-    egldTransfer.set_sender(ACCOUNT_A_BECH32);
-    egldTransfer.set_receiver(ACCOUNT_B_BECH32);
+    egldTransfer.set_sender(ALICE_BECH32);
+    egldTransfer.set_receiver(BOB_BECH32);
     egldTransfer.set_amount("0");
 
     Proto::ESDTTransfer esdtTransfer;
-    esdtTransfer.set_sender(ACCOUNT_A_BECH32);
-    esdtTransfer.set_receiver(ACCOUNT_B_BECH32);
+    esdtTransfer.set_sender(ALICE_BECH32);
+    esdtTransfer.set_receiver(BOB_BECH32);
     esdtTransfer.set_token_identifier("MYTOKEN-1234");
     esdtTransfer.set_amount("10000000000000");
 
     Proto::ESDTNFTTransfer esdtnftTransfer;
-    esdtnftTransfer.set_sender(ACCOUNT_A_BECH32);
-    esdtnftTransfer.set_receiver(ACCOUNT_B_BECH32);
+    esdtnftTransfer.set_sender(ALICE_BECH32);
+    esdtnftTransfer.set_receiver(BOB_BECH32);
     esdtnftTransfer.set_token_collection("LKMEX-aab910");
     esdtnftTransfer.set_token_nonce(4);
     esdtnftTransfer.set_amount("184300000000000000");
@@ -169,19 +169,19 @@ TEST(ElrondTransactionFactory, createTransaction) {
     signingInputWithGenericTransaction.mutable_transaction()->set_data("hello");
 
     Proto::SigningInput signingInputWithEgldTransfer;
-    signingInputWithEgldTransfer.mutable_egld_transfer()->set_sender(ACCOUNT_A_BECH32);
-    signingInputWithEgldTransfer.mutable_egld_transfer()->set_receiver(ACCOUNT_B_BECH32);
+    signingInputWithEgldTransfer.mutable_egld_transfer()->set_sender(ALICE_BECH32);
+    signingInputWithEgldTransfer.mutable_egld_transfer()->set_receiver(BOB_BECH32);
     signingInputWithEgldTransfer.mutable_egld_transfer()->set_amount("1");
 
     Proto::SigningInput signingInputWithESDTTransfer;
-    signingInputWithESDTTransfer.mutable_esdt_transfer()->set_sender(ACCOUNT_A_BECH32);
-    signingInputWithESDTTransfer.mutable_esdt_transfer()->set_receiver(ACCOUNT_B_BECH32);
+    signingInputWithESDTTransfer.mutable_esdt_transfer()->set_sender(ALICE_BECH32);
+    signingInputWithESDTTransfer.mutable_esdt_transfer()->set_receiver(BOB_BECH32);
     signingInputWithESDTTransfer.mutable_esdt_transfer()->set_token_identifier("MYTOKEN-1234");
     signingInputWithESDTTransfer.mutable_esdt_transfer()->set_amount("10000000000000");
 
     Proto::SigningInput signingInputWithESDTNFTTransfer;
-    signingInputWithESDTNFTTransfer.mutable_esdtnft_transfer()->set_sender(ACCOUNT_A_BECH32);
-    signingInputWithESDTNFTTransfer.mutable_esdtnft_transfer()->set_receiver(ACCOUNT_B_BECH32);
+    signingInputWithESDTNFTTransfer.mutable_esdtnft_transfer()->set_sender(ALICE_BECH32);
+    signingInputWithESDTNFTTransfer.mutable_esdtnft_transfer()->set_receiver(BOB_BECH32);
     signingInputWithESDTNFTTransfer.mutable_esdtnft_transfer()->set_token_collection("LKMEX-aab910");
     signingInputWithESDTNFTTransfer.mutable_esdtnft_transfer()->set_token_nonce(4);
     signingInputWithESDTNFTTransfer.mutable_esdtnft_transfer()->set_amount("184300000000000000");
@@ -194,5 +194,5 @@ TEST(ElrondTransactionFactory, createTransaction) {
     ASSERT_EQ("hello", tx1.data());
     ASSERT_EQ("1", tx2.value());
     ASSERT_EQ("ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000", tx3.data());
-    ASSERT_EQ("ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@c70cf50b238372fffaf7b7c5723b06b57859d424a2da621bcc1b2f317543aa36", tx4.data());
+    ASSERT_EQ("ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@8049d639e5a6980d1cd2392abcce41029cda74a1563523a202f09641cc2618f8", tx4.data());
 }

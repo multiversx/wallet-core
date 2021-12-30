@@ -51,7 +51,7 @@ class TestElrondSigner {
             .build()
 
         val output = AnySigner.sign(signingInput, CoinType.ELROND, Elrond.SigningOutput.parser())
-        val expectedSignature = "b5fddb8c16fa7f6123cb32edc854f1e760a3eb62c6dc420b5a4c0473c58befd45b621b31a448c5b59e21428f2bc128c80d0ee1caa4f2bf05a12be857ad451b00"
+        val expectedSignature = "b4f60c20ad6393bb3315853fe151e6c1ea5fadbeef059e9a4391a1fe8dd07aa955ec2330bb9461a1bb44a66688eaac8618c82f8a305afec5e5bb0aa5244c420c"
 
         assertEquals(expectedSignature, output.signature)
         assertEquals("""{"nonce":0,"value":"0","receiver":"$accountBBech32","sender":"$accountABech32","gasPrice":1000000000,"gasLimit":50000,"data":"Zm9v","chainID":"1","version":1,"signature":"$expectedSignature"}""", output.encoded)

@@ -33,15 +33,15 @@ TEST(ElrondSerialization, SignableStringWithRealData) {
     Proto::TransactionMessage message;
     message.set_nonce(15);
     message.set_value("100");
-    message.set_sender(ACCOUNT_A_BECH32);
-    message.set_receiver(ACCOUNT_B_BECH32);
+    message.set_sender(ALICE_BECH32);
+    message.set_receiver(BOB_BECH32);
     message.set_gas_price(1000000000);
     message.set_gas_limit(50000);
     message.set_data("foo");
     message.set_chain_id("1");
     message.set_version(1);
 
-    string expected = (boost::format(R"({"nonce":15,"value":"100","receiver":"%1%","sender":"%2%","gasPrice":1000000000,"gasLimit":50000,"data":"Zm9v","chainID":"1","version":1})") % ACCOUNT_B_BECH32 % ACCOUNT_A_BECH32).str();
+    string expected = (boost::format(R"({"nonce":15,"value":"100","receiver":"%1%","sender":"%2%","gasPrice":1000000000,"gasLimit":50000,"data":"Zm9v","chainID":"1","version":1})") % BOB_BECH32 % ALICE_BECH32).str();
     string actual = serializeTransaction(message);
     ASSERT_EQ(expected, actual);
 }

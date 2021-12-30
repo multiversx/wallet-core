@@ -85,7 +85,7 @@ class TestElrondTransactionsFactory {
 
         assertEquals(accountABech32, transaction.sender)
         assertEquals(accountABech32, transaction.receiver)
-        assertEquals("ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@c70cf50b238372fffaf7b7c5723b06b57859d424a2da621bcc1b2f317543aa36", transaction.data)
+        assertEquals("ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@8049d639e5a6980d1cd2392abcce41029cda74a1563523a202f09641cc2618f8", transaction.data)
         assertEquals("0", transaction.value)
         assertEquals(1000000000, transaction.gasPrice)
         assertEquals(937500, transaction.gasLimit)
