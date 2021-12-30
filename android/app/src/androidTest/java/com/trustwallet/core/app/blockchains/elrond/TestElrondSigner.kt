@@ -68,13 +68,66 @@ class TestElrondSigner {
 
         val signingInput = Elrond.SigningInput.newBuilder()
             .setPrivateKey(privateKey)
-            .setTransaction(transaction)
+            .setEGLDTransfer(transaction)
             .build()
 
         val output = AnySigner.sign(signingInput, CoinType.ELROND, Elrond.SigningOutput.parser())
         val expectedSignature = "7e1c4c63b88ea72dcf7855a54463b1a424eb357ac3feb4345221e512ce07c7a50afb6d7aec6f480b554e32cf2037082f3bc17263d1394af1f3ef240be53c930b"
 
         assertEquals(expectedSignature, output.signature)
-        assertEquals("""{"nonce":0,"value":"0","receiver":"$bobBech32","sender":"$aliceBech32","gasPrice":1000000000,"gasLimit":50000,"data":"Zm9v","chainID":"1","version":1,"signature":"$expectedSignature"}""", output.encoded)
+        assertEquals("""{"nonce":7,"value":"1000000000000000000","receiver":"$bobBech32","sender":"$aliceBech32","gasPrice":1000000000,"gasLimit":50000,"chainID":"1","version":1,"signature":"$expectedSignature"}""", output.encoded)
+    }
+
+    @Test
+    fun signESDTTransfer() {
+        val transaction = Elrond.ESDTTransfer.newBuilder()
+            .setNonce(7)
+            .setSender(aliceBech32)
+            .setReceiver(bobBech32)
+            .setTokenIdentifier("MYTOKEN-1234")
+            .setAmount("10000000000000")
+            .setChainId("1")
+            .build()
+        
+        val privateKey = ByteString.copyFrom(PrivateKey(aliceSeedHex.toHexByteArray()).data())
+
+        val signingInput = Elrond.SigningInput.newBuilder()
+            .setPrivateKey(privateKey)
+            .setESDTTransfer(transaction)
+            .build()
+
+        val output = AnySigner.sign(signingInput, CoinType.ELROND, Elrond.SigningOutput.parser())
+        val expectedSignature = "9add6d9ac3f1a1fddb07b934e8a73cad3b8c232bdf29d723c1b38ad619905f03e864299d06eb3fe3bbb48a9f1d9b7f14e21dc5eaffe0c87f5718ad0c4198bb0c"
+        val expectedData = "RVNEVFRyYW5zZmVyQDRkNTk1NDRmNGI0NTRlMmQzMTMyMzMzNEAwOTE4NGU3MmEwMDA="
+
+        assertEquals(expectedSignature, output.signature)
+        assertEquals("""{"nonce":7,"value":"0","receiver":"$bobBech32","sender":"$aliceBech32","gasPrice":1000000000,"gasLimit":425000,"data":"$expectedData","chainID":"1","version":1,"signature":"$expectedSignature"}""", output.encoded)
+    }
+
+    @Test
+    fun signESDTNFTTransfer() {
+        val transaction = Elrond.ESDTNFTTransfer.newBuilder()
+            .setNonce(7)
+            .setSender(aliceBech32)
+            .setReceiver(bobBech32)
+            .setTokenCollection("LKMEX-aab910")
+            .setTokenNonce(4)
+            .setAmount("184300000000000000")
+            .setChainId("1")
+            .build()
+        
+        val privateKey = ByteString.copyFrom(PrivateKey(aliceSeedHex.toHexByteArray()).data())
+
+        val signingInput = Elrond.SigningInput.newBuilder()
+            .setPrivateKey(privateKey)
+            .setESDTNFTTransfer(transaction)
+            .build()
+
+        val output = AnySigner.sign(signingInput, CoinType.ELROND, Elrond.SigningOutput.parser())
+        val expectedSignature = "cc935685d5b31525e059a16a832cba98dee751983a5a93de4198f6553a2c55f5f1e0b4300fe9077376fa754546da0b0f6697e66462101a209aafd0fc775ab60a"
+        val expectedData = "RVNEVE5GVFRyYW5zZmVyQDRjNGI0ZDQ1NTgyZDYxNjE2MjM5MzEzMEAwNEAwMjhlYzNkZmEwMWFjMDAwQDgwNDlkNjM5ZTVhNjk4MGQxY2QyMzkyYWJjY2U0MTAyOWNkYTc0YTE1NjM1MjNhMjAyZjA5NjQxY2MyNjE4Zjg="
+
+        assertEquals(expectedSignature, output.signature)
+        assertEquals("""{"nonce":7,"value":"0","receiver":"$aliceBech32","sender":"$aliceBech32","gasPrice":1000000000,"gasLimit":937500,"data":"$expectedData","chainID":"1","version":1,"signature":"$expectedSignature"}""", output.encoded)
     }
 }
