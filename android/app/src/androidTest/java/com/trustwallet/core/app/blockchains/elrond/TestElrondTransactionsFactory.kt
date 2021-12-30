@@ -24,8 +24,8 @@ class TestElrondTransactionsFactory {
         System.loadLibrary("TrustWalletCore")
     }
 
-    val aliceBech32 = "erd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz"
-    val bobBech32 = "erd1cux02zersde0l7hhklzhywcxk4u9n4py5tdxyx7vrvhnza2r4gmq4vw35r"
+    val accountABech32 = "erd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz"
+    val accountBBech32 = "erd1cux02zersde0l7hhklzhywcxk4u9n4py5tdxyx7vrvhnza2r4gmq4vw35r"
 
     @Test
     fun createEGLDTransfer() {
@@ -33,13 +33,13 @@ class TestElrondTransactionsFactory {
         val factory = ElrondTransactionFactory(networkConfig)
 
         val transaction = Marshalizer.unmarshalProto(factory.createEGLDTransfer(
-            aliceBech32,
-            bobBech32,
+            accountABech32,
+            accountBBech32,
             "1000000000000000000"
         ), Elrond.TransactionMessage.parser())
 
-        assertEquals(aliceBech32, transaction.sender)
-        assertEquals(bobBech32, transaction.receiver)
+        assertEquals(accountABech32, transaction.sender)
+        assertEquals(accountBBech32, transaction.receiver)
         assertEquals("", transaction.data)
         assertEquals("1000000000000000000", transaction.value)
         assertEquals(1000000000, transaction.gasPrice)
@@ -54,14 +54,14 @@ class TestElrondTransactionsFactory {
         val factory = ElrondTransactionFactory(networkConfig)
         
         val transaction = Marshalizer.unmarshalProto(factory.createESDTTransfer(
-            aliceBech32,
-            bobBech32,
+            accountABech32,
+            accountBBech32,
             "MYTOKEN-1234",
             "10000000000000"
         ), Elrond.TransactionMessage.parser())
 
-        assertEquals(aliceBech32, transaction.sender)
-        assertEquals(bobBech32, transaction.receiver)
+        assertEquals(accountABech32, transaction.sender)
+        assertEquals(accountBBech32, transaction.receiver)
         assertEquals("ESDTTransfer@4d59544f4b454e2d31323334@09184e72a000", transaction.data)
         assertEquals("0", transaction.value)
         assertEquals(1000000000, transaction.gasPrice)
@@ -76,15 +76,15 @@ class TestElrondTransactionsFactory {
         val factory = ElrondTransactionFactory(networkConfig)
         
         val transaction = Marshalizer.unmarshalProto(factory.createESDTNFTTransfer(
-            aliceBech32,
-            bobBech32,
+            accountABech32,
+            accountBBech32,
             "LKMEX-aab910",
             4,
             "184300000000000000"
         ), Elrond.TransactionMessage.parser())
 
-        assertEquals(aliceBech32, transaction.sender)
-        assertEquals(aliceBech32, transaction.receiver)
+        assertEquals(accountABech32, transaction.sender)
+        assertEquals(accountABech32, transaction.receiver)
         assertEquals("ESDTNFTTransfer@4c4b4d45582d616162393130@04@028ec3dfa01ac000@c70cf50b238372fffaf7b7c5723b06b57859d424a2da621bcc1b2f317543aa36", transaction.data)
         assertEquals("0", transaction.value)
         assertEquals(1000000000, transaction.gasPrice)
@@ -106,21 +106,21 @@ class TestElrondTransactionsFactory {
         val factory = ElrondTransactionFactory(networkConfig)
         
         val tx1 = Marshalizer.unmarshalProto(factory.createEGLDTransfer(
-            aliceBech32,
-            bobBech32,
+            accountABech32,
+            accountBBech32,
             "1000000000000000000"
         ), Elrond.TransactionMessage.parser())
 
         val tx2 = Marshalizer.unmarshalProto(factory.createESDTTransfer(
-            aliceBech32,
-            bobBech32,
+            accountABech32,
+            accountBBech32,
             "MYTOKEN-1234",
             "10000000000000"
         ), Elrond.TransactionMessage.parser())
 
         val tx3 = Marshalizer.unmarshalProto(factory.createESDTNFTTransfer(
-            aliceBech32,
-            bobBech32,
+            accountABech32,
+            accountBBech32,
             "LKMEX-aab910",
             4,
             "184300000000000000"

@@ -21,21 +21,21 @@ class TestElrondSigner {
         System.loadLibrary("TrustWalletCore")
     }
 
-    val aliceBech32 = "erd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz"
-    var aliceSeedHex = "1a927e2af5306a9bb2ea777f73e06ecc0ac9aaa72fb4ea3fecf659451394cccf"
-    var alicePubKeyHex = "fd691bb5e85d102687d81079dffce842d4dc328276d2d4c60d8fd1c3433c3293"
+    val accountABech32 = "erd1l453hd0gt5gzdp7czpuall8ggt2dcv5zwmfdf3sd3lguxseux2fsmsgldz"
+    var accountASeedHex = "1a927e2af5306a9bb2ea777f73e06ecc0ac9aaa72fb4ea3fecf659451394cccf"
+    var accountAPubKeyHex = "fd691bb5e85d102687d81079dffce842d4dc328276d2d4c60d8fd1c3433c3293"
 
-    val bobBech32 = "erd1cux02zersde0l7hhklzhywcxk4u9n4py5tdxyx7vrvhnza2r4gmq4vw35r"
-    var bobSeedHex = "e3a3a3d1ac40d42d8fd4c569a9749b65a1250dd3d10b6f4e438297662ea4850e"
-    var bobPubKeyHex = "c70cf50b238372fffaf7b7c5723b06b57859d424a2da621bcc1b2f317543aa36"
+    val accountBBech32 = "erd1cux02zersde0l7hhklzhywcxk4u9n4py5tdxyx7vrvhnza2r4gmq4vw35r"
+    var accountBSeedHex = "e3a3a3d1ac40d42d8fd4c569a9749b65a1250dd3d10b6f4e438297662ea4850e"
+    var accountBPubKeyHex = "c70cf50b238372fffaf7b7c5723b06b57859d424a2da621bcc1b2f317543aa36"
 
     @Test
-    fun signTransaction() {
+    fun signGenericTransaction() {
         val transaction = Elrond.TransactionMessage.newBuilder()
             .setNonce(0)
             .setValue("0")
-            .setSender(aliceBech32)
-            .setReceiver(bobBech32)
+            .setSender(accountABech32)
+            .setReceiver(accountBBech32)
             .setGasPrice(1000000000)
             .setGasLimit(50000)
             .setData("foo")
@@ -43,7 +43,7 @@ class TestElrondSigner {
             .setVersion(1)
             .build()
         
-        val privateKey = ByteString.copyFrom(PrivateKey(aliceSeedHex.toHexByteArray()).data())
+        val privateKey = ByteString.copyFrom(PrivateKey(accountASeedHex.toHexByteArray()).data())
 
         val signingInput = Elrond.SigningInput.newBuilder()
             .setPrivateKey(privateKey)
@@ -54,6 +54,6 @@ class TestElrondSigner {
         val expectedSignature = "b5fddb8c16fa7f6123cb32edc854f1e760a3eb62c6dc420b5a4c0473c58befd45b621b31a448c5b59e21428f2bc128c80d0ee1caa4f2bf05a12be857ad451b00"
 
         assertEquals(expectedSignature, output.signature)
-        assertEquals("""{"nonce":0,"value":"0","receiver":"$bobBech32","sender":"$aliceBech32","gasPrice":1000000000,"gasLimit":50000,"data":"Zm9v","chainID":"1","version":1,"signature":"$expectedSignature"}""", output.encoded)
+        assertEquals("""{"nonce":0,"value":"0","receiver":"$accountBBech32","sender":"$accountABech32","gasPrice":1000000000,"gasLimit":50000,"data":"Zm9v","chainID":"1","version":1,"signature":"$expectedSignature"}""", output.encoded)
     }
 }
