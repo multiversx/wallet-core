@@ -10,8 +10,8 @@ import XCTest
 class ElrondTests: XCTestCase {
 
     let aliceBech32 = "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th"
-    let aliceSeedHex = "0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1"
-    let alicePubKeyHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9"
+    let alicePubKeyHex = "0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1"
+    let aliceSeedHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9"
     let bobBech32 = "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"
 
     func testAddress() {
