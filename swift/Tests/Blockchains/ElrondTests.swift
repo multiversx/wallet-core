@@ -93,7 +93,7 @@ class ElrondTests: XCTestCase {
         let output: ElrondSigningOutput = AnySigner.sign(input: input, coin: .elrond)
         let expectedSignature = "9add6d9ac3f1a1fddb07b934e8a73cad3b8c232bdf29d723c1b38ad619905f03e864299d06eb3fe3bbb48a9f1d9b7f14e21dc5eaffe0c87f5718ad0c4198bb0c"
         let expectedData = "RVNEVFRyYW5zZmVyQDRkNTk1NDRmNGI0NTRlMmQzMTMyMzMzNEAwOTE4NGU3MmEwMDA="
-        let expectedEncoded = #"{"nonce":7,"value":"","receiver":"\#(bobBech32)","sender":"\#(aliceBech32)","gasPrice":1000000000,"gasLimit":425000,"data":"\#(expectedData)","chainID":"1","version":1,"signature":"\#(expectedSignature)"}"#
+        let expectedEncoded = #"{"nonce":7,"value":"0","receiver":"\#(bobBech32)","sender":"\#(aliceBech32)","gasPrice":1000000000,"gasLimit":425000,"data":"\#(expectedData)","chainID":"1","version":1,"signature":"\#(expectedSignature)"}"#
 
         XCTAssertEqual(output.signature, expectedSignature)
         XCTAssertEqual(output.encoded, expectedEncoded)
@@ -119,7 +119,7 @@ class ElrondTests: XCTestCase {
         let output: ElrondSigningOutput = AnySigner.sign(input: input, coin: .elrond)
         let expectedSignature = "cc935685d5b31525e059a16a832cba98dee751983a5a93de4198f6553a2c55f5f1e0b4300fe9077376fa754546da0b0f6697e66462101a209aafd0fc775ab60a"
         let expectedData = "RVNEVE5GVFRyYW5zZmVyQDRjNGI0ZDQ1NTgyZDYxNjE2MjM5MzEzMEAwNEAwMjhlYzNkZmEwMWFjMDAwQDgwNDlkNjM5ZTVhNjk4MGQxY2QyMzkyYWJjY2U0MTAyOWNkYTc0YTE1NjM1MjNhMjAyZjA5NjQxY2MyNjE4Zjg="
-        let expectedEncoded = #"{"nonce":7,"value":"","receiver":"\#(aliceBech32)","sender":"\#(aliceBech32)","gasPrice":1000000000,"gasLimit":937500,"data":"\#(expectedData)","chainID":"1","version":1,"signature":"\#(expectedSignature)"}"#
+        let expectedEncoded = #"{"nonce":7,"value":"0","receiver":"\#(aliceBech32)","sender":"\#(aliceBech32)","gasPrice":1000000000,"gasLimit":937500,"data":"\#(expectedData)","chainID":"1","version":1,"signature":"\#(expectedSignature)"}"#
 
         XCTAssertEqual(output.signature, expectedSignature)
         XCTAssertEqual(output.encoded, expectedEncoded)
