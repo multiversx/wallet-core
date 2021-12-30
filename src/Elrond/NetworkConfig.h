@@ -45,9 +45,9 @@ public:
     uint32_t getGasCostESDTNFTTransfer();
     void setGasCostESDTNFTTransfer(uint32_t value);
 
-    // TODO: docs ...
     static NetworkConfig GetDefault();
-    // TODO: docs ...
+
+    /// Useful to implement upwards-compatible changes of the network configuration (a TWCore client can receive planned configuration updates, in advance).
     static NetworkConfig GetByTimestamp(uint64_t timestamp);
 };
 

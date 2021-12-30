@@ -68,7 +68,7 @@ class TestElrondSigner {
 
         val signingInput = Elrond.SigningInput.newBuilder()
             .setPrivateKey(privateKey)
-            .setEGLDTransfer(transaction)
+            .setEgldTransfer(transaction)
             .build()
 
         val output = AnySigner.sign(signingInput, CoinType.ELROND, Elrond.SigningOutput.parser())
@@ -93,7 +93,7 @@ class TestElrondSigner {
 
         val signingInput = Elrond.SigningInput.newBuilder()
             .setPrivateKey(privateKey)
-            .setESDTTransfer(transaction)
+            .setEsdtTransfer(transaction)
             .build()
 
         val output = AnySigner.sign(signingInput, CoinType.ELROND, Elrond.SigningOutput.parser())
@@ -120,7 +120,7 @@ class TestElrondSigner {
 
         val signingInput = Elrond.SigningInput.newBuilder()
             .setPrivateKey(privateKey)
-            .setESDTNFTTransfer(transaction)
+            .setEsdtnftTransfer(transaction)
             .build()
 
         val output = AnySigner.sign(signingInput, CoinType.ELROND, Elrond.SigningOutput.parser())
