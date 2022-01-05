@@ -18,7 +18,7 @@ using namespace TW;
 using namespace TW::Elrond;
 
 
-TEST(ElrondSigner, SignGenericTransaction) {
+TEST(ElrondSigner, SignGenericAction) {
     auto input = Proto::SigningInput();
     auto privateKey = PrivateKey(parse_hex(ALICE_SEED_HEX));
     input.set_private_key(privateKey.bytes.data(), privateKey.bytes.size());

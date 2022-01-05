@@ -24,31 +24,27 @@ TransactionFactory::TransactionFactory(const NetworkConfig& networkConfig) :
     gasEstimator(networkConfig) {
 }
 
-Proto::TransactionMessage TransactionFactory::createTransaction(const Proto::SigningInput &input) {
+Transaction TransactionFactory::createTransaction(const Proto::SigningInput &input) {
     if (input.has_egld_transfer()) {
-        return createEGLDTransfer(input.egld_transfer());
+        return createEGLDTransfer(input);
     } else if (input.has_esdt_transfer()) {
-        return createESDTTransfer(input.esdt_transfer());
+        return createESDTTransfer(input);
     } else if (input.has_esdtnft_transfer()) {
-        return createESDTNFTTransfer(input.esdtnft_transfer());
+        return createESDTNFTTransfer(input);
     } else {
-        return createGenericTransaction(input.transaction());
+        return createGenericAction(input);
     }
 }
 
-Proto::TransactionMessage TransactionFactory::createGenericTransaction(const Proto::TransactionMessage& genericTransaction) {
-    // Creates merely a clone of the input (by invoking the = operator), without any other logic.
-    Proto::TransactionMessage transaction = genericTransaction;
-    return transaction;
-}
+Transaction TransactionFactory::createEGLDTransfer(const Proto::SigningInput &input) {
+    auto transfer = input.egld_transfer();
 
-Proto::TransactionMessage TransactionFactory::createEGLDTransfer(const Proto::EGLDTransfer& transfer) {
-    Proto::TransactionMessage transaction;
+    Transaction transaction;
 
     uint64_t estimatedGasLimit = this->gasEstimator.forEGLDTransfer(0);
 
-    transaction.set_nonce(transfer.nonce());
-    transaction.set_sender(transfer.sender());
+    transaction.nonce = transfer.nonce();
+    transaction.sender = transfer.sender();
     transaction.set_sender_username(transfer.sender_username());
     transaction.set_receiver(transfer.receiver());
     transaction.set_receiver_username(transfer.receiver_username());
@@ -61,8 +57,8 @@ Proto::TransactionMessage TransactionFactory::createEGLDTransfer(const Proto::EG
     return transaction;
 }
 
-Proto::TransactionMessage TransactionFactory::createESDTTransfer(const Proto::ESDTTransfer& transfer) {
-    Proto::TransactionMessage transaction;
+Transaction TransactionFactory::createESDTTransfer(const Proto::SigningInput &input) {
+    Proto::GenericAction transaction;
 
     std::string encodedTokenIdentifier = Codec::encodeString(transfer.token_identifier());
     std::string encodedAmount = Codec::encodeBigInt(transfer.amount());
@@ -84,8 +80,8 @@ Proto::TransactionMessage TransactionFactory::createESDTTransfer(const Proto::ES
     return transaction;
 }
 
-Proto::TransactionMessage TransactionFactory::createESDTNFTTransfer(const Proto::ESDTNFTTransfer& transfer) {
-    Proto::TransactionMessage transaction;
+Transaction TransactionFactory::createESDTNFTTransfer(const Proto::SigningInput &input) {
+    Proto::GenericAction transaction;
 
     std::string encodedCollection = Codec::encodeString(transfer.token_collection());
     std::string encodedNonce = Codec::encodeUint64(transfer.token_nonce());
@@ -106,6 +102,12 @@ Proto::TransactionMessage TransactionFactory::createESDTNFTTransfer(const Proto:
     transaction.set_chain_id(coalesceChainId(transfer.chain_id()));
     transaction.set_version(TX_VERSION);
 
+    return transaction;
+}
+
+Transaction TransactionFactory::createGenericAction(const Proto::SigningInput &input) {
+    // Creates merely a clone of the input (by invoking the = operator), without any other logic.
+    Proto::GenericAction transaction = GenericAction;
     return transaction;
 }
 

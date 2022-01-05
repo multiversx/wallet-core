@@ -24,11 +24,11 @@ class ElrondTests: XCTestCase {
         XCTAssertEqual(address.description, addressFromString.description)
     }
 
-    func testSignGenericTransaction() {
+    func testSignGenericAction() {
         let privateKey = PrivateKey(data: Data(hexString: aliceSeedHex)!)!
 
         let input = ElrondSigningInput.with {
-            $0.transaction = ElrondTransactionMessage.with {
+            $0.transaction = GenericAction.with {
                 $0.nonce = 0
                 $0.value = "0"
                 $0.sender = aliceBech32

@@ -26,8 +26,8 @@ class TestElrondSigner {
     private var bobBech32 = "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"
    
     @Test
-    fun signGenericTransaction() {
-        val transaction = Elrond.TransactionMessage.newBuilder()
+    fun signGenericAction() {
+        val transaction = Elrond.GenericAction.newBuilder()
             .setNonce(0)
             .setValue("0")
             .setSender(aliceBech32)

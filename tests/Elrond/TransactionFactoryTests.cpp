@@ -24,7 +24,7 @@ TEST(ElrondTransactionFactory, createEGLDTransfer) {
     transfer.set_receiver(BOB_BECH32);
     transfer.set_amount("1000000000000000000");
 
-    Proto::TransactionMessage transaction = factory.createEGLDTransfer(transfer);
+    Proto::GenericAction transaction = factory.createEGLDTransfer(transfer);
 
     ASSERT_EQ(ALICE_BECH32, transaction.sender());
     ASSERT_EQ(BOB_BECH32, transaction.receiver());
@@ -45,7 +45,7 @@ TEST(ElrondTransactionFactory, createESDTTransfer) {
     transfer.set_token_identifier("MYTOKEN-1234");
     transfer.set_amount("10000000000000");
 
-    Proto::TransactionMessage transaction = factory.createESDTTransfer(transfer);
+    Proto::GenericAction transaction = factory.createESDTTransfer(transfer);
 
     ASSERT_EQ(ALICE_BECH32, transaction.sender());
     ASSERT_EQ(BOB_BECH32, transaction.receiver());
@@ -67,7 +67,7 @@ TEST(ElrondTransactionFactory, createESDTNFTTransfer) {
     transfer.set_token_nonce(4);
     transfer.set_amount("184300000000000000");
 
-    Proto::TransactionMessage transaction = factory.createESDTNFTTransfer(transfer);
+    Proto::GenericAction transaction = factory.createESDTNFTTransfer(transfer);
 
     ASSERT_EQ(ALICE_BECH32, transaction.sender());
     ASSERT_EQ(ALICE_BECH32, transaction.receiver());
@@ -110,9 +110,9 @@ TEST(ElrondTransactionFactory, createTransfersWithProvidedNetworkConfig) {
     esdtnftTransfer.set_token_nonce(4);
     esdtnftTransfer.set_amount("184300000000000000");
 
-    Proto::TransactionMessage tx1 = factory.createEGLDTransfer(egldTransfer);
-    Proto::TransactionMessage tx2 = factory.createESDTTransfer(esdtTransfer);
-    Proto::TransactionMessage tx3 = factory.createESDTNFTTransfer(esdtnftTransfer);
+    Proto::GenericAction tx1 = factory.createEGLDTransfer(egldTransfer);
+    Proto::GenericAction tx2 = factory.createESDTTransfer(esdtTransfer);
+    Proto::GenericAction tx3 = factory.createESDTNFTTransfer(esdtnftTransfer);
     
     ASSERT_EQ(60000, tx1.gas_limit());
     ASSERT_EQ(1500000000, tx1.gas_price());
@@ -145,9 +145,9 @@ TEST(ElrondTransactionFactory, createTransfersWithOverriddenNetworkParameters) {
     esdtnftTransfer.set_gas_price(1000000003);
     esdtnftTransfer.set_chain_id("C");
 
-    Proto::TransactionMessage tx1 = factory.createEGLDTransfer(egldTransfer);
-    Proto::TransactionMessage tx2 = factory.createESDTTransfer(esdtTransfer);
-    Proto::TransactionMessage tx3 = factory.createESDTNFTTransfer(esdtnftTransfer);
+    Proto::GenericAction tx1 = factory.createEGLDTransfer(egldTransfer);
+    Proto::GenericAction tx2 = factory.createESDTTransfer(esdtTransfer);
+    Proto::GenericAction tx3 = factory.createESDTNFTTransfer(esdtnftTransfer);
     
     ASSERT_EQ(50500, tx1.gas_limit());
     ASSERT_EQ(1000000001, tx1.gas_price());
@@ -165,8 +165,8 @@ TEST(ElrondTransactionFactory, createTransfersWithOverriddenNetworkParameters) {
 TEST(ElrondTransactionFactory, createTransaction) {
     TransactionFactory factory;
 
-    Proto::SigningInput signingInputWithGenericTransaction;
-    signingInputWithGenericTransaction.mutable_transaction()->set_data("hello");
+    Proto::SigningInput signingInputWithGenericAction;
+    signingInputWithGenericAction.mutable_transaction()->set_data("hello");
 
     Proto::SigningInput signingInputWithEgldTransfer;
     signingInputWithEgldTransfer.mutable_egld_transfer()->set_sender(ALICE_BECH32);
@@ -186,10 +186,10 @@ TEST(ElrondTransactionFactory, createTransaction) {
     signingInputWithESDTNFTTransfer.mutable_esdtnft_transfer()->set_token_nonce(4);
     signingInputWithESDTNFTTransfer.mutable_esdtnft_transfer()->set_amount("184300000000000000");
 
-    Proto::TransactionMessage tx1 = factory.createTransaction(signingInputWithGenericTransaction);
-    Proto::TransactionMessage tx2 = factory.createTransaction(signingInputWithEgldTransfer);
-    Proto::TransactionMessage tx3 = factory.createTransaction(signingInputWithESDTTransfer);
-    Proto::TransactionMessage tx4 = factory.createTransaction(signingInputWithESDTNFTTransfer);
+    Proto::GenericAction tx1 = factory.createTransaction(signingInputWithGenericAction);
+    Proto::GenericAction tx2 = factory.createTransaction(signingInputWithEgldTransfer);
+    Proto::GenericAction tx3 = factory.createTransaction(signingInputWithESDTTransfer);
+    Proto::GenericAction tx4 = factory.createTransaction(signingInputWithESDTNFTTransfer);
     
     ASSERT_EQ("hello", tx1.data());
     ASSERT_EQ("1", tx2.value());

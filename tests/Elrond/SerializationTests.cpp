@@ -16,7 +16,7 @@ using namespace TW;
 using namespace TW::Elrond;
 
 TEST(ElrondSerialization, SignableString) {
-    Proto::TransactionMessage message;
+    Proto::GenericAction message;
     message.set_nonce(42);
     message.set_value("43");
     message.set_sender("alice");
@@ -30,7 +30,7 @@ TEST(ElrondSerialization, SignableString) {
 }
 
 TEST(ElrondSerialization, SignableStringWithRealData) {
-    Proto::TransactionMessage message;
+    Proto::GenericAction message;
     message.set_nonce(15);
     message.set_value("100");
     message.set_sender(ALICE_BECH32);
@@ -47,7 +47,7 @@ TEST(ElrondSerialization, SignableStringWithRealData) {
 }
 
 TEST(ElrondSerialization, SignableStringWithoutData) {
-    Proto::TransactionMessage message;
+    Proto::GenericAction message;
     message.set_nonce(42);
     message.set_value("43");
     message.set_sender("feed");
