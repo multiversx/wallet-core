@@ -10,7 +10,7 @@
 
 #include "HexCoding.h"
 #include "uint256.h"
-#include "Elrond/TransactionFactory.h"
+#include "Elrond/Transactions.h"
 #include "TestAccounts.h"
 
 using namespace TW;

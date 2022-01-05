@@ -7,7 +7,7 @@
 #include "Signer.h"
 #include "Address.h"
 #include "Serialization.h"
-#include "TransactionFactory.h"
+#include "Transactions.h"
 #include "../PublicKey.h"
 #include "HexCoding.h"
 
