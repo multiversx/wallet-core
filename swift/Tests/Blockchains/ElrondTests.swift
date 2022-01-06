@@ -28,8 +28,8 @@ class ElrondTests: XCTestCase {
         let privateKey = PrivateKey(data: Data(hexString: aliceSeedHex)!)!
 
         let input = ElrondSigningInput.with {
-            $0.genericAction = GenericAction.with {
-                $0.accounts = Accounts.with {
+            $0.genericAction = ElrondGenericAction.with {
+                $0.accounts = ElrondAccounts.with {
                     $0.senderNonce = 0
                     $0.sender = aliceBech32
                     $0.receiver = bobBech32 
@@ -57,7 +57,7 @@ class ElrondTests: XCTestCase {
 
         let input = ElrondSigningInput.with {
             $0.egldTransfer = ElrondEGLDTransfer.with {
-                $0.accounts = Accounts.with {
+                $0.accounts = ElrondAccounts.with {
                     $0.senderNonce = 7
                     $0.sender = aliceBech32
                     $0.receiver = bobBech32
@@ -81,7 +81,7 @@ class ElrondTests: XCTestCase {
 
         let input = ElrondSigningInput.with {
             $0.esdtTransfer = ElrondESDTTransfer.with {
-                $0.accounts = Accounts.with {
+                $0.accounts = ElrondAccounts.with {
                     $0.senderNonce = 7
                     $0.sender = aliceBech32
                     $0.receiver = bobBech32
@@ -107,7 +107,7 @@ class ElrondTests: XCTestCase {
 
         let input = ElrondSigningInput.with {
             $0.esdtTransfer = ElrondESDTNFTTransfer.with {
-                $0.accounts = Accounts.with {
+                $0.accounts = ElrondAccounts.with {
                     $0.senderNonce = 7
                     $0.sender = aliceBech32
                     $0.receiver = bobBech32
