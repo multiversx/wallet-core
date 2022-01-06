@@ -13,14 +13,14 @@ namespace TW::Elrond {
 class Transaction {
 public:
     uint64_t nonce;
-    std::string value;
-    std::string receiver;
     std::string sender;
     std::string senderUsername;
+    std::string receiver;
     std::string receiverUsername;
-    uint16_t gasPrice;
-    uint64_t gasLimit;
+    std::string value;
     std::string data;
+    uint64_t gasPrice;
+    uint64_t gasLimit;
     std::string chainID;
     uint32_t version;
     uint32_t options;

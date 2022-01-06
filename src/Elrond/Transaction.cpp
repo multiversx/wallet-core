@@ -9,5 +9,18 @@
 using namespace TW;
 using namespace TW::Elrond;
 
-Transaction::Transaction() {
+Transaction::Transaction() :
+    nonce(0),
+    sender(""),
+    senderUsername(""),
+    receiver(""),
+    receiverUsername(""),
+    value("0"),
+    data(""),
+    gasPrice(0),
+    gasLimit(0),
+    chainID(""),
+    version(0),
+    options(0) {
 }
+

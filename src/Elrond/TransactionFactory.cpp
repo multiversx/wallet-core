@@ -37,11 +37,22 @@ Transaction TransactionFactory::create(const Proto::SigningInput &input) {
 }
 
 Transaction TransactionFactory::fromGenericAction(const Proto::SigningInput &input) {
+    // Copies the input fields into a transaction object, without any other logic.
+
     auto action = input.generic_action();
 
     Transaction transaction;
 
-    
+    transaction.nonce = action.accounts().sender_nonce();
+    transaction.sender = action.accounts().sender();
+    transaction.senderUsername = action.accounts().sender_username();
+    transaction.receiver = action.accounts().receiver();
+    transaction.receiverUsername = action.accounts().receiver_username();
+    transaction.value = action.value();
+    transaction.gasLimit = input.gas_limit();
+    transaction.gasPrice = input.gas_price();
+    transaction.chainID = input.chain_id();
+    transaction.version = TX_VERSION;
 
     return transaction;
 }
