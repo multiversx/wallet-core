@@ -7,7 +7,7 @@
 #include "Signer.h"
 #include "Address.h"
 #include "Serialization.h"
-#include "Transactions.h"
+#include "TransactionFactory.h"
 #include "NetworkConfig.h"
 #include "../PublicKey.h"
 #include "HexCoding.h"
@@ -19,7 +19,9 @@ using namespace TW::Elrond;
 using namespace TW::Elrond::Proto;
 
 SigningOutput Signer::sign(const SigningInput &input) noexcept {
-    auto transaction = createTransaction(input);
+    TransactionFactory factory;
+
+    auto transaction = factory.create(input);
     auto privateKey = PrivateKey(input.private_key());
     auto signableAsString = serializeTransaction(transaction);
     auto signableAsData = TW::data(signableAsString);
