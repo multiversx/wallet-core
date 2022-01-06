@@ -7,8 +7,6 @@
 #include "TransactionFactory.h"
 
 #include "Codec.h"
-#include "HexCoding.h"
-#include "uint256.h"
 
 using namespace TW;
 using namespace TW::Elrond;
@@ -36,23 +34,23 @@ Transaction TransactionFactory::create(const Proto::SigningInput &input) {
     }
 }
 
+/// Copies the input fields into a transaction object, without any other logic.
 Transaction TransactionFactory::fromGenericAction(const Proto::SigningInput &input) {
-    // Copies the input fields into a transaction object, without any other logic.
-
     auto action = input.generic_action();
 
     Transaction transaction;
-
     transaction.nonce = action.accounts().sender_nonce();
     transaction.sender = action.accounts().sender();
     transaction.senderUsername = action.accounts().sender_username();
     transaction.receiver = action.accounts().receiver();
     transaction.receiverUsername = action.accounts().receiver_username();
     transaction.value = action.value();
+    transaction.data = action.data();
     transaction.gasLimit = input.gas_limit();
     transaction.gasPrice = input.gas_price();
     transaction.chainID = input.chain_id();
-    transaction.version = TX_VERSION;
+    transaction.version = action.version();
+    transaction.options = action.options();
 
     return transaction;
 }
@@ -60,20 +58,19 @@ Transaction TransactionFactory::fromGenericAction(const Proto::SigningInput &inp
 Transaction TransactionFactory::fromEGLDTransfer(const Proto::SigningInput &input) {
     auto transfer = input.egld_transfer();
 
+    uint64_t estimatedGasLimit = this->gasEstimator.forEGLDTransfer(0);
+
     Transaction transaction;
-
-    // uint64_t estimatedGasLimit = this->gasEstimator.forEGLDTransfer(0);
-
-    // transaction.set_nonce(transfer.nonce());
-    // transaction.set_sender(transfer.sender());
-    // transaction.set_sender_username(transfer.sender_username());
-    // transaction.set_receiver(transfer.receiver());
-    // transaction.set_receiver_username(transfer.receiver_username());
-    // transaction.set_value(transfer.amount());
-    // transaction.set_gas_limit(coalesceGasLimit(transfer.gas_limit(), estimatedGasLimit));
-    // transaction.set_gas_price(coalesceGasPrice(transfer.gas_price()));
-    // transaction.set_chain_id(coalesceChainId(transfer.chain_id()));
-    // transaction.set_version(TX_VERSION);
+    transaction.nonce = transfer.accounts().sender_nonce();
+    transaction.sender = transfer.accounts().sender();
+    transaction.senderUsername = transfer.accounts().sender_username();
+    transaction.receiver = transfer.accounts().receiver();
+    transaction.receiverUsername = transfer.accounts().receiver_username();
+    transaction.value = transfer.amount();
+    transaction.gasLimit = coalesceGasLimit(input.gas_limit(), estimatedGasLimit);
+    transaction.gasPrice = coalesceGasPrice(input.gas_price());
+    transaction.chainID = coalesceChainId(input.chain_id());
+    transaction.version = TX_VERSION;
 
     return transaction;
 }
@@ -81,24 +78,23 @@ Transaction TransactionFactory::fromEGLDTransfer(const Proto::SigningInput &inpu
 Transaction TransactionFactory::fromESDTTransfer(const Proto::SigningInput &input) {
     auto transfer = input.esdt_transfer();
 
+    std::string encodedTokenIdentifier = Codec::encodeString(transfer.token_identifier());
+    std::string encodedAmount = Codec::encodeBigInt(transfer.amount());
+    std::string data = prepareFunctionCall("ESDTTransfer", { encodedTokenIdentifier, encodedAmount });
+    uint64_t estimatedGasLimit = this->gasEstimator.forESDTTransfer(data.size());
+
     Transaction transaction;
-
-    // std::string encodedTokenIdentifier = Codec::encodeString(transfer.token_identifier());
-    // std::string encodedAmount = Codec::encodeBigInt(transfer.amount());
-    // std::string data = prepareFunctionCall("ESDTTransfer", { encodedTokenIdentifier, encodedAmount });
-    // uint64_t estimatedGasLimit = this->gasEstimator.forESDTTransfer(data.size());
-
-    // transaction.set_nonce(transfer.nonce());
-    // transaction.set_sender(transfer.sender());
-    // transaction.set_sender_username(transfer.sender_username());
-    // transaction.set_receiver(transfer.receiver());
-    // transaction.set_receiver_username(transfer.receiver_username());
-    // transaction.set_value("0");
-    // transaction.set_data(data);
-    // transaction.set_gas_limit(coalesceGasLimit(transfer.gas_limit(), estimatedGasLimit));
-    // transaction.set_gas_price(coalesceGasPrice(transfer.gas_price()));
-    // transaction.set_chain_id(coalesceChainId(transfer.chain_id()));
-    // transaction.set_version(TX_VERSION);
+    transaction.nonce = transfer.accounts().sender_nonce();
+    transaction.sender = transfer.accounts().sender();
+    transaction.senderUsername = transfer.accounts().sender_username();
+    transaction.receiver = transfer.accounts().receiver();
+    transaction.receiverUsername = transfer.accounts().receiver_username();
+    transaction.value = "0";
+    transaction.data = data;
+    transaction.gasLimit = coalesceGasLimit(input.gas_limit(), estimatedGasLimit);
+    transaction.gasPrice = coalesceGasPrice(input.gas_price());
+    transaction.chainID = coalesceChainId(input.chain_id());
+    transaction.version = TX_VERSION;
 
     return transaction;
 }
@@ -106,26 +102,24 @@ Transaction TransactionFactory::fromESDTTransfer(const Proto::SigningInput &inpu
 Transaction TransactionFactory::fromESDTNFTTransfer(const Proto::SigningInput &input) {
     auto transfer = input.esdtnft_transfer();
 
-    Transaction transaction;
-
-    // std::string encodedCollection = Codec::encodeString(transfer.token_collection());
-    // std::string encodedNonce = Codec::encodeUint64(transfer.token_nonce());
-    // std::string encodedQuantity = Codec::encodeBigInt(transfer.amount());
-    // std::string encodedReceiver = Codec::encodeAddress(transfer.receiver());
-    // std::string data = prepareFunctionCall("ESDTNFTTransfer", { encodedCollection, encodedNonce, encodedQuantity, encodedReceiver });
-    // uint64_t estimatedGasLimit = this->gasEstimator.forESDTNFTTransfer(data.size());
+    std::string encodedCollection = Codec::encodeString(transfer.token_collection());
+    std::string encodedNonce = Codec::encodeUint64(transfer.token_nonce());
+    std::string encodedQuantity = Codec::encodeBigInt(transfer.amount());
+    std::string encodedReceiver = Codec::encodeAddress(transfer.accounts().receiver());
+    std::string data = prepareFunctionCall("ESDTNFTTransfer", { encodedCollection, encodedNonce, encodedQuantity, encodedReceiver });
+    uint64_t estimatedGasLimit = this->gasEstimator.forESDTNFTTransfer(data.size());
     
-    // transaction.set_nonce(transfer.nonce());
-    // // For NFT, SFT and MetaESDT, transaction.sender == transaction.receiver.
-    // transaction.set_sender(transfer.sender());
-    // transaction.set_receiver(transfer.sender());
-    // transaction.set_value("0");
-
-    // transaction.set_data(data);
-    // transaction.set_gas_limit(coalesceGasLimit(transfer.gas_limit(), estimatedGasLimit));
-    // transaction.set_gas_price(coalesceGasPrice(transfer.gas_price()));
-    // transaction.set_chain_id(coalesceChainId(transfer.chain_id()));
-    // transaction.set_version(TX_VERSION);
+    Transaction transaction;
+    transaction.nonce = transfer.accounts().sender_nonce();
+    // For NFT, SFT and MetaESDT, transaction.sender == transaction.receiver.
+    transaction.sender = transfer.accounts().sender();
+    transaction.receiver = transfer.accounts().sender();
+    transaction.value = "0";
+    transaction.data = data;
+    transaction.gasLimit = coalesceGasLimit(input.gas_limit(), estimatedGasLimit);
+    transaction.gasPrice = coalesceGasPrice(input.gas_price());
+    transaction.chainID = coalesceChainId(input.chain_id());
+    transaction.version = TX_VERSION;
 
     return transaction;
 }

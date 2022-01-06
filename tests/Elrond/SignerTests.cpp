@@ -39,13 +39,13 @@ TEST(ElrondSigner, SignGenericAction) {
     auto expectedSignature = "b4f60c20ad6393bb3315853fe151e6c1ea5fadbeef059e9a4391a1fe8dd07aa955ec2330bb9461a1bb44a66688eaac8618c82f8a305afec5e5bb0aa5244c420c";
     auto expectedEncoded = (boost::format(R"({"nonce":0,"value":"0","receiver":"%1%","sender":"%2%","gasPrice":1000000000,"gasLimit":50000,"data":"Zm9v","chainID":"1","version":1,"signature":"%3%"})") % BOB_BECH32 % ALICE_BECH32 % expectedSignature).str();
 
-    ASSERT_EQ(expectedSignature, signature);
     ASSERT_EQ(expectedEncoded, encoded);
+    ASSERT_EQ(expectedSignature, signature);
 }
 
-TEST(ElrondSigner, SignJSON) {
+TEST(ElrondSigner, SignGenericActionJSON) {
     // Shuffle some fields, assume arbitrary order in the input
-    auto input = (boost::format(R"({"transaction" : {"data":"foo","value":"0","nonce":0,"receiver":"%1%","sender":"%2%","gasPrice":1000000000,"gasLimit":50000,"chainId":"1","version":1}})") % BOB_BECH32 % ALICE_BECH32).str();
+    auto input = (boost::format(R"({"genericAction" : {"accounts": {"senderNonce": 0, "receiver": "%1%", "sender": "%2%"}, "data": "foo", "value": "0", "version": 1}, "gasPrice": 1000000000, "gasLimit": 50000, "chainId": "1"})") % BOB_BECH32 % ALICE_BECH32).str();
     auto privateKey = PrivateKey(parse_hex(ALICE_SEED_HEX));
     
     auto encoded = Signer::signJSON(input, privateKey.bytes);
@@ -82,7 +82,7 @@ TEST(ElrondSigner, SignWithoutData) {
 
 TEST(ElrondSigner, SignJSONWithoutData) {
     // Shuffle some fields, assume arbitrary order in the input
-    auto input = (boost::format(R"({"transaction" : {"value":"0","nonce":0,"receiver":"%1%","sender":"%2%","gasPrice":1000000000,"gasLimit":50000,"chainId":"1","version":1}})") % BOB_BECH32 % ALICE_BECH32).str();
+    auto input = (boost::format(R"({"genericAction" : {"accounts": {"senderNonce": 0, "receiver": "%1%", "sender": "%2%"}, "value": "0", "version": 1}, "gasPrice": 1000000000, "gasLimit": 50000, "chainId": "1"})") % BOB_BECH32 % ALICE_BECH32).str();
     auto privateKey = PrivateKey(parse_hex(ALICE_SEED_HEX));
     
     auto encoded = Signer::signJSON(input, privateKey.bytes);
@@ -164,8 +164,8 @@ TEST(ElrondSigner, SignWithOptions) {
         % expectedSignature
     ).str();
 
-    ASSERT_EQ(expectedSignature, signature);
     ASSERT_EQ(expectedEncoded, encoded);
+    ASSERT_EQ(expectedSignature, signature);
 }
 
 TEST(ElrondSigner, SignEGLDTransfer) {
