@@ -28,18 +28,19 @@ class ElrondTests: XCTestCase {
         let privateKey = PrivateKey(data: Data(hexString: aliceSeedHex)!)!
 
         let input = ElrondSigningInput.with {
-            $0.transaction = GenericAction.with {
-                $0.nonce = 0
+            $0.genericAction = GenericAction.with {
+                $0.accounts = Accounts.with {
+                    $0.senderNonce = 0
+                    $0.sender = aliceBech32
+                    $0.receiver = bobBech32 
+                }
                 $0.value = "0"
-                $0.sender = aliceBech32
-                $0.receiver = bobBech32 
-                $0.gasPrice = 1000000000
-                $0.gasLimit = 50000
                 $0.data = "foo"
-                $0.chainID = "1"
                 $0.version = 1
             }
-
+            $0.gasPrice = 1000000000
+            $0.gasLimit = 50000
+            $0.chainID = "1"
             $0.privateKey = privateKey.data
         }
 
@@ -56,13 +57,14 @@ class ElrondTests: XCTestCase {
 
         let input = ElrondSigningInput.with {
             $0.egldTransfer = ElrondEGLDTransfer.with {
-                $0.nonce = 7
-                $0.sender = aliceBech32
-                $0.receiver = bobBech32
+                $0.accounts = Accounts.with {
+                    $0.senderNonce = 7
+                    $0.sender = aliceBech32
+                    $0.receiver = bobBech32
+                }
                 $0.amount = "1000000000000000000"
-                $0.chainID = "1"
             }
-
+            $0.chainID = "1"
             $0.privateKey = privateKey.data
         }
 
@@ -79,12 +81,13 @@ class ElrondTests: XCTestCase {
 
         let input = ElrondSigningInput.with {
             $0.esdtTransfer = ElrondESDTTransfer.with {
-                $0.nonce = 7
-                $0.sender = aliceBech32
-                $0.receiver = bobBech32
-                $0.tokenIdentifier = "MYTOKEN-1234"
+                $0.accounts = Accounts.with {
+                    $0.senderNonce = 7
+                    $0.sender = aliceBech32
+                    $0.receiver = bobBech32
+                }
                 $0.amount = "10000000000000"
-                $0.chainID = "1"
+                $0.tokenIdentifier = "MYTOKEN-1234"
             }
 
             $0.privateKey = privateKey.data
@@ -103,14 +106,15 @@ class ElrondTests: XCTestCase {
         let privateKey = PrivateKey(data: Data(hexString: aliceSeedHex)!)!
 
         let input = ElrondSigningInput.with {
-            $0.esdtnftTransfer = ElrondESDTNFTTransfer.with {
-                $0.nonce = 7
-                $0.sender = aliceBech32
-                $0.receiver = bobBech32
+            $0.esdtTransfer = ElrondESDTNFTTransfer.with {
+                $0.accounts = Accounts.with {
+                    $0.senderNonce = 7
+                    $0.sender = aliceBech32
+                    $0.receiver = bobBech32
+                }
                 $0.tokenCollection = "LKMEX-aab910"
                 $0.tokenNonce = 4
                 $0.amount = "184300000000000000"
-                $0.chainID = "1"
             }
 
             $0.privateKey = privateKey.data
