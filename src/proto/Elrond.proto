@@ -9,7 +9,7 @@ syntax = "proto3";
 package TW.Elrond.Proto;
 option java_package = "wallet.core.jni.proto";
 
-// Generic action. Using one of the more specific actions (below) is recommended.
+// Generic action. Using one of the more specific actions (e.g. transfers, see below) is recommended.
 message GenericAction {
     Accounts    accounts = 1;
     string      value = 2;

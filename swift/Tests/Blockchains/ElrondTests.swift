@@ -30,7 +30,7 @@ class ElrondTests: XCTestCase {
         let input = ElrondSigningInput.with {
             $0.genericAction = ElrondGenericAction.with {
                 $0.accounts = ElrondAccounts.with {
-                    $0.senderNonce = 0
+                    $0.senderNonce = 7
                     $0.sender = aliceBech32
                     $0.receiver = bobBech32 
                 }
@@ -45,7 +45,7 @@ class ElrondTests: XCTestCase {
         }
 
         let output: ElrondSigningOutput = AnySigner.sign(input: input, coin: .elrond)
-        let expectedSignature = "b4f60c20ad6393bb3315853fe151e6c1ea5fadbeef059e9a4391a1fe8dd07aa955ec2330bb9461a1bb44a66688eaac8618c82f8a305afec5e5bb0aa5244c420c"
+        let expectedSignature = "e8647dae8b16e034d518a1a860c6a6c38d16192d0f1362833e62424f424e5da660770dff45f4b951d9cc58bfb9d14559c977d443449bfc4b8783ff9c84065700"
         let expectedEncoded = #"{"nonce":0,"value":"0","receiver":"\#(bobBech32)","sender":"\#(aliceBech32)","gasPrice":1000000000,"gasLimit":50000,"data":"Zm9v","chainID":"1","version":1,"signature":"\#(expectedSignature)"}"#
 
         XCTAssertEqual(output.signature, expectedSignature)

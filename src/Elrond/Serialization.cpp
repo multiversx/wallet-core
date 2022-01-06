@@ -8,7 +8,6 @@
 
 #include "Address.h"
 #include "Base64.h"
-#include "PrivateKey.h"
 
 using namespace TW;
 
