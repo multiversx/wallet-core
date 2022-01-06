@@ -22,15 +22,15 @@ TEST(TWAnySignerElrond, Sign) {
     auto privateKey = PrivateKey(parse_hex(ALICE_SEED_HEX));
     input.set_private_key(privateKey.bytes.data(), privateKey.bytes.size());
 
-    input.mutable_transaction()->set_nonce(0);
-    input.mutable_transaction()->set_value("0");
-    input.mutable_transaction()->set_sender(ALICE_BECH32);
-    input.mutable_transaction()->set_receiver(BOB_BECH32);
-    input.mutable_transaction()->set_gas_price(1000000000);
-    input.mutable_transaction()->set_gas_limit(50000);
-    input.mutable_transaction()->set_data("foo");
-    input.mutable_transaction()->set_chain_id("1");
-    input.mutable_transaction()->set_version(1);
+    input.mutable_generic_action()->mutable_accounts()->set_sender_nonce(0);
+    input.mutable_generic_action()->mutable_accounts()->set_sender(ALICE_BECH32);
+    input.mutable_generic_action()->mutable_accounts()->set_receiver(BOB_BECH32);
+    input.mutable_generic_action()->set_value("0");
+    input.mutable_generic_action()->set_data("foo");
+    input.mutable_generic_action()->set_version(1);
+    input.set_gas_price(1000000000);
+    input.set_gas_limit(50000);
+    input.set_chain_id("1");
 
     Proto::SigningOutput output;
     ANY_SIGN(input, TWCoinTypeElrond);

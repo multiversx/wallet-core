@@ -29,12 +29,10 @@ public:
     std::string chainID;
     uint32_t version;
     uint32_t options;
+    Transaction();
     // TODO: Perhaps make it protected, and define createTransaction() as a friend.
     virtual void populate(const Proto::SigningInput& signingInput, const NetworkConfig& networkConfig);
 private:
-    uint64_t coalesceGasLimit(uint64_t providedGasLimit, uint64_t estimatedGasLimit);
-    uint64_t coalesceGasPrice(uint64_t gasPrice);
-    std::string coalesceChainId(std::string chainID);
     std::string prepareFunctionCall(const std::string& function, std::initializer_list<const std::string> arguments);
 };
 

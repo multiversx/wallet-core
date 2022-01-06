@@ -15,6 +15,40 @@ using namespace TW::Elrond;
 
 const int TX_VERSION = 1;
 
+Transaction::Transaction() {
+}
+
+void Transaction::populate(const Proto::SigningInput& signingInput, const NetworkConfig& networkConfig) {
+
+}
+
+
+uint64_t Transaction::coalesceGasLimit(uint64_t providedGasLimit, uint64_t estimatedGasLimit) {
+    return providedGasLimit > 0 ? providedGasLimit : estimatedGasLimit;
+}
+
+uint64_t Transaction::coalesceGasPrice(uint64_t gasPrice) {
+    return gasPrice > 0 ? gasPrice : this->networkConfig.getMinGasPrice();
+}
+
+std::string Transaction::coalesceChainId(std::string chainID) {
+    return chainID.empty() ? this->networkConfig.getChainId() : chainID;
+}
+
+std::string Transaction::prepareFunctionCall(const std::string& function, std::initializer_list<const std::string> arguments) {
+    const auto ARGUMENTS_SEPARATOR = "@";
+    std::string result;
+
+    result.append(function);
+
+    for (auto argument : arguments) {
+        result.append(ARGUMENTS_SEPARATOR);
+        result.append(argument);
+    }
+
+    return result;
+}
+
 // Transaction TransactionFactory::createEGLDTransfer(const Proto::SigningInput &input) {
 //     auto transfer = input.egld_transfer();
 
@@ -90,31 +124,6 @@ const int TX_VERSION = 1;
 //     return transaction;
 // }
 
-// uint64_t TransactionFactory::coalesceGasLimit(uint64_t providedGasLimit, uint64_t estimatedGasLimit) {
-//     return providedGasLimit > 0 ? providedGasLimit : estimatedGasLimit;
-// }
-
-// uint64_t TransactionFactory::coalesceGasPrice(uint64_t gasPrice) {
-//     return gasPrice > 0 ? gasPrice : this->networkConfig.getMinGasPrice();
-// }
-
-// std::string TransactionFactory::coalesceChainId(std::string chainID) {
-//     return chainID.empty() ? this->networkConfig.getChainId() : chainID;
-// }
-
-// std::string TransactionFactory::prepareFunctionCall(const std::string& function, std::initializer_list<const std::string> arguments) {
-//     const auto ARGUMENTS_SEPARATOR = "@";
-//     std::string result;
-
-//     result.append(function);
-
-//     for (auto argument : arguments) {
-//         result.append(ARGUMENTS_SEPARATOR);
-//         result.append(argument);
-//     }
-
-//     return result;
-// }
 
 Transaction createTransaction(const Proto::SigningInput &input) {
     return createTransaction(input, NetworkConfig::GetDefault());
