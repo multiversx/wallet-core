@@ -106,7 +106,7 @@ class ElrondTests: XCTestCase {
         let privateKey = PrivateKey(data: Data(hexString: aliceSeedHex)!)!
 
         let input = ElrondSigningInput.with {
-            $0.esdtTransfer = ElrondESDTNFTTransfer.with {
+            $0.esdtnftTransfer = ElrondESDTNFTTransfer.with {
                 $0.accounts = ElrondAccounts.with {
                     $0.senderNonce = 7
                     $0.sender = aliceBech32
