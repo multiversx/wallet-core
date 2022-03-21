@@ -1,10 +1,11 @@
 name: iOS CI
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [ maiar* ]
   pull_request:
-    branches: [ master ]
+    branches: [ maiar* ]
 
 jobs:
   build:
@@ -30,6 +31,12 @@ jobs:
       run: |
         tools/generate-files
         tools/ios-test
-    - name: Build sample app
+        tools/ios-build
+    - name: List build
       run: |
-        tools/samples-build ios
+        ls -1 -R build
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: tw-maiar-ios
+        path: build/ios

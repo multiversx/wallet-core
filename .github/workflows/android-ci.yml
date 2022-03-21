@@ -1,10 +1,11 @@
 name: Android CI
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [ maiar* ]
   pull_request:
-    branches: [ master ]
+    branches: [ maiar* ]
 
 jobs:
   build:
@@ -36,9 +37,12 @@ jobs:
       run: |
         tools/generate-files
         tools/android-test
-    - name: Build sample app
+        tools/android-build
+    - name: List build
       run: |
-        tools/samples-build android
-      env:
-        GITHUB_USER: ${{ github.actor }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ls -1 -R build
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: tw-maiar-android.aar
+        path: build/trustwalletcore.aar
