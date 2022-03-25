@@ -2,9 +2,9 @@ name: iOS CI
 
 on:
   push:
-    branches: [ maiar ]
+    branches: [ maiar, testnet-btc ]
   pull_request:
-    branches: [ maiar ]
+    branches: [ maiar, testnet-btc ]
 
 jobs:
   build:
