@@ -2,8 +2,8 @@ name: iOS CI
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ maiar*, ios-build ]
+  # push:
+  #   branches: [ maiar*, ios-build ]
   pull_request:
     branches: [ maiar*, ios-build ]
 
