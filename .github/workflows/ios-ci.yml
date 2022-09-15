@@ -2,10 +2,10 @@ name: iOS CI
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ maiar* ]
+  # push:
+  #   branches: [ maiar*, ios-build ]
   pull_request:
-    branches: [ maiar* ]
+    branches: [ maiar*, ios-build ]
 
 jobs:
   build:
@@ -39,4 +39,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: tw-maiar-ios
-        path: build/ios
+        path: build/ios-frameworks
