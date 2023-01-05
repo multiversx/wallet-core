@@ -17,6 +17,7 @@ public:
     std::string senderUsername;
     std::string receiver;
     std::string receiverUsername;
+    std::string guardian;
     std::string value;
     std::string data;
     uint64_t gasPrice;
@@ -28,4 +29,4 @@ public:
     Transaction();
 };
 
-} // namespace
+} // namespace TW::Elrond

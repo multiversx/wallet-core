@@ -42,6 +42,7 @@ Transaction TransactionFactory::fromGenericAction(const Proto::SigningInput& inp
     transaction.senderUsername = action.accounts().sender_username();
     transaction.receiver = action.accounts().receiver();
     transaction.receiverUsername = action.accounts().receiver_username();
+    transaction.guardian = action.accounts().guardian();
     transaction.value = action.value();
     transaction.data = action.data();
     transaction.gasLimit = input.gas_limit();
@@ -64,6 +65,7 @@ Transaction TransactionFactory::fromEGLDTransfer(const Proto::SigningInput& inpu
     transaction.senderUsername = transfer.accounts().sender_username();
     transaction.receiver = transfer.accounts().receiver();
     transaction.receiverUsername = transfer.accounts().receiver_username();
+    transaction.guardian = transfer.accounts().guardian();
     transaction.value = transfer.amount();
     transaction.gasLimit = coalesceGasLimit(input.gas_limit(), estimatedGasLimit);
     transaction.gasPrice = coalesceGasPrice(input.gas_price());
@@ -87,6 +89,7 @@ Transaction TransactionFactory::fromESDTTransfer(const Proto::SigningInput& inpu
     transaction.senderUsername = transfer.accounts().sender_username();
     transaction.receiver = transfer.accounts().receiver();
     transaction.receiverUsername = transfer.accounts().receiver_username();
+    transaction.guardian = transfer.accounts().guardian();
     transaction.value = "0";
     transaction.data = data;
     transaction.gasLimit = coalesceGasLimit(input.gas_limit(), estimatedGasLimit);
@@ -112,6 +115,7 @@ Transaction TransactionFactory::fromESDTNFTTransfer(const Proto::SigningInput& i
     // For NFT, SFT and MetaESDT, transaction.sender == transaction.receiver.
     transaction.sender = transfer.accounts().sender();
     transaction.receiver = transfer.accounts().sender();
+    transaction.guardian = transfer.accounts().guardian();
     transaction.value = "0";
     transaction.data = data;
     transaction.gasLimit = coalesceGasLimit(input.gas_limit(), estimatedGasLimit);

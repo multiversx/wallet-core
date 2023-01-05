@@ -9,8 +9,8 @@
 #include <nlohmann/json.hpp>
 
 #include "Elrond/Address.h"
-#include "Elrond/Signer.h"
 #include "Elrond/Codec.h"
+#include "Elrond/Signer.h"
 #include "HexCoding.h"
 #include "PrivateKey.h"
 #include "PublicKey.h"
@@ -339,7 +339,37 @@ TEST(ElrondSigner, SignWithOptions) {
     auto encoded = output.encoded();
     auto expectedSignature = "d9a624f13960ae1cc471de48bdb43b101b9d469bb8b159f68bb629bb32d0109e1acfebb62d6d2fc5786c0b85f9e7ce2caff74988864a8285f34797c5a5fa5801";
     auto expectedEncoded =
-        (boost::format(R"({"nonce":89,"value":"0","receiver":"%1%","sender":"%2%","gasPrice":1000000000,"gasLimit":50000,"chainID":"local-testnet","version":1,"options":42,"signature":"%3%"})") % BOB_BECH32 % ALICE_BECH32 % expectedSignature).str();
+        (boost::format(R"({"nonce":89,"value":"0","receiver":"%1%","sender":"%2%","gasPrice":1000000000,"gasLimit":50000,"chainID":"local-testnet","version":1,"signature":"%3%","options":42})") % BOB_BECH32 % ALICE_BECH32 % expectedSignature).str();
+
+    ASSERT_EQ(expectedEncoded, encoded);
+    ASSERT_EQ(expectedSignature, signature);
+}
+
+TEST(ElrondSigner, SignWithGuardianAddress) {
+    auto input = Proto::SigningInput();
+    auto privateKey = PrivateKey(parse_hex(ALICE_SEED_HEX));
+    input.set_private_key(privateKey.bytes.data(), privateKey.bytes.size());
+
+    input.mutable_generic_action()->mutable_accounts()->set_sender_nonce(89);
+    input.mutable_generic_action()->mutable_accounts()->set_sender(ALICE_BECH32);
+    input.mutable_generic_action()->mutable_accounts()->set_receiver(BOB_BECH32);
+    input.mutable_generic_action()->mutable_accounts()->set_guardian(CAROL_BECH_32);
+    input.mutable_generic_action()->set_value("0");
+    input.mutable_generic_action()->set_data("");
+    input.mutable_generic_action()->set_version(1);
+    // We'll set the "options" that correspond to a "guarded" transaction.
+    // Currently, the "options" field should be ignored (not set) by applications using TW Core.
+    input.mutable_generic_action()->set_options(2);
+    input.set_gas_price(1000000000);
+    input.set_gas_limit(50000);
+    input.set_chain_id("D");
+
+    auto output = Signer::sign(input);
+    auto signature = output.signature();
+    auto encoded = output.encoded();
+    auto expectedSignature = "e56812a82f212c89302448355243261dc9650ad945ca3731301ee3c7ee10e3119a876890c8bc01f69e364295c500b6438b27025d4966f8ed77f1bc864befcc04";
+    auto expectedEncoded =
+        (boost::format(R"({"nonce":89,"value":"0","receiver":"%1%","sender":"%2%","gasPrice":1000000000,"gasLimit":50000,"chainID":"D","version":1,"signature":"%3%","options":2,"guardian":"%4%"})") % BOB_BECH32 % ALICE_BECH32 % expectedSignature % CAROL_BECH_32).str();
 
     ASSERT_EQ(expectedEncoded, encoded);
     ASSERT_EQ(expectedSignature, signature);

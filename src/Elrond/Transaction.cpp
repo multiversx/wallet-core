@@ -9,8 +9,7 @@
 namespace TW::Elrond {
 
 Transaction::Transaction()
-    : nonce(0), sender(""), senderUsername(""), receiver(""), receiverUsername(""), value("0"), data(""), gasPrice(0), gasLimit(0), chainID(""), version(0), options(0) {
+    : nonce(0), sender(""), senderUsername(""), receiver(""), receiverUsername(""), guardian(""), value("0"), data(""), gasPrice(0), gasLimit(0), chainID(""), version(0), options(0) {
 }
 
 } // namespace TW::Elrond
-

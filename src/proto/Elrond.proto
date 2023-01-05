@@ -80,7 +80,11 @@ message Accounts {
     // Receiver address
     string      receiver = 4;
 
+    // Receiver username
     string      receiver_username = 5;
+
+    // Guardian address
+    string      guardian = 6;
 }
 
 // Input data necessary to create a signed transaction.

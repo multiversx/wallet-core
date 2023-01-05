@@ -23,8 +23,9 @@ std::map<std::string, int> fields_order{
     {"data", 9},
     {"chainID", 10},
     {"version", 11},
-    {"options", 12},
-    {"signature", 13}};
+    {"signature", 12},
+    {"options", 13},
+    {"guardian", 14}};
 
 struct FieldsSorter {
     bool operator()(const std::string& lhs, const std::string& rhs) const {
@@ -53,6 +54,10 @@ sorted_json preparePayload(const Elrond::Transaction& transaction) {
 
     if (!transaction.receiverUsername.empty()) {
         payload["receiverUsername"] = json(Base64::encode(data(transaction.receiverUsername)));
+    }
+
+    if (!transaction.guardian.empty()) {
+        payload["guardian"] = json(transaction.guardian);
     }
 
     if (!transaction.data.empty()) {
