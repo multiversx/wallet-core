@@ -7,8 +7,12 @@
 #include "Swap.h"
 
 #include "Coin.h"
+#include "HexCoding.h"
 #include <TrustWalletCore/TWCoinType.h>
 
+// ATOM
+#include "Cosmos/Address.h"
+#include "../proto/Cosmos.pb.h"
 // BTC
 #include "Bitcoin/SigHashType.h"
 #include "../proto/Bitcoin.pb.h"
@@ -46,6 +50,8 @@ TWCoinType chainCoinType(Chain chain) {
     switch (chain) {
     case Chain::ETH:
         return TWCoinTypeEthereum;
+    case Chain::AVAX:
+        return TWCoinTypeAvalancheCChain;
     case Chain::BNB:
         return TWCoinTypeBinance;
     case Chain::BTC:
@@ -56,6 +62,8 @@ TWCoinType chainCoinType(Chain chain) {
         return TWCoinTypeBitcoinCash;
     case Chain::LTC:
         return TWCoinTypeLitecoin;
+    case Chain::ATOM:
+        return TWCoinTypeCosmos;
     case Chain::THOR:
     default:
         return TWCoinTypeTHORChain;
@@ -64,6 +72,8 @@ TWCoinType chainCoinType(Chain chain) {
 
 std::string chainName(Chain chain) {
     switch (chain) {
+    case Chain::AVAX:
+        return "AVAX";
     case Chain::ETH:
         return "ETH";
     case Chain::BNB:
@@ -76,6 +86,8 @@ std::string chainName(Chain chain) {
         return "BCH";
     case Chain::LTC:
         return "LTC";
+    case Chain::ATOM:
+        return "ATOM";
     case Chain::THOR:
     default:
         return "THOR";
@@ -108,7 +120,10 @@ SwapBundled SwapBuilder::build(bool shortened) {
         return buildBitcoin(fromAmountNum, memo, fromChain);
     case Chain::BNB:
         return buildBinance(mFromAsset, fromAmountNum, memo);
+    case Chain::ATOM:
+        return buildAtom(fromAmountNum, memo);
     case Chain::ETH:
+    case Chain::AVAX:
         return buildEth(fromAmountNum, memo);
     }
     default:
@@ -214,13 +229,15 @@ SwapBundled SwapBuilder::buildBinance(Proto::Asset fromAsset, uint64_t amount, c
 SwapBundled SwapBuilder::buildEth(uint64_t amount, const std::string& memo) {
     Data out;
     auto input = Ethereum::Proto::SigningInput();
+    // EIP-1559
+    input.set_tx_mode(Ethereum::Proto::Enveloped);
     const auto& toTokenId = mFromAsset.token_id();
     // some sanity check / address conversion
     Data vaultAddressBin = ethAddressStringToData(mVaultAddress);
     if (!Ethereum::Address::isValid(mVaultAddress) || vaultAddressBin.size() != Ethereum::Address::size) {
         return {.status_code = static_cast<int>(Proto::ErrorCode::Error_Invalid_vault_address), .error = "Invalid vault address: " + mVaultAddress};
     }
-    if (!Ethereum::Address::isValid(*mRouterAddress)) {
+    if (!toTokenId.empty() && !Ethereum::Address::isValid(*mRouterAddress)) {
         return {.status_code = static_cast<int>(Proto::ErrorCode::Error_Invalid_router_address), .error = "Invalid router address: " + *mRouterAddress};
     }
     Data toAssetAddressBin = ethAddressStringToData(toTokenId);
@@ -238,20 +255,56 @@ SwapBundled SwapBuilder::buildEth(uint64_t amount, const std::string& memo) {
     // ... end
 
     input.set_to_address(*mRouterAddress);
-    auto& transfer = *input.mutable_transaction()->mutable_contract_generic();
-    auto func = Ethereum::ABI::Function("deposit", std::vector<std::shared_ptr<Ethereum::ABI::ParamBase>>{
-                                                       std::make_shared<Ethereum::ABI::ParamAddress>(vaultAddressBin),
-                                                       std::make_shared<Ethereum::ABI::ParamAddress>(toAssetAddressBin),
-                                                       std::make_shared<Ethereum::ABI::ParamUInt256>(uint256_t(amount)),
-                                                       std::make_shared<Ethereum::ABI::ParamString>(memo)});
-    Data payload;
-    func.encode(payload);
-    transfer.set_data(payload.data(), payload.size());
-    Data amountData = store(toTokenId.empty() ? uint256_t(amount) : uint256_t(0));
-    transfer.set_amount(amountData.data(), amountData.size());
+    if (!toTokenId.empty()) {
+        auto& transfer = *input.mutable_transaction()->mutable_contract_generic();
+        auto func = Ethereum::ABI::Function("deposit", std::vector<std::shared_ptr<Ethereum::ABI::ParamBase>>{
+                                                           std::make_shared<Ethereum::ABI::ParamAddress>(vaultAddressBin),
+                                                           std::make_shared<Ethereum::ABI::ParamAddress>(toAssetAddressBin),
+                                                           std::make_shared<Ethereum::ABI::ParamUInt256>(uint256_t(amount)),
+                                                           std::make_shared<Ethereum::ABI::ParamString>(memo)});
+        Data payload;
+        func.encode(payload);
+        transfer.set_data(payload.data(), payload.size());
+        Data amountData = store(uint256_t(0));
+        transfer.set_amount(amountData.data(), amountData.size());
+    } else {
+        input.set_to_address(mVaultAddress);
+        auto& transfer = *input.mutable_transaction()->mutable_transfer();
+        Data amountData = store(uint256_t(amount));
+        transfer.set_amount(amountData.data(), amountData.size());
+        transfer.set_data(memo.data(), memo.size());
+    }
 
     auto serialized = input.SerializeAsString();
     out.insert(out.end(), serialized.begin(), serialized.end());
     return {.out = std::move(out)};
 }
+
+SwapBundled SwapBuilder::buildAtom(uint64_t amount, const std::string& memo) {
+    if (!Cosmos::Address::isValid(mVaultAddress, "cosmos")) {
+        return {.status_code = static_cast<int>(Proto::ErrorCode::Error_Invalid_vault_address), .error = "Invalid vault address: " + mVaultAddress};
+    }
+    Data out;
+
+    auto input = Cosmos::Proto::SigningInput();
+    input.set_signing_mode(Cosmos::Proto::Protobuf);
+    input.set_chain_id("cosmoshub-4");
+    input.set_memo(memo);
+
+    auto msg = input.add_messages();
+    auto& message = *msg->mutable_send_coins_message();
+
+    message.set_from_address(mFromAddress);
+    message.set_to_address(mVaultAddress);
+
+    auto amountOfTx = message.add_amounts();
+    amountOfTx->set_denom("uatom");
+    amountOfTx->set_amount(std::to_string(amount));
+
+    auto serialized = input.SerializeAsString();
+    out.insert(out.end(), serialized.begin(), serialized.end());
+
+    return {.out = std::move(out)};
+}
+
 } // namespace TW::THORChainSwap

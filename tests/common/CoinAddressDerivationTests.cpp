@@ -145,6 +145,7 @@ TEST(Coin, DeriveAddress) {
             EXPECT_EQ(address, "ecash:qz7eyzytkl5z6cg6nw20hd62pyyp22mcfuywezks2y");
             break;
         case TWCoinTypeEOS:
+        case TWCoinTypeWAX:
             EXPECT_EQ(address, "EOS5TrYnZP1RkDSUMzBY4GanCy6AP68kCMdkAb5EACkAwkdgRLShz");
             break;
         case TWCoinTypeMultiversX:
@@ -152,6 +153,9 @@ TEST(Coin, DeriveAddress) {
             break;
         case TWCoinTypeEverscale:
             EXPECT_EQ(address, "0:ef64d51f95ef17973b737277cfecbd2a8d551141be2f58f5fb362575fc3eb5b0");
+            break;
+        case TWCoinTypeTON:
+            EXPECT_EQ(address, "EQAoYT8nMLfeNh6h0uIoK_wLm9JkvxiGxJDr6GRXJGu2ZhpY");
             break;
         case TWCoinTypeFIO:
             EXPECT_EQ(address, "FIO5TrYnZP1RkDSUMzBY4GanCy6AP68kCMdkAb5EACkAwkdgRLShz");
@@ -252,11 +256,17 @@ TEST(Coin, DeriveAddress) {
         case TWCoinTypeAptos:
             EXPECT_EQ(address, "0xce2fd04ac9efa74f17595e5785e847a2399d7e637f5e8179244f76191f653276");
             break;
+        case TWCoinTypeSui:
+            EXPECT_EQ(address, "0xfc93395679dec6ca84d9766be2014b6bc1473f2e");
+            break;
         case TWCoinTypeHedera:
             EXPECT_EQ(address, "0.0.302a300506032b6570032100ee93a4f66f8d16b819bb9beb9ffccdfcdc1412e87fee6a324c2a99a1e0e67148");
             break;
         case TWCoinTypeSecret:
             EXPECT_EQ(address, "secret1hkfq3zahaqkkzx5mjnamwjsfpq2jk7z0m7t23a");
+            break;
+        case TWCoinTypeNativeInjective:
+            EXPECT_EQ(address, "inj1nk9x9ajk4rgkzhqjjn7hr6w0k0jg2kj0knl55v");
             break;
         case TWCoinTypeAgoric:
             EXPECT_EQ(address, "agoric1hkfq3zahaqkkzx5mjnamwjsfpq2jk7z0txauuh");

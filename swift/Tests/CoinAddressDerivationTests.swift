@@ -67,7 +67,7 @@ class CoinAddressDerivationTests: XCTestCase {
                 case .multiversX:
                     let expectedResult = "erd1jfcy8aeru6vlx4fe6h3pc3vlpe2cnnur5zetxdhp879yagq7vqvs8na4f8"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
-                case .eos:
+                case .eos, .wax:
                     let expectedResult = "EOS6hs8sRvGSzuQtq223zwJipMzqTJpXUVjyvHPvPwBSZWWrJTJkg"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .ethereum,
@@ -253,14 +253,23 @@ class CoinAddressDerivationTests: XCTestCase {
                 case .everscale:
                     let expectedResult = "0:0c39661089f86ec5926ea7d4ee4223d634ba4ed6dcc2e80c7b6a8e6d59f79b04";
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
+                case .ton:
+                    let expectedResult = "EQDgEMqToTacHic7SnvnPFmvceG5auFkCcAw0mSCvzvKUfk9";
+                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .aptos:
                     let expectedResult = "0x07968dab936c1bad187c60ce4082f307d030d780e91e694ae03aef16aba73f30";
+                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
+                case .sui:
+                    let expectedResult = "0x061ce2b2100a71bb7aa0da98998887ad82597948";
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .hedera:
                     let expectedResult = "0.0.302a300506032b657003210049eba62f64d0d941045595d9433e65d84ecc46bcdb1421de55e05fcf2d8357d5";
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .secret:
                     let expectedResult = "secret1f69sk5033zcdr2p2yf3xjehn7xvgdeq09d2llh"
+                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
+                case .nativeInjective:
+                    let expectedResult = "inj13u6g7vqgw074mgmf2ze2cadzvkz9snlwcrtq8a"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .agoric:
                     let expectedResult = "agoric18zvvgk6j3eq5wd7mqxccgt20gz2w94cy88aek5"

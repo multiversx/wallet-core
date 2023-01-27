@@ -13,9 +13,9 @@ namespace TW::MultiversX {
 
 /// A stripped-down variant of the MultiversX codec.
 /// For reference, see:
-/// - https://docs.multiversx.com
-/// - https://github.com/MultiversX/mx-sdk-erdjs
-/// - https://github.com/MultiversX/mx-sdk-rs
+/// - https://docs.multiversx.com/developers/developer-reference/overview
+/// - https://github.com/multiversx/mx-sdk-erdjs/tree/main/src/smartcontracts/codec
+/// - https://github.com/multiversx/mx-sdk-rs/tree/master/framework/codec
 class Codec {
 public:
     static std::string encodeString(const std::string& value);

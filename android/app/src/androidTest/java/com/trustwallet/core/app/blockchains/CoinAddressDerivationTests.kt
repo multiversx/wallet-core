@@ -75,6 +75,7 @@ class CoinAddressDerivationTests {
         QTUM -> assertEquals("QhceuaTdeCZtcxmVc6yyEDEJ7Riu5gWFoF", address)
         NULS -> assertEquals("NULSd6HgU8MoRnNjBgvJpa9tqvGxYdv5ne4en", address)
         EOS -> assertEquals("EOS6hs8sRvGSzuQtq223zwJipMzqTJpXUVjyvHPvPwBSZWWrJTJkg", address)
+        WAX -> assertEquals("EOS6hs8sRvGSzuQtq223zwJipMzqTJpXUVjyvHPvPwBSZWWrJTJkg", address)
         IOTEX -> assertEquals("io1qw9cccecw09q7p5kzyqtuhfhvah2mhfrc84jfk", address)
         ZILLIQA -> assertEquals("zil1mk6pqphhkmaguhalq6n3cq0h38ltcehg0rfmv6", address)
         ZELCASH -> assertEquals("t1UKbRPzL4WN8Rs8aZ8RNiWoD2ftCMHKGUf", address)
@@ -105,9 +106,12 @@ class CoinAddressDerivationTests {
         NATIVEEVMOS -> assertEquals("evmos13u6g7vqgw074mgmf2ze2cadzvkz9snlwstd20d", address)
         NERVOS -> assertEquals("ckb1qzda0cr08m85hc8jlnfp3zer7xulejywt49kt2rr0vthywaa50xwsqdtyq04tvp02wectaumxn0664yw2jd53lqk4mxg3", address)
         EVERSCALE -> assertEquals("0:0c39661089f86ec5926ea7d4ee4223d634ba4ed6dcc2e80c7b6a8e6d59f79b04", address)
+        TON -> assertEquals("EQDgEMqToTacHic7SnvnPFmvceG5auFkCcAw0mSCvzvKUfk9", address)
         APTOS -> assertEquals("0x07968dab936c1bad187c60ce4082f307d030d780e91e694ae03aef16aba73f30", address)
+        SUI -> assertEquals("0x061ce2b2100a71bb7aa0da98998887ad82597948", address)
         HEDERA -> assertEquals("0.0.302a300506032b657003210049eba62f64d0d941045595d9433e65d84ecc46bcdb1421de55e05fcf2d8357d5", address)
         SECRET -> assertEquals("secret1f69sk5033zcdr2p2yf3xjehn7xvgdeq09d2llh", address)
+        NATIVEINJECTIVE -> assertEquals("inj13u6g7vqgw074mgmf2ze2cadzvkz9snlwcrtq8a", address)
         AGORIC -> assertEquals("agoric18zvvgk6j3eq5wd7mqxccgt20gz2w94cy88aek5", address)
     }
 }

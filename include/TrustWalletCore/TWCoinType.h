@@ -43,6 +43,7 @@ enum TWCoinType {
     TWCoinTypeDigiByte = 20,
     TWCoinTypeDogecoin = 3,
     TWCoinTypeEOS = 194,
+    TWCoinTypeWAX = 14001,
     TWCoinTypeEthereum = 60,
     TWCoinTypeEthereumClassic = 61,
     TWCoinTypeFIO = 235,
@@ -126,7 +127,10 @@ enum TWCoinType {
     TWCoinTypeAptos = 637,
     TWCoinTypeHedera = 3030,
     TWCoinTypeSecret = 529,
+    TWCoinTypeNativeInjective = 10000060,
     TWCoinTypeAgoric = 564,
+    TWCoinTypeTON = 607,
+    TWCoinTypeSui = 784,
 };
 
 /// Returns the blockchain for a coin type.

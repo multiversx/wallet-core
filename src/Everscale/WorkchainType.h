@@ -6,11 +6,8 @@
 
 #pragma once
 
+#include "CommonTON/WorkchainType.h"
+
 namespace TW::Everscale {
-
-enum WorkchainType {
-    Masterchain = -1,
-    Basechain = 0,
-};
-
+    using WorkchainType = CommonTON::WorkchainType;
 } // namespace TW::Everscale

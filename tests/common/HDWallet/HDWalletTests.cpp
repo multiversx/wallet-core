@@ -8,11 +8,12 @@
 #include "Bitcoin/Address.h"
 #include "Bitcoin/CashAddress.h"
 #include "Bitcoin/SegwitAddress.h"
+#include "Sui/Address.h"
 #include "Coin.h"
 #include "Ethereum/Address.h"
-#include "Ethereum/Signer.h"
-#include "Ethereum/EIP191.h"
 #include "Ethereum/EIP2645.h"
+#include "Ethereum/MessageSigner.h"
+#include "Ethereum/Signer.h"
 #include "HDWallet.h"
 #include "Hash.h"
 #include "Hedera/DER.h"
@@ -21,8 +22,8 @@
 #include "Mnemonic.h"
 #include "NEAR/Address.h"
 #include "PublicKey.h"
-#include "TestUtilities.h"
 #include "StarkEx/MessageSigner.h"
+#include "TestUtilities.h"
 
 #include <gtest/gtest.h>
 
@@ -440,6 +441,18 @@ TEST(HDWallet, AptosKey) {
     }
 }
 
+TEST(HDWallet, SuiKey) {
+    const auto derivPath = "m/44'/784'/0'/0'/0'";
+    HDWallet wallet = HDWallet("cost add execute system fault long raccoon stone paddle column ketchup smile debate wood marble please jar can goddess magnet axis celery rough gold", "");
+    {
+        const auto privateKey = wallet.getKey(TWCoinTypeSui, DerivationPath(derivPath));
+        EXPECT_EQ(hex(privateKey.bytes), "3823dce5288ab55dd1c00d97e91933c613417fdb282a0b8b01a7f5f5a533b266");
+        auto pubkey = privateKey.getPublicKey(TWPublicKeyTypeED25519);
+        EXPECT_EQ(hex(pubkey.bytes), "6a7cdeec16a75c0ff6787bc2356109469033022bb10e826c9d443a9f1fc0bd8e");
+        EXPECT_EQ(TW::Sui::Address(pubkey).string(), "0x2db500ac919cdde351ac36e3711d832c6db97669");
+    }
+}
+
 TEST(HDWallet, HederaKey) {
     // https://github.com/hashgraph/hedera-sdk-js/blob/e0cd39c84ab189d59a6bcedcf16e4102d7bb8beb/packages/cryptography/test/unit/Mnemonic.js#L47
     {
@@ -544,7 +557,7 @@ TEST(HDWallet, FromMnemonicImmutableXMainnet) {
         ASSERT_EQ(ethAddressFromPub, ethAddress);
 
         std::string tosign = "Only sign this request if you’ve initiated an action with Immutable X.\n\nFor internal use:\nbd717ba31dca6e0f3f136f7c4197babce5f09a9f25176044c0b3112b1b6017a3";
-        auto hexEthSignature = Ethereum::MessageSigner::signMessage(ethPrivKey, tosign);
+        auto hexEthSignature = Ethereum::MessageSigner::signMessage(ethPrivKey, tosign, Ethereum::MessageType::ImmutableX);
 
         ASSERT_EQ(hexEthSignature, "32cd5a58f3419fc5db672e3d57f76199b853eda0856d491b38f557b629b0a0814ace689412bf354a1af81126d2749207dffae8ae8845160f33948a6b787e17ee01");
     }
@@ -577,13 +590,13 @@ TEST(HDWallet, FromMnemonicImmutableXMainnetFromSignature) {
         ASSERT_EQ(hex(ethPrivKey.bytes), "03a9ca895dca1623c7dfd69693f7b4111f5d819d2e145536e0b03c136025a25d");
         auto ethAddressFromPub = Ethereum::Address(ethPrivKey.getPublicKey(TWPublicKeyTypeSECP256k1Extended)).string();
         ASSERT_EQ(ethAddressFromPub, ethAddress);
-        auto signature = Ethereum::MessageSigner::signMessage(ethPrivKey, "Only sign this request if you’ve initiated an action with Immutable X.");
+        auto signature = Ethereum::MessageSigner::signMessage(ethPrivKey, "Only sign this request if you’ve initiated an action with Immutable X.", Ethereum::MessageType::ImmutableX);
         ASSERT_EQ(signature, "18b1be8b78807d3326e28bc286d7ee3d068dcd90b1949ce1d25c1f99825f26e70992c5eb7f44f76b202aceded00d74f771ed751f2fe538eec01e338164914fe001");
         auto starkPrivKey = ImmutableX::getPrivateKeyFromRawSignature(parse_hex(signature), DerivationPath(derivationPath));
         auto starkPubKey  = starkPrivKey.getPublicKey(TWPublicKeyTypeStarkex);
         ASSERT_EQ(hex(starkPrivKey.bytes), "04be51a04e718c202e4dca60c2b72958252024cfc1070c090dd0f170298249de");
         ASSERT_EQ(hex(starkPubKey.bytes), "00e5b9b11f8372610ef35d647a1dcaba1a4010716588d591189b27bf3c2d5095");
-        auto signatureToSend = Ethereum::MessageSigner::signMessage(ethPrivKey, "Only sign this key linking request from Immutable X");
+        auto signatureToSend = Ethereum::MessageSigner::signMessage(ethPrivKey, "Only sign this key linking request from Immutable X", Ethereum::MessageType::ImmutableX);
         ASSERT_EQ(signatureToSend, "646da4160f7fc9205e6f502fb7691a0bf63ecbb74bbb653465cd62388dd9f56325ab1e4a9aba99b1661e3e6251b42822855a71e60017b310b9f90e990a12e1dc01");
 
         auto starkMsg = "463a2240432264a3aa71a5713f2a4e4c1b9e12bbb56083cd56af6d878217cf";

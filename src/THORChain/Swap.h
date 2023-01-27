@@ -23,7 +23,9 @@ enum Chain {
     BNB = 3,
     DOGE = 4,
     BCH = 5,
-    LTC = 6
+    LTC = 6,
+    ATOM = 7,
+    AVAX = 8
 };
 
 using SwapErrorCode = int;
@@ -50,6 +52,7 @@ class SwapBuilder {
     SwapBundled buildBitcoin(uint64_t amount, const std::string& memo, Chain fromChain);
     SwapBundled buildBinance(Proto::Asset fromAsset, uint64_t amount, const std::string& memo);
     SwapBundled buildEth(uint64_t amount, const std::string& memo);
+    SwapBundled buildAtom(uint64_t amount, const std::string& memo);
 
 public:
     SwapBuilder() noexcept = default;

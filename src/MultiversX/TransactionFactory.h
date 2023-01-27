@@ -31,17 +31,17 @@ public:
     Transaction fromGenericAction(const Proto::SigningInput& input);
 
     /// This should be used to transfer EGLD.
-    /// For reference, see: https://docs.multiversx.com/developers/signing-transactions/signing-transactions/#general-structure.
+    /// For reference, see: https://docs.multiversx.com/developers/signing-transactions/signing-transactions.
     Transaction fromEGLDTransfer(const Proto::SigningInput& input);
 
     /// This should be used to transfer regular ESDTs (fungible tokens).
-    /// For reference, see: https://docs.multiversx.com/developers/esdt-tokens/#transfers
+    /// For reference, see: https://docs.multiversx.com/developers/esdt-tokens
     ///
     /// The "regular" ESDT tokens held by an account can be fetched from https://api.multiversx.com/accounts/{address}/tokens.
     Transaction fromESDTTransfer(const Proto::SigningInput& input);
 
     /// This should be used to transfer NFTs, SFTs and Meta ESDTs.
-    /// For reference, see: https://docs.multiversx.com/developers/nft-tokens/#transfers
+    /// For reference, see: https://docs.multiversx.com/developers/nft-tokens
     ///
     /// The semi-fungible and non-fungible tokens held by an account can be fetched from https://api.multiversx.com/accounts/{address}/nfts?type=SemiFungibleESDT,NonFungibleESDT.
     /// The Meta ESDTs (a special kind of SFTs) held by an account can be fetched from https://api.multiversx.com/accounts/{address}/nfts?type=MetaESDT.
