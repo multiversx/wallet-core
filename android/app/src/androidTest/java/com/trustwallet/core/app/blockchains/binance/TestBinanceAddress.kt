@@ -31,4 +31,14 @@ class TestBinanceAddress {
         assertEquals("0x727f677b390c151caf9c206fd77f77918f56904b5504243db9b21e51182c4c06", key.data().toHex())
         assertEquals("bnb1devga6q804tx9fqrnx0vtu5r36kxgp9tmk4xkm", address)
     }
+
+    @Test
+    fun testBinanceTestnet() {
+        val wallet = HDWallet("rabbit tilt arm protect banner ill produce vendor april bike much identify pond upset front easily glass gallery address hair priority focus forest angle", "")
+        val key = wallet.getKeyForCoin(CoinType.BINANCE)
+        val address = CoinType.BINANCE.deriveAddress(key, Derivation.DEFAULT, "tbnb")
+
+        assertEquals("0x727f677b390c151caf9c206fd77f77918f56904b5504243db9b21e51182c4c06", key.data().toHex())
+        assertEquals("tbnb1devga6q804tx9fqrnx0vtu5r36kxgp9t4ruzk2", address)
+    }
 }
