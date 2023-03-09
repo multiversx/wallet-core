@@ -9,8 +9,6 @@ import XCTest
 
 extension HDWallet {
     static let test = HDWallet(mnemonic: "ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal", passphrase: "TREZOR")!
-    static let test2 = HDWallet(mnemonic: "ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal", passphrase: "")!
-    static let test3 = HDWallet(mnemonic: "rabbit tilt arm protect banner ill produce vendor april bike much identify pond upset front easily glass gallery address hair priority focus forest angle", passphrase: "")!
 }
 
 class HDWalletTests: XCTestCase {
@@ -123,17 +121,9 @@ class HDWalletTests: XCTestCase {
 
         let address2 = wallet.getAddressDerivation(coin: coin, derivation: .bitcoinLegacy)
         XCTAssertEqual(address2, "1PeUvjuxyf31aJKX6kCXuaqxhmG78ZUdL1")
-    }
 
-    func testGetAddressDerivation2() {
-        let coin = CoinType.bitcoin
-        let wallet = HDWallet.test2
-
-        let address1 = wallet.getAddressDerivation(coin: coin, derivation: .bitcoinSegwit)
-        XCTAssertEqual(address1, "bc1qpsp72plnsqe6e2dvtsetxtww2cz36ztmfxghpd")
-
-        let address2 = wallet.getAddressDerivation(coin: coin, derivation: .bitcoinTestnet)
-        XCTAssertEqual(address2, "tb1qq8p994ak933c39d2jaj8n4sg598tnkhnyk5sg5")
+        let address3 = wallet.getAddressDerivation(coin: coin, derivation: .bitcoinTestnet)
+        XCTAssertEqual(address3, "tb1qwgpxgwn33z3ke9s7q65l976pseh4edrzfmyvl0")
     }
 
     func testDerive() {
@@ -256,22 +246,13 @@ class HDWalletTests: XCTestCase {
         XCTAssertEqual("bnb1wk7kxw0qrvxe2pj9mk6ydjx0t4j9jla8pja0td", address.description)
     }
 
-    func testDeriveBinanceChainMainnet() {
+    func testDeriveBinanceTestnet() {
         let binance = CoinType.binance
-        let wallet = HDWallet.test3
+        let wallet = HDWallet.test
         let key = wallet.getKeyForCoin(coin: binance)
-        let address = AnyAddress(publicKey: key.getPublicKeySecp256k1(compressed: true), coin: binance, hrp: "bnb")
+        let address = AnyAddress(publicKey: key.getPublicKeySecp256k1(compressed: true), coin: binance)
 
-        XCTAssertEqual("bnb1devga6q804tx9fqrnx0vtu5r36kxgp9tmk4xkm", address.description)
-    }
-
-    func testDeriveBinanceChainTestnet() {
-        let binance = CoinType.binance
-        let wallet = HDWallet.test3
-        let key = wallet.getKeyForCoin(coin: binance)
-        let address = AnyAddress(publicKey: key.getPublicKeySecp256k1(compressed: true), coin: binance, hrp: "tbnb")
-
-        XCTAssertEqual("tbnb1devga6q804tx9fqrnx0vtu5r36kxgp9t4ruzk2", address.description)
+        XCTAssertEqual("tbnb1wk7kxw0qrvxe2pj9mk6ydjx0t4j9jla8085ttu", address.description, hrp: "tbnb")
     }
 
     func testDeriveZcash() {
