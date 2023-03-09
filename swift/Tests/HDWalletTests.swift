@@ -10,6 +10,7 @@ import XCTest
 extension HDWallet {
     static let test = HDWallet(mnemonic: "ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal", passphrase: "TREZOR")!
     static let test2 = HDWallet(mnemonic: "ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal", passphrase: "")!
+    static let test3 = HDWallet(mnemonic: "rabbit tilt arm protect banner ill produce vendor april bike much identify pond upset front easily glass gallery address hair priority focus forest angle", passphrase: "")!
 }
 
 class HDWalletTests: XCTestCase {
@@ -255,18 +256,18 @@ class HDWalletTests: XCTestCase {
         XCTAssertEqual("bnb1wk7kxw0qrvxe2pj9mk6ydjx0t4j9jla8pja0td", address.description)
     }
 
-    func testDeriveBinanceChain2Mainnet() {
+    func testDeriveBinanceChainMainnet() {
         let binance = CoinType.binance
-        let wallet = HDWallet.test2
+        let wallet = HDWallet.test3
         let key = wallet.getKeyForCoin(coin: binance)
         let address = AnyAddress(publicKey: key.getPublicKeySecp256k1(compressed: true), coin: binance, hrp: "bnb")
 
         XCTAssertEqual("bnb1devga6q804tx9fqrnx0vtu5r36kxgp9tmk4xkm", address.description)
     }
 
-    func testDeriveBinanceChain2Testnet() {
+    func testDeriveBinanceChainTestnet() {
         let binance = CoinType.binance
-        let wallet = HDWallet.test2
+        let wallet = HDWallet.test3
         let key = wallet.getKeyForCoin(coin: binance)
         let address = AnyAddress(publicKey: key.getPublicKeySecp256k1(compressed: true), coin: binance, hrp: "tbnb")
 
