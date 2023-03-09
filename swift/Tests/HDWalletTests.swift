@@ -255,6 +255,24 @@ class HDWalletTests: XCTestCase {
         XCTAssertEqual("bnb1wk7kxw0qrvxe2pj9mk6ydjx0t4j9jla8pja0td", address.description)
     }
 
+    func testDeriveBinanceChain2Mainnet() {
+        let binance = CoinType.binance
+        let wallet = HDWallet.test2
+        let key = wallet.getKeyForCoin(coin: binance)
+        let address = AnyAddress(publicKey: key.getPublicKeySecp256k1(compressed: true), coin: binance, hrp: "bnb")
+
+        XCTAssertEqual("bnb1devga6q804tx9fqrnx0vtu5r36kxgp9tmk4xkm", address.description)
+    }
+
+    func testDeriveBinanceChain2Testnet() {
+        let binance = CoinType.binance
+        let wallet = HDWallet.test2
+        let key = wallet.getKeyForCoin(coin: binance)
+        let address = AnyAddress(publicKey: key.getPublicKeySecp256k1(compressed: true), coin: binance, hrp: "tbnb")
+
+        XCTAssertEqual("tbnb1devga6q804tx9fqrnx0vtu5r36kxgp9t4ruzk2", address.description)
+    }
+
     func testDeriveZcash() {
         let zcash = CoinType.zcash
         let wallet = HDWallet.test
