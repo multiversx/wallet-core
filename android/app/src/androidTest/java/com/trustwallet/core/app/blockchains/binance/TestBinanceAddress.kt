@@ -39,7 +39,7 @@ class TestBinanceAddress {
         val publicKey = privateKey.getPublicKeySecp256k1(true)
         val address = AnyAddress(publicKey, CoinType.BINANCE, "tbnb")
 
-        assertEquals("0x727f677b390c151caf9c206fd77f77918f56904b5504243db9b21e51182c4c06", key.data().toHex())
+        assertEquals("0x727f677b390c151caf9c206fd77f77918f56904b5504243db9b21e51182c4c06", privateKey.data().toHex())
         assertEquals("tbnb1devga6q804tx9fqrnx0vtu5r36kxgp9t4ruzk2", address)
     }
 }
