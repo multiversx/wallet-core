@@ -23,6 +23,23 @@ class TestBinanceAddress {
     }
 
     @Test
+    fun testIsValid() {
+        assertTrue(AnyAddress.isValid("bnb12vtaxl9952zm6rwf7v8jerq74pvaf77fcmvzhw", CoinType.BINANCE));
+
+        assertFalse(AnyAddress.isValid("bad1devga6q804tx9fqrnx0vtu5r36kxgp9tqx8h9k", CoinType.BINANCE));
+        assertFalse(AnyAddress.isValid("tbnb1devga6q804tx9fqrnx0vtu5r36kxgp9t4ruzk2", CoinType.BINANCE));
+    }
+
+    @Test
+    fun testIsValidBech32() {
+        assertTrue(AnyAddress.isValidBech32("bnb12vtaxl9952zm6rwf7v8jerq74pvaf77fcmvzhw", CoinType.BINANCE, "bnb"));
+        assertTrue(AnyAddress.isValidBech32("tbnb1devga6q804tx9fqrnx0vtu5r36kxgp9t4ruzk2", CoinType.BINANCE, "tbnb"));
+
+        assertFalse(AnyAddress.isValidBech32("bnb12vtaxl9952zm6rwf7v8jerq74pvaf77fcmvzhw", CoinType.BINANCE, "bad"));
+        assertFalse(AnyAddress.isValidBech32("tbnb1devga6q804tx9fqrnx0vtu5r36kxgp9t4ruzk2", CoinType.BINANCE, "bad"));
+    }
+
+    @Test
     fun testBinanceMainnet() {
         val wallet = HDWallet("rabbit tilt arm protect banner ill produce vendor april bike much identify pond upset front easily glass gallery address hair priority focus forest angle", "")
         val key = wallet.getKeyForCoin(CoinType.BINANCE)
