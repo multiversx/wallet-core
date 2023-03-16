@@ -2,6 +2,8 @@ package com.trustwallet.core.app.blockchains.binance
 
 import com.trustwallet.core.app.utils.toHexBytes
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import wallet.core.jni.*
 import com.trustwallet.core.app.utils.toHex
