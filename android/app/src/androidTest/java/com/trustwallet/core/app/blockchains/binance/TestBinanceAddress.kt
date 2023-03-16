@@ -36,7 +36,7 @@ class TestBinanceAddress {
         assertTrue(AnyAddress.isValidBech32("tbnb1devga6q804tx9fqrnx0vtu5r36kxgp9t4ruzk2", CoinType.BINANCE, "tbnb"));
 
         assertFalse(AnyAddress.isValidBech32("bnb12vtaxl9952zm6rwf7v8jerq74pvaf77fcmvzhw", CoinType.BINANCE, "bad"));
-        assertFalse(AnyAddress.isValidBech32("tbnb1devga6q804tx9fqrnx0vtu5r36kxgp9t4ruzk2", CoinType.BINANCE, "bad"));
+        assertFalse(AnyAddress.isValidBech32("tbnb1devga6q804tx9fqrnx0vtu5r36kxgp9t4ruzk2", CoinType.BINANCE, "test"));
     }
 
     @Test
