@@ -71,3 +71,4 @@ jobs:
       with:
         name: trustwalletcore.aar
         path: build/trustwalletcore.aar
+      # Trigger CI
