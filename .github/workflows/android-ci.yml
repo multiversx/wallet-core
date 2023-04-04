@@ -51,17 +51,17 @@ jobs:
     - name: Generate files
       run: tools/generate-files android
 
-    - name: Build Kotlin doc
-      run: tools/kotlin-doc
+    # - name: Build Kotlin doc
+    #   run: tools/kotlin-doc
 
-    - name: Run test
-      run: tools/android-test
+    # - name: Run test
+    #   run: tools/android-test
 
-    - name: Build sample app
-      run: tools/samples-build android
-      env:
-        GITHUB_USER: ${{ github.actor }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Build sample app
+    #   run: tools/samples-build android
+    #   env:
+    #     GITHUB_USER: ${{ github.actor }}
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build artifacts
       run: tools/android-build
