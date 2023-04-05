@@ -8,6 +8,7 @@ set -e
 
 FRAMEWORK=WalletCoreCommon
 BUILD_FOLDER=build/ios-frameworks
+ARCHIVE=ios-frameworks.tar.gz
 
 init() {
     echo "Cleanup and init..."
@@ -49,8 +50,10 @@ create_xc_framework() {
                -framework $BUILD_FOLDER/ios-arm64_x86_64-simulator.xcarchive/Products/Library/Frameworks/$FRAMEWORK.framework \
                -framework $BUILD_FOLDER/ios-x86_64_arm64-maccatalyst.xcarchive/Products/Library/Frameworks/$FRAMEWORK.framework \
                -framework $BUILD_FOLDER/macos-arm64_x86_64.xcarchive/Products/Library/Frameworks/$FRAMEWORK.framework
+}
 
-    tar -cvzf WalletCoreCommon.xcframework.tar.gz WalletCoreCommon.xcframework
+create_archive() {
+    tar -cvzf $ARCHIVE $BUILD_FOLDER
 }
 
 main() {
@@ -59,6 +62,7 @@ main() {
     build_ios_mac_catalyst
     build_ios_arm64 && build_ios_simulator
     create_xc_framework
+    create_archive
 }
 
 main

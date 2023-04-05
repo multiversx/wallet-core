@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest-xl
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3
     - name: Install system dependencies
@@ -44,5 +44,5 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: WalletCoreCommon.xcframework.tar.gz
-        path: build/ios-frameworks/WalletCoreCommon.xcframework.tar.gz
+        name: ios-frameworks.tar.gz
+        path: build/ios-frameworks.tar.gz
