@@ -1,15 +1,11 @@
-name: Android CI
+name: Android Build
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-latest-xl
 
     steps:
     - uses: actions/checkout@v3
