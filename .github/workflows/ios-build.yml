@@ -1,6 +1,7 @@
 name: iOS CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
   pull_request:
@@ -37,9 +38,11 @@ jobs:
     - name: Generate files
       run: tools/generate-files
 
-    - name: Run iOS tests
-      run: tools/ios-test
+    - name: Build artifacts
+      run: tools/ios-build
 
-    - name: Build sample app
-      run: |
-        tools/samples-build ios
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: WalletCoreCommon.xcframework.tar.gz
+        path: build/ios-frameworks/WalletCoreCommon.xcframework.tar.gz
