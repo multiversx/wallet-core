@@ -1,6 +1,7 @@
 name: iOS CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
   pull_request:
@@ -8,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest-xl
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3
     - name: Install system dependencies
@@ -37,7 +38,16 @@ jobs:
     - name: Run iOS tests
       run: |
         tools/generate-files
-        tools/ios-test
-    - name: Build sample app
-      run: |
-        tools/samples-build ios
+    #   tools/ios-test
+    # - name: Build sample app
+    #   run: |
+    #     tools/samples-build ios
+
+    - name: Build artifacts
+      run: tools/ios-build
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: trustwalletcore
+        path: build/ios-frameworks

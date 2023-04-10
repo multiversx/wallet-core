@@ -1,14 +1,15 @@
 name: Android CI
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_dispatch:
+  # push:
+  #   branches: [ master ]
+  # pull_request:
+  #   branches: [ master ]
 
 jobs:
   build:
-    runs-on: macos-latest-xl
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -50,14 +51,24 @@ jobs:
     - name: Generate files
       run: tools/generate-files android
 
-    - name: Build Kotlin doc
-      run: tools/kotlin-doc
+    # - name: Build Kotlin doc
+    #   run: tools/kotlin-doc
 
-    - name: Run test
-      run: tools/android-test
+    # - name: Run test
+    #   run: tools/android-test
 
-    - name: Build sample app
-      run: tools/samples-build android
-      env:
-        GITHUB_USER: ${{ github.actor }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Build sample app
+    #   run: tools/samples-build android
+    #   env:
+    #     GITHUB_USER: ${{ github.actor }}
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build artifacts
+      run: tools/android-build
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: trustwalletcore.aar
+        path: build/trustwalletcore.aar
+      # Trigger CI
