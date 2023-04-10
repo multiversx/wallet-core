@@ -6,19 +6,20 @@
 
 #pragma once
 
-#include <string>
 #include "NetworkConfig.h"
+#include <string>
 
 namespace TW::MultiversX {
 
 class GasEstimator {
     NetworkConfig networkConfig;
+
 public:
     GasEstimator(const NetworkConfig& networkConfig);
 
-    uint64_t forEGLDTransfer(size_t dataLength) const;
-    uint64_t forESDTTransfer(size_t dataLength) const;
-    uint64_t forESDTNFTTransfer(size_t dataLength) const;
+    uint64_t forEGLDTransfer(size_t dataLength, bool isGuarded) const;
+    uint64_t forESDTTransfer(size_t dataLength, bool isGuarded) const;
+    uint64_t forESDTNFTTransfer(size_t dataLength, bool isGuarded) const;
 };
 
-} // namespace
+} // namespace TW::MultiversX

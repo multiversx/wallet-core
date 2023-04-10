@@ -53,6 +53,7 @@ private:
     uint64_t coalesceGasLimit(uint64_t providedGasLimit, uint64_t estimatedGasLimit);
     uint64_t coalesceGasPrice(uint64_t gasPrice);
     std::string coalesceChainId(std::string chainID);
+    TransactionOptions decideOptions(const Transaction& transaction);
     std::string prepareFunctionCall(const std::string& function, std::initializer_list<const std::string> arguments);
 };
 

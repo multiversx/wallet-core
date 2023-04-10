@@ -28,7 +28,7 @@ TEST(MultiversXTransactionFactory, fromEGLDTransfer) {
     ASSERT_EQ(50000ul, transaction.gasLimit);
     ASSERT_EQ(1000000000ul, transaction.gasPrice);
     ASSERT_EQ("1", transaction.chainID);
-    ASSERT_EQ(1ul, transaction.version);
+    ASSERT_EQ(2ul, transaction.version);
 }
 
 TEST(MultiversXTransactionFactory, fromESDTTransfer) {
@@ -49,7 +49,7 @@ TEST(MultiversXTransactionFactory, fromESDTTransfer) {
     ASSERT_EQ(425000ul, transaction.gasLimit);
     ASSERT_EQ(1000000000ul, transaction.gasPrice);
     ASSERT_EQ("1", transaction.chainID);
-    ASSERT_EQ(1ul, transaction.version);
+    ASSERT_EQ(2ul, transaction.version);
 }
 
 TEST(MultiversXTransactionFactory, fromESDTNFTTransfer) {
@@ -71,7 +71,7 @@ TEST(MultiversXTransactionFactory, fromESDTNFTTransfer) {
     ASSERT_EQ(937500ul, transaction.gasLimit);
     ASSERT_EQ(1000000000ul, transaction.gasPrice);
     ASSERT_EQ("1", transaction.chainID);
-    ASSERT_EQ(1ul, transaction.version);
+    ASSERT_EQ(2ul, transaction.version);
 }
 
 TEST(MultiversXTransactionFactory, createTransfersWithProvidedNetworkConfig) {

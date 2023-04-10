@@ -38,6 +38,14 @@ void NetworkConfig::setMinGasLimit(uint32_t value) {
     this->minGasLimit = value;
 }
 
+uint32_t NetworkConfig::getExtraGasLimitForGuardedTransaction() const {
+    return this->minGasLimit;
+}
+
+void NetworkConfig::setExtraGasLimitForGuardedTransaction(uint32_t value) {
+    this->minGasLimit = value;
+}
+
 uint64_t NetworkConfig::getMinGasPrice() const {
     return this->minGasPrice;
 }
@@ -70,10 +78,11 @@ NetworkConfig NetworkConfig::GetDefault() {
 NetworkConfig NetworkConfig::GetByTimestamp(uint64_t timestamp) {
     NetworkConfig networkConfig;
 
-    // Mainnet values at the time of defining the "NetworkConfig" component (December 2021).
+    // Mainnet values at the time of defining the "NetworkConfig" component (April / May 2023).
     if (timestamp > 0) {
         networkConfig.setGasPerDataByte(1500);
         networkConfig.setMinGasLimit(50000);
+        networkConfig.setExtraGasLimitForGuardedTransaction(50000);
         networkConfig.setMinGasPrice(1000000000);
         networkConfig.setGasCostESDTTransfer(200000);
         networkConfig.setGasCostESDTNFTTransfer(200000);

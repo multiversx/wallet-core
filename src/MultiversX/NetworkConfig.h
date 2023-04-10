@@ -13,10 +13,11 @@ namespace TW::MultiversX {
 /// A "NetworkConfig" object holds the network parameters relevant to creating transactions (e.g. minimum gas limit, minimum gas price).
 class NetworkConfig {
     /// The following fields can (should) be fetched from https://api.multiversx.com/network/config.
-    /// However, a "NetworkConfig" object is initialized with proper default values for Mainnet (as of December 2021).
+    /// However, a "NetworkConfig" object is initialized with proper default values for Mainnet (as of 2023).
     std::string chainId;
     uint32_t gasPerDataByte;
     uint32_t minGasLimit;
+    uint32_t extraGasLimitForGuardedTransaction;
     uint64_t minGasPrice;
 
     /// GasSchedule entries of interest (only one at this moment), according to: https://github.com/multiversx/mx-chain-mainnet-config/blob/master/gasSchedules.
@@ -36,6 +37,9 @@ public:
 
     uint32_t getMinGasLimit() const;
     void setMinGasLimit(uint32_t value);
+
+    uint32_t getExtraGasLimitForGuardedTransaction() const;
+    void setExtraGasLimitForGuardedTransaction(uint32_t value);
 
     uint64_t getMinGasPrice() const;
     void setMinGasPrice(uint64_t value);
