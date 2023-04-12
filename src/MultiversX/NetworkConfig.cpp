@@ -43,7 +43,7 @@ uint32_t NetworkConfig::getExtraGasLimitForGuardedTransaction() const {
 }
 
 void NetworkConfig::setExtraGasLimitForGuardedTransaction(uint32_t value) {
-    this->minGasLimit = value;
+    this->extraGasLimitForGuardedTransaction = value;
 }
 
 uint64_t NetworkConfig::getMinGasPrice() const {

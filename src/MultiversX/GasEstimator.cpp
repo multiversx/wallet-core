@@ -19,43 +19,49 @@ GasEstimator::GasEstimator(const NetworkConfig& networkConfig) {
     this->networkConfig = networkConfig;
 }
 
-uint64_t GasEstimator::forEGLDTransfer(size_t dataLength, bool isGuarded) const {
+uint64_t GasEstimator::forEGLDTransfer(size_t dataLength) const {
     uint64_t gasLimit =
         this->networkConfig.getMinGasLimit() +
         this->networkConfig.getGasPerDataByte() * dataLength;
 
-    if (isGuarded) {
-        gasLimit += this->networkConfig.getExtraGasLimitForGuardedTransaction();
-    }
-
     return gasLimit;
 }
 
-uint64_t GasEstimator::forESDTTransfer(size_t dataLength, bool isGuarded) const {
+uint64_t GasEstimator::forESDTTransfer(size_t dataLength) const {
     uint64_t gasLimit =
         this->networkConfig.getMinGasLimit() +
         this->networkConfig.getGasCostESDTTransfer() +
         this->networkConfig.getGasPerDataByte() * dataLength +
         ADDITIONAL_GAS_FOR_ESDT_TRANSFER;
 
-    if (isGuarded) {
-        gasLimit += this->networkConfig.getExtraGasLimitForGuardedTransaction();
-    }
-
     return gasLimit;
 }
 
-uint64_t GasEstimator::forESDTNFTTransfer(size_t dataLength, bool isGuarded) const {
+uint64_t GasEstimator::forESDTNFTTransfer(size_t dataLength) const {
     uint64_t gasLimit =
         this->networkConfig.getMinGasLimit() +
         this->networkConfig.getGasCostESDTNFTTransfer() +
         this->networkConfig.getGasPerDataByte() * dataLength +
         ADDITIONAL_GAS_FOR_ESDT_NFT_TRANSFER;
 
-    if (isGuarded) {
-        gasLimit += this->networkConfig.getExtraGasLimitForGuardedTransaction();
-    }
+    return gasLimit;
+}
 
+uint64_t GasEstimator::forGuardedEGLDTransfer(size_t dataLength) const {
+    uint64_t gasLimit = forEGLDTransfer(dataLength);
+    gasLimit += this->networkConfig.getExtraGasLimitForGuardedTransaction();
+    return gasLimit;
+}
+
+uint64_t GasEstimator::forGuardedESDTTransfer(size_t dataLength) const {
+    uint64_t gasLimit = forESDTTransfer(dataLength);
+    gasLimit += this->networkConfig.getExtraGasLimitForGuardedTransaction();
+    return gasLimit;
+}
+
+uint64_t GasEstimator::forGuardedESDTNFTTransfer(size_t dataLength) const {
+    uint64_t gasLimit = forESDTNFTTransfer(dataLength);
+    gasLimit += this->networkConfig.getExtraGasLimitForGuardedTransaction();
     return gasLimit;
 }
 

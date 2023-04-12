@@ -71,7 +71,8 @@ Transaction TransactionFactory::fromEGLDTransfer(const Proto::SigningInput& inpu
     transaction.options = decideOptions(transaction);
 
     // Estimate & set gasLimit:
-    uint64_t estimatedGasLimit = this->gasEstimator.forEGLDTransfer(0, transaction.hasGuardian());
+    uint64_t estimatedGasLimit = transaction.hasGuardian() ? this->gasEstimator.forGuardedEGLDTransfer(0)
+                                                           : this->gasEstimator.forEGLDTransfer(0);
     transaction.gasLimit = coalesceGasLimit(input.gas_limit(), estimatedGasLimit);
 
     return transaction;
@@ -99,7 +100,8 @@ Transaction TransactionFactory::fromESDTTransfer(const Proto::SigningInput& inpu
     transaction.options = decideOptions(transaction);
 
     // Estimate & set gasLimit:
-    uint64_t estimatedGasLimit = this->gasEstimator.forESDTTransfer(data.size(), transaction.hasGuardian());
+    uint64_t estimatedGasLimit = transaction.hasGuardian() ? this->gasEstimator.forGuardedESDTTransfer(data.size())
+                                                           : this->gasEstimator.forESDTTransfer(data.size());
     transaction.gasLimit = coalesceGasLimit(input.gas_limit(), estimatedGasLimit);
 
     return transaction;
@@ -128,7 +130,8 @@ Transaction TransactionFactory::fromESDTNFTTransfer(const Proto::SigningInput& i
     transaction.options = decideOptions(transaction);
 
     // Estimate & set gasLimit:
-    uint64_t estimatedGasLimit = this->gasEstimator.forESDTNFTTransfer(data.size(), transaction.hasGuardian());
+    uint64_t estimatedGasLimit = transaction.hasGuardian() ? this->gasEstimator.forGuardedESDTNFTTransfer(data.size())
+                                                           : this->gasEstimator.forESDTNFTTransfer(data.size());
     transaction.gasLimit = coalesceGasLimit(input.gas_limit(), estimatedGasLimit);
 
     return transaction;
