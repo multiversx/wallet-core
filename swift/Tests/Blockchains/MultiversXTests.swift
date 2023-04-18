@@ -67,6 +67,7 @@ class MultiversXTests: XCTestCase {
                 $0.value = "1000000000000000000"
                 $0.data = ""
                 $0.version = 2
+                $0.options = 2
             }
             $0.gasPrice = 1000000000
             $0.gasLimit = 100000
@@ -159,6 +160,31 @@ class MultiversXTests: XCTestCase {
         let output: MultiversXSigningOutput = AnySigner.sign(input: input, coin: .multiversX)
         let expectedSignature = "0f40dec9d37bde3c67803fc535088e536344e271807bb7c1aa24af3c69bffa9b705e149ff7bcaf21678f4900c4ee72741fa6ef08bf4c67fc6da1c6b0f337730e"
         let expectedEncoded = #"{"nonce":7,"value":"1000000000000000000","receiver":"\#(bobBech32)","sender":"\#(aliceBech32)","gasPrice":1000000000,"gasLimit":50000,"chainID":"1","version":2,"signature":"\#(expectedSignature)"}"#
+
+        XCTAssertEqual(output.signature, expectedSignature)
+        XCTAssertEqual(output.encoded, expectedEncoded)
+    }
+
+    func testSignEGLDTransferWithGuardian() {
+        let privateKey = PrivateKey(data: Data(hexString: aliceSeedHex)!)!
+
+        let input = MultiversXSigningInput.with {
+            $0.egldTransfer = MultiversXEGLDTransfer.with {
+                $0.accounts = MultiversXAccounts.with {
+                    $0.senderNonce = 7
+                    $0.sender = aliceBech32
+                    $0.receiver = bobBech32
+                    $0.guardian = carolBech32
+                }
+                $0.amount = "1000000000000000000"
+            }
+            $0.chainID = "1"
+            $0.privateKey = privateKey.data
+        }
+
+        let output: MultiversXSigningOutput = AnySigner.sign(input: input, coin: .multiversX)
+        let expectedSignature = "741dd0d24db4df37a050f693f8481b6e51b8dd6dfc2f01a4f90aa1af3e59c89a8b0ef9d710af33103970e353d9f0cb9fd128a2e174731cbc88265d9737ed5604"
+        let expectedEncoded = #"{"nonce":7,"value":"1000000000000000000","receiver":"\#(bobBech32)","sender":"\#(aliceBech32)","gasPrice":1000000000,"gasLimit":50000,"chainID":"1","version":2,"signature":"\#(expectedSignature)","options":2,"guardian":"\#(carolBech32)"}"#
 
         XCTAssertEqual(output.signature, expectedSignature)
         XCTAssertEqual(output.encoded, expectedEncoded)
