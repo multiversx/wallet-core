@@ -24,6 +24,7 @@ class TestMultiversXSigner {
     private var aliceBech32 = "erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th"
     private var aliceSeedHex = "0x413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9"
     private var bobBech32 = "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"
+    private var carolBech32 = "erd1k2s324ww2g0yj38qn2ch2jwctdy8mnfxep94q9arncc6xecg3xaq6mjse8"
    
     @Test
     fun signGenericAction() {
@@ -55,6 +56,38 @@ class TestMultiversXSigner {
 
         assertEquals(expectedSignature, output.signature)
         assertEquals("""{"nonce":7,"value":"0","receiver":"$bobBech32","sender":"$aliceBech32","gasPrice":1000000000,"gasLimit":50000,"data":"Zm9v","chainID":"1","version":1,"signature":"$expectedSignature"}""", output.encoded)
+    }
+
+    @Test
+    fun signGenericActionWithGuardian() {
+        val privateKey = ByteString.copyFrom(PrivateKey(aliceSeedHex.toHexByteArray()).data())
+
+        val accounts = MultiversX.Accounts.newBuilder()
+            .setSenderNonce(42)
+            .setSender(aliceBech32)
+            .setReceiver(bobBech32)
+            .setGuardian(carolBech32)
+            .build()
+
+        val genericAction = MultiversX.GenericAction.newBuilder()
+            .setAccounts(accounts)
+            .setValue("1000000000000000000")
+            .setVersion(2)
+            .build()
+
+        val signingInput = MultiversX.SigningInput.newBuilder()
+            .setGenericAction(genericAction)
+            .setGasPrice(1000000000)
+            .setGasLimit(100000)
+            .setChainId("1")
+            .setPrivateKey(privateKey)
+            .build()
+
+        val output = AnySigner.sign(signingInput, CoinType.MULTIVERSX, MultiversX.SigningOutput.parser())
+        val expectedSignature = "dae30e5cddb4a1f050009f939ce2c90843770870f9e6c77366be07e5cd7b3ebfdda38cd45d04e9070037d57761b6a68cee697e6043057f9dc565a4d0e632480d"
+
+        assertEquals(expectedSignature, output.signature)
+        assertEquals("""{"nonce":42,"value":"1000000000000000000","receiver":"$bobBech32","sender":"$aliceBech32","gasPrice":1000000000,"gasLimit":100000,"chainID":"1","version":2,"signature":"$expectedSignature","options":2,"guardian":"$carolBech32"}""", output.encoded)
     }
 
     @Test

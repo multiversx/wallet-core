@@ -13,6 +13,7 @@ class MultiversXTests: XCTestCase {
     let alicePubKeyHex = "0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1"
     let aliceSeedHex = "413f42575f7f26fad3317a778771212fdb80245850981e48b58a4f25e344e8f9"
     let bobBech32 = "erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx"
+    let carolBech32 = "erd1k2s324ww2g0yj38qn2ch2jwctdy8mnfxep94q9arncc6xecg3xaq6mjse8"
 
     func testAddress() {
         let key = PrivateKey(data: Data(hexString: aliceSeedHex)!)!
@@ -32,7 +33,7 @@ class MultiversXTests: XCTestCase {
                 $0.accounts = MultiversXAccounts.with {
                     $0.senderNonce = 7
                     $0.sender = aliceBech32
-                    $0.receiver = bobBech32 
+                    $0.receiver = bobBech32
                 }
                 $0.value = "0"
                 $0.data = "foo"
@@ -47,6 +48,35 @@ class MultiversXTests: XCTestCase {
         let output: MultiversXSigningOutput = AnySigner.sign(input: input, coin: .multiversX)
         let expectedSignature = "e8647dae8b16e034d518a1a860c6a6c38d16192d0f1362833e62424f424e5da660770dff45f4b951d9cc58bfb9d14559c977d443449bfc4b8783ff9c84065700"
         let expectedEncoded = #"{"nonce":7,"value":"0","receiver":"\#(bobBech32)","sender":"\#(aliceBech32)","gasPrice":1000000000,"gasLimit":50000,"data":"Zm9v","chainID":"1","version":1,"signature":"\#(expectedSignature)"}"#
+
+        XCTAssertEqual(output.signature, expectedSignature)
+        XCTAssertEqual(output.encoded, expectedEncoded)
+    }
+
+    func testSignGenericActionWithGuardian() {
+        let privateKey = PrivateKey(data: Data(hexString: aliceSeedHex)!)!
+
+        let input = MultiversXSigningInput.with {
+            $0.genericAction = MultiversXGenericAction.with {
+                $0.accounts = MultiversXAccounts.with {
+                    $0.senderNonce = 42
+                    $0.sender = aliceBech32
+                    $0.receiver = bobBech32
+                    $0.guardian = carolBech32
+                }
+                $0.value = "1000000000000000000"
+                $0.data = ""
+                $0.version = 2
+            }
+            $0.gasPrice = 1000000000
+            $0.gasLimit = 100000
+            $0.chainID = "1"
+            $0.privateKey = privateKey.data
+        }
+
+        let output: MultiversXSigningOutput = AnySigner.sign(input: input, coin: .multiversX)
+        let expectedSignature = "dae30e5cddb4a1f050009f939ce2c90843770870f9e6c77366be07e5cd7b3ebfdda38cd45d04e9070037d57761b6a68cee697e6043057f9dc565a4d0e632480d"
+        let expectedEncoded = #"{"nonce":42,"value":"1000000000000000000","receiver":"\#(bobBech32)","sender":"\#(aliceBech32)","gasPrice":1000000000,"gasLimit":100000,"chainID":"1","version":2,"signature":"\#(expectedSignature)","options":2,"guardian":"\#(carolBech32)"}"#
 
         XCTAssertEqual(output.signature, expectedSignature)
         XCTAssertEqual(output.encoded, expectedEncoded)
