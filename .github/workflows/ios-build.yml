@@ -1,19 +1,11 @@
-name: iOS CI
+name: iOS Build
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: macos-latest
-    if: github.event.pull_request.draft == false
+    runs-on: macos-latest-xl
     steps:
     - uses: actions/checkout@v3
     - name: Install system dependencies
@@ -42,9 +34,11 @@ jobs:
     - name: Generate files
       run: tools/generate-files
 
-    - name: Run iOS tests
-      run: tools/ios-test
+    - name: Build artifacts
+      run: tools/ios-build
 
-    - name: Build sample app
-      run: |
-        tools/samples-build ios
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ios-frameworks.tar.gz
+        path: build/ios-frameworks.tar.gz
