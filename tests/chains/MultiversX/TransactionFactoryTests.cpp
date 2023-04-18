@@ -74,16 +74,18 @@ TEST(MultiversXTransactionFactory, fromESDTNFTTransfer) {
     ASSERT_EQ(2ul, transaction.version);
 }
 
-TEST(MultiversXTransactionFactory, createTransfersWithProvidedNetworkConfig) {
-    NetworkConfig networkConfig;
+TEST(MultiversXTransactionFactory, createTransfersWithProvidedConfig) {
+    TransactionFactoryConfig config;
 
     // Set dummy values:
-    networkConfig.setChainId("T");
-    networkConfig.setMinGasPrice(1500000000);
-    networkConfig.setMinGasLimit(60000);
-    networkConfig.setGasPerDataByte(2000);
-    networkConfig.setGasCostESDTTransfer(300000);
-    networkConfig.setGasCostESDTNFTTransfer(300000);
+    config.setChainId("T");
+    config.setMinGasPrice(1500000000);
+    config.setMinGasLimit(60000);
+    config.setGasPerDataByte(2000);
+    config.setGasCostESDTTransfer(300000);
+    config.setGasCostESDTNFTTransfer(300000);
+    config.setAdditionalGasForESDTTransfer(100000);
+    config.setAdditionalGasForESDTNFTTransfer(500000);
 
     Proto::SigningInput signingInputWithEGLDTransfer;
     signingInputWithEGLDTransfer.mutable_egld_transfer()->mutable_accounts()->set_sender(ALICE_BECH32);
@@ -103,7 +105,7 @@ TEST(MultiversXTransactionFactory, createTransfersWithProvidedNetworkConfig) {
     signingInputWithESDTNFTTransfer.mutable_esdtnft_transfer()->set_token_nonce(4);
     signingInputWithESDTNFTTransfer.mutable_esdtnft_transfer()->set_amount("184300000000000000");
 
-    TransactionFactory factory(networkConfig);
+    TransactionFactory factory(config);
     Transaction tx1 = factory.fromEGLDTransfer(signingInputWithEGLDTransfer);
     Transaction tx2 = factory.fromESDTTransfer(signingInputWithESDTTransfer);
     Transaction tx3 = factory.fromESDTNFTTransfer(signingInputWithESDTNFTTransfer);

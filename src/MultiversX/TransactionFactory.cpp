@@ -13,11 +13,11 @@ namespace TW::MultiversX {
 const int TX_VERSION = 2;
 
 TransactionFactory::TransactionFactory()
-    : TransactionFactory(NetworkConfig::GetDefault()) {
+    : TransactionFactory(TransactionFactoryConfig::GetDefault()) {
 }
 
-TransactionFactory::TransactionFactory(const NetworkConfig& networkConfig)
-    : networkConfig(networkConfig), gasEstimator(networkConfig) {
+TransactionFactory::TransactionFactory(const TransactionFactoryConfig& config)
+    : config(config) {
 }
 
 Transaction TransactionFactory::create(const Proto::SigningInput& input) {
@@ -71,8 +71,7 @@ Transaction TransactionFactory::fromEGLDTransfer(const Proto::SigningInput& inpu
     transaction.options = decideOptions(transaction);
 
     // Estimate & set gasLimit:
-    uint64_t estimatedGasLimit = transaction.hasGuardian() ? this->gasEstimator.forGuardedEGLDTransfer(0)
-                                                           : this->gasEstimator.forEGLDTransfer(0);
+    uint64_t estimatedGasLimit = computeGasLimit(0, 0, transaction.hasGuardian());
     transaction.gasLimit = coalesceGasLimit(input.gas_limit(), estimatedGasLimit);
 
     return transaction;
@@ -100,8 +99,8 @@ Transaction TransactionFactory::fromESDTTransfer(const Proto::SigningInput& inpu
     transaction.options = decideOptions(transaction);
 
     // Estimate & set gasLimit:
-    uint64_t estimatedGasLimit = transaction.hasGuardian() ? this->gasEstimator.forGuardedESDTTransfer(data.size())
-                                                           : this->gasEstimator.forESDTTransfer(data.size());
+    uint64_t executionGasLimit = this->config.getGasCostESDTTransfer() + this->config.getAdditionalGasForESDTTransfer();
+    uint64_t estimatedGasLimit = computeGasLimit(data.size(), executionGasLimit, transaction.hasGuardian());
     transaction.gasLimit = coalesceGasLimit(input.gas_limit(), estimatedGasLimit);
 
     return transaction;
@@ -130,11 +129,22 @@ Transaction TransactionFactory::fromESDTNFTTransfer(const Proto::SigningInput& i
     transaction.options = decideOptions(transaction);
 
     // Estimate & set gasLimit:
-    uint64_t estimatedGasLimit = transaction.hasGuardian() ? this->gasEstimator.forGuardedESDTNFTTransfer(data.size())
-                                                           : this->gasEstimator.forESDTNFTTransfer(data.size());
+    uint64_t executionGasLimit = this->config.getGasCostESDTNFTTransfer() + this->config.getAdditionalGasForESDTNFTTransfer();
+    uint64_t estimatedGasLimit = computeGasLimit(data.size(), executionGasLimit, transaction.hasGuardian());
     transaction.gasLimit = coalesceGasLimit(input.gas_limit(), estimatedGasLimit);
 
     return transaction;
+}
+
+uint64_t TransactionFactory::computeGasLimit(size_t dataLength, uint64_t executionGasLimit, bool hasGuardian) {
+    uint64_t dataMovementGasLimit = this->config.getMinGasLimit() + this->config.getGasPerDataByte() * dataLength;
+    uint64_t gasLimit = dataMovementGasLimit + executionGasLimit;
+
+    if (hasGuardian) {
+        gasLimit += this->config.getExtraGasLimitForGuardedTransaction();
+    }
+
+    return gasLimit;
 }
 
 uint64_t TransactionFactory::coalesceGasLimit(uint64_t providedGasLimit, uint64_t estimatedGasLimit) {
@@ -142,11 +152,11 @@ uint64_t TransactionFactory::coalesceGasLimit(uint64_t providedGasLimit, uint64_
 }
 
 uint64_t TransactionFactory::coalesceGasPrice(uint64_t gasPrice) {
-    return gasPrice > 0 ? gasPrice : this->networkConfig.getMinGasPrice();
+    return gasPrice > 0 ? gasPrice : this->config.getMinGasPrice();
 }
 
 std::string TransactionFactory::coalesceChainId(std::string chainID) {
-    return chainID.empty() ? this->networkConfig.getChainId() : chainID;
+    return chainID.empty() ? this->config.getChainId() : chainID;
 }
 
 TransactionOptions TransactionFactory::decideOptions(const Transaction& transaction) {
