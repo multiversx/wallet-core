@@ -211,7 +211,7 @@ class TestMultiversXSigner {
         val expectedSignature = "741dd0d24db4df37a050f693f8481b6e51b8dd6dfc2f01a4f90aa1af3e59c89a8b0ef9d710af33103970e353d9f0cb9fd128a2e174731cbc88265d9737ed5604"
 
         assertEquals(expectedSignature, output.signature)
-        assertEquals("""{"nonce":7,"value":"1000000000000000000","receiver":"$bobBech32","sender":"$aliceBech32","gasPrice":1000000000,"gasLimit":50000,"chainID":"1","version":2,"signature":"$expectedSignature","options":2,"guardian":"$carolBech32"}""", output.encoded)
+        assertEquals("""{"nonce":7,"value":"1000000000000000000","receiver":"$bobBech32","sender":"$aliceBech32","gasPrice":1000000000,"gasLimit":100000,"chainID":"1","version":2,"signature":"$expectedSignature","options":2,"guardian":"$carolBech32"}""", output.encoded)
     }
 
     @Test
