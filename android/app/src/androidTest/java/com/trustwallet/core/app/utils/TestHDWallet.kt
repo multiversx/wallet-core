@@ -25,6 +25,8 @@ class TestHDWallet {
         "ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal"
     val password = "TREZOR"
 
+    val words2 = "seven danger reunion broom column ankle page gentle dolphin name consider despair tornado width birth motion analyst decorate also loud height valve name benefit"
+
     @Test
     fun testCreateFromMnemonicImmutableXMainnetFromSignature() {
         // Successfully register: https://api.x.immutable.com/v1/users/0xd0972E2312518Ca15A2304D56ff9cc0b7ea0Ea37
@@ -144,6 +146,15 @@ class TestHDWallet {
 
         val address2 = wallet.getAddressDerivation(coin, Derivation.BITCOINLEGACY)
         assertEquals(address2, "1PeUvjuxyf31aJKX6kCXuaqxhmG78ZUdL1")
+
+        val address3 = wallet.getAddressDerivation(coin, Derivation.BITCOINTESTNET)
+        assertEquals(address3, "tb1qwgpxgwn33z3ke9s7q65l976pseh4edrzfmyvl0")
+    }
+
+    @Test
+    fun testGetAddressDerivationTestnet() {
+        val coin = CoinType.BITCOIN
+        val wallet = HDWallet(words2, "")
 
         val address3 = wallet.getAddressDerivation(coin, Derivation.BITCOINTESTNET)
         assertEquals(address3, "tb1qwgpxgwn33z3ke9s7q65l976pseh4edrzfmyvl0")

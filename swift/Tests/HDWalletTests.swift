@@ -9,6 +9,7 @@ import XCTest
 
 extension HDWallet {
     static let test = HDWallet(mnemonic: "ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal", passphrase: "TREZOR")!
+    static let test2 = HDWallet(mnemonic: "seven danger reunion broom column ankle page gentle dolphin name consider despair tornado width birth motion analyst decorate also loud height valve name benefit", passphrase: "")!
 }
 
 class HDWalletTests: XCTestCase {
@@ -121,6 +122,14 @@ class HDWalletTests: XCTestCase {
 
         let address2 = wallet.getAddressDerivation(coin: coin, derivation: .bitcoinLegacy)
         XCTAssertEqual(address2, "1PeUvjuxyf31aJKX6kCXuaqxhmG78ZUdL1")
+
+        let address3 = wallet.getAddressDerivation(coin: coin, derivation: .bitcoinTestnet)
+        XCTAssertEqual(address3, "tb1qwgpxgwn33z3ke9s7q65l976pseh4edrzfmyvl0")
+    }
+
+    func testGetAddressDerivationTestnet() {
+        let coin = CoinType.bitcoin
+        let wallet = HDWallet.test2
 
         let address3 = wallet.getAddressDerivation(coin: coin, derivation: .bitcoinTestnet)
         XCTAssertEqual(address3, "tb1qwgpxgwn33z3ke9s7q65l976pseh4edrzfmyvl0")
