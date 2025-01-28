@@ -1,4 +1,4 @@
-name: iOS CI
+name: iOS Build
 
 on:
   push:
@@ -43,14 +43,15 @@ jobs:
         tools/install-dependencies
       if: steps.internal_cache.outputs.cache-hit != 'true'
 
-    - name: Run codegen tests
-      run: tools/codegen-test
-
-    - name: Run iOS tests
+    - name: Generate files
       run: |
         tools/generate-files ios
-        tools/ios-test
 
-    - name: Build sample app
-      run: |
-        tools/samples-build ios
+    - name: Build artifacts
+      run: tools/ios-build
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-frameworks.tar.gz
+        path: build/ios-frameworks.tar.gz

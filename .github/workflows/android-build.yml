@@ -1,4 +1,4 @@
-name: Kotlin CI
+name: Android Build
 
 on:
   push:
@@ -12,8 +12,8 @@ concurrency:
 
 jobs:
   build:
-    runs-on: macos-latest-xlarge
-    if: false
+    runs-on: macos-latest-large
+    if: github.event.pull_request.draft == false
     steps:
     - uses: actions/checkout@v3
 
@@ -23,13 +23,8 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
-      with:
-        gradle-version: 8.1.1
 
     - name: Install system dependencies
       run: |
@@ -45,11 +40,8 @@ jobs:
       run: |
         tools/install-rust-dependencies
 
-    - name: Install emsdk
-      run: tools/install-wasm-dependencies
-
-    - name: Install Kotlin Dependencies
-      run: tools/install-kotlin-dependencies
+    - name: Install Android Dependencies
+      run: tools/install-android-dependencies
 
     - name: Cache internal dependencies
       id: internal_cache
@@ -63,21 +55,16 @@ jobs:
       if: steps.internal_cache.outputs.cache-hit != 'true'
 
     - name: Generate files
-      run: |
-        source emsdk/emsdk_env.sh
-        tools/generate-files
+      run: tools/generate-files android
 
-    - name: CMake (Java, Kotlin)
-      run: |
-        cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Debug -DTW_UNITY_BUILD=ON -DTW_COMPILE_JAVA=ON -DTW_COMPILE_KOTLIN=ON -GNinja
+    - name: Build Kotlin doc
+      run: tools/kotlin-doc
 
-    - name: Build JNI
-      run: |
-        ninja -Cbuild
-        mv build/libTrustWalletCore.dylib kotlin/wallet-core-kotlin/src/jvmMain/resources/jni/macos-arm64/
+    - name: Build artifacts
+      run: tools/android-build
 
-    - name: Build Kotlin Multiplatform
-      run: tools/kotlin-build
-
-    - name: Run Kotlin Multiplatform tests
-      run: tools/kotlin-test
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: wallet-core.aar
+        path: build/wallet-core.aar
